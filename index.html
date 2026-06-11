@@ -2811,20 +2811,76 @@ if(document.getElementById('page-sim') && document.getElementById('page-sim').cl
   initCanvas();
 }
 
-/* ── CONTACT FORM ── */
-function submitForm(e){
+/* ── CONTACT FORM TO TELEGRAM (Modernized & Upgraded) ── */
+async function submitForm(e) {
   e.preventDefault();
-  var n=document.getElementById('cf-name');
-  var em=document.getElementById('cf-email');
-  var s=document.getElementById('cf-subject');
-  var ms=document.getElementById('cf-msg');
-  if(!n.value||!em.value||!s.value||!ms.value){
-    alert('Please fill in all required fields.');return;
+  
+  // 1. Gather and sanitize input data
+  const name = document.getElementById('cf-name').value.trim();
+  const org = document.getElementById('cf-org').value.trim();
+  const email = document.getElementById('cf-email').value.trim();
+  const subject = document.getElementById('cf-subject').value;
+  const message = document.getElementById('cf-msg').value.trim();
+
+  // 2. Validate required fields
+  if(!name || !email || !subject || !message) {
+    alert(isArabic ? 'يرجى ملء جميع الحقول المطلوبة.' : 'Please fill in all required fields.'); 
+    return;
   }
-  var t=document.getElementById('form-toast');
-  t.classList.add('show');
-  document.getElementById('contactForm').reset();
-  setTimeout(function(){t.classList.remove('show');},5000);
+
+  // 3. Telegram Bot API Credentials
+  const botToken = '8755127790:AAF8Sv9m4-xsvmytc0SnZ3qO5zFI-TBVduU';
+  const chatId = 'YOUR_CHAT_ID_HERE'; // <-- IMPORTANT: Put your Chat ID here
+
+  // 4. Format message with Markdown for better presentation
+  const text = `📩 *New Website Enquiry*\n\n` +
+               `👤 *Name:* ${name}\n` +
+               `🏢 *Institution:* ${org ? org : "N/A"}\n` +
+               `📧 *Email:* ${email}\n` +
+               `📌 *Subject:* ${subject}\n\n` +
+               `💬 *Message:*\n${message}`;
+
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  // 5. Update UI state (Loading...)
+  const submitBtn = document.querySelector('.form-submit');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = isArabic ? 'جاري الإرسال...' : 'Sending...';
+  submitBtn.style.opacity = '0.7';
+  submitBtn.style.cursor = 'wait';
+  submitBtn.disabled = true;
+
+  // 6. Send request via Async/Await
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: text,
+        parse_mode: 'Markdown' // Enables bold text and styling
+      })
+    });
+
+    if(response.ok) {
+      // Show success toast notification
+      const toast = document.getElementById('form-toast');
+      toast.classList.add('show');
+      document.getElementById('contactForm').reset();
+      setTimeout(() => toast.classList.remove('show'), 5000);
+    } else {
+      throw new Error('Telegram API rejected the request');
+    }
+  } catch (error) {
+    alert(isArabic ? 'حدث خطأ أثناء الإرسال، يرجى المحاولة لاحقاً.' : 'Error sending message, please try again later.');
+    console.error('Contact Form Error:', error);
+  } finally {
+    // 7. Restore UI state
+    submitBtn.textContent = originalText;
+    submitBtn.style.opacity = '1';
+    submitBtn.style.cursor = 'pointer';
+    submitBtn.disabled = false;
+  }
 }
 
 /* ── LANGUAGE TOGGLE ── */
