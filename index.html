@@ -104,6 +104,10 @@ img{display:block;max-width:100%;}
 ::-webkit-scrollbar-track{background:var(--hue-navy-deep);}
 ::-webkit-scrollbar-thumb{background:var(--hue-gold);border-radius:3px;}
 
+
+/* White eye logo in nav */
+.nav-eye-img{height:34px;width:auto;object-fit:contain;flex-shrink:0;}
+
 /* Focus styles for accessibility */
 :focus-visible {
   outline: 2px solid var(--hue-gold);
@@ -186,6 +190,10 @@ img{display:block;max-width:100%;}
   color:var(--hue-navy);letter-spacing:.04em;
   line-height:1.1;
 }
+
+.uni-faculty { margin-top: 0; }
+.uni-center { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+
 .uni-faculty{
   font-size:.7rem;font-weight:500;
   color:var(--hue-gold);letter-spacing:.12em;
@@ -226,19 +234,7 @@ nav{
   padding:.55rem 0;cursor:pointer;flex-shrink:0;
 }
 .nav-logo:focus-visible{outline-color:var(--hue-gold);}
-.nav-eye{
-  width:34px;height:34px;flex-shrink:0;
-  background:var(--hue-gold);
-  clip-path:ellipse(50% 38% at 50% 50%);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1rem;position:relative;
-  aria-hidden:true;
-}
-.nav-eye::after{
-  content:'';
-  position:absolute;width:10px;height:10px;
-  border-radius:50%;background:var(--hue-navy);
-}
+/* nav-eye replaced by white_eye.png img */
 .nav-logo-txt .l1{
   font-family:var(--font-display);font-size:1rem;font-weight:700;
   color:var(--white);letter-spacing:.04em;
@@ -759,6 +755,11 @@ nav{
   background:var(--white);border:1px solid var(--light-line);
   border-top:2px solid var(--hue-navy);border-radius:var(--radius-sm);padding:1.3rem;
 }
+
+/* Fund card logos */
+.fund-logo-wrap{width:52px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--off-white);border:1px solid var(--light-line);border-radius:3px;overflow:hidden;padding:4px;}
+.fund-logo{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply;}
+
 .fund-ico{width:40px;height:40px;flex-shrink:0;background:var(--hue-navy);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
 .fund-card h4{font-family:var(--font-body);font-size:.85rem;font-weight:700;color:var(--hue-navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.25rem;}
 .fund-card p{font-size:.74rem;color:var(--text-2);line-height:1.6;}
@@ -772,7 +773,8 @@ nav{
   padding:1.1rem 1.3rem;transition:var(--trans);text-decoration:none;color:inherit;
 }
 .dl-card:hover{border-left-color:var(--hue-gold);box-shadow:var(--sh-lift);}
-.dl-ico{width:36px;height:36px;flex-shrink:0;background:var(--hue-navy);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.dl-ico{width:42px;height:42px;flex-shrink:0;background:var(--hue-navy);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.dl-ico svg{display:block;}
 .dl-name{font-size:.84rem;font-weight:600;color:var(--text-1);}
 .dl-meta{font-family:var(--font-mono);font-size:.58rem;color:var(--text-3);margin-top:.15rem;}
 .dl-arr{margin-left:auto;font-size:1.1rem;color:var(--hue-gold);}
@@ -915,6 +917,10 @@ nav{
 .gal-item img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
 .gal-ph{text-align:center;padding:1.2rem;z-index:1;position:relative;}
 .gal-ph .gico{font-size:1.8rem;display:block;margin-bottom:.35rem;}
+
+/* Gallery SVG placeholders */
+.gal-ph .gico-svg{width:2.2rem;height:2.2rem;display:block;margin:0 auto .4rem;opacity:.55;}
+
 .gal-ph .glbl{font-size:.68rem;color:var(--text-3);line-height:1.4;}
 .gal-ov{
   position:absolute;inset:0;
@@ -1162,7 +1168,8 @@ footer{
   .foot-bottom{flex-direction:column;}
   .foot-copy{text-align:left;}
   .pipe-nodes{flex-direction:column;align-items:stretch;}
-/* Pipeline step indicators */
+
+/* Pipeline step indicators - outside media query */
 .pipe-step{
   font-family:var(--font-mono);font-size:.52rem;
   background:rgba(255,255,255,.04);border:1px solid rgba(200,169,66,.15);
@@ -1177,6 +1184,122 @@ footer{
   background:rgba(46,204,113,.08);border-color:rgba(46,204,113,.3);
   color:var(--hud-grn);
 }
+
+/* ══ MOBILE EXTRA FIXES ══ */
+@media(max-width:480px){
+  .hero-inner{padding:3rem 5%;}
+  .hero-title{font-size:1.9rem;}
+  .hero-stats{grid-template-columns:1fr 1fr;gap:.5rem;}
+  .hstat-val{font-size:1.4rem;}
+  .info-bar{padding:.3rem 4%;gap:.5rem;}
+  .uni-header{padding:.6rem 4%;flex-wrap:wrap;gap:.6rem;}
+  .uni-logos{gap:.8rem;}
+  .logo-box{height:46px;min-width:64px;}
+  .uni-center{min-width:0;}
+  .uni-name{font-size:.95rem;}
+  
+.uni-faculty { margin-top: 0; }
+.uni-center { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+
+.uni-faculty{font-size:.6rem;}
+  .uni-dept{font-size:.52rem;}
+  .sec-wrap{padding:2.5rem 5%;}
+  .contact-layout,.sim-layout{grid-template-columns:1fr;}
+  .sim-layout{padding:1.5rem 4%;}
+  .ach-grid,.fund-grid,.dl-grid{grid-template-columns:1fr;}
+  .mem-grid{grid-template-columns:1fr;}
+  .sup-grid{grid-template-columns:1fr;}
+  .arch-hw{grid-template-columns:1fr;}
+  .flow-track{grid-template-columns:1fr;}
+  .hero-btns{flex-direction:column;}
+  .btn-gold,.btn-outline,.btn-navy{width:100%;justify-content:center;}
+  .paper-actions{flex-direction:column;}
+  .paper-actions .btn-navy,.paper-actions .btn-gold{width:100%;justify-content:center;}
+  .tg-btns{gap:.35rem;}
+  .tbtn{font-size:.6rem;padding:.35rem .65rem;}
+  .gal-grid{grid-template-columns:1fr 1fr;}
+  .task-table{font-size:.68rem;}
+  .foot-grid{gap:1.5rem;}
+  .partners-ribbon{padding:.5rem 4%;gap:.8rem;}
+  .pr-items{gap:.7rem;}
+}
+
+/* RTL mobile fixes */
+[dir="rtl"] .nav-inner{gap:.5rem;}
+[dir="rtl"] .info-bar-left{gap:1rem;}
+[dir="rtl"] @media(max-width:768px){
+  .nav-tabs.open{text-align:right;}
+}
+
+/* Prevent overflow on all screen sizes */
+.sec-wrap,.page-banner-inner,.hero-inner,.sim-layout,.contact-layout{
+  width:100%;box-sizing:border-box;overflow-x:hidden;
+}
+body{overflow-x:hidden;}
+canvas{max-width:100%;}
+.pipeline-diag{overflow-x:auto;}
+
+/* Extra RTL fixes */
+[dir="rtl"] .uni-center { text-align: center; }
+[dir="rtl"] .hero-kicker { flex-direction: row-reverse; }
+[dir="rtl"] .hero-title { text-align: right; }
+[dir="rtl"] .hero-sub { text-align: right; }
+[dir="rtl"] .hero-stats { direction: rtl; }
+[dir="rtl"] .hero-btns { flex-direction: row-reverse; justify-content: flex-end; }
+[dir="rtl"] .sec-h { text-align: right; }
+[dir="rtl"] .sec-lead { text-align: right; }
+[dir="rtl"] .ach-card { text-align: right; }
+[dir="rtl"] .fstep { text-align: center; }
+[dir="rtl"] .fstep h4 { text-align: center; }
+[dir="rtl"] .fstep p { text-align: right; }
+[dir="rtl"] .card { text-align: right; }
+[dir="rtl"] .mem-card { text-align: right; }
+[dir="rtl"] .sup-card { text-align: center; }
+[dir="rtl"] .paper-meta { text-align: right; }
+[dir="rtl"] .paper-abstract { text-align: right; border-left: none; border-right: 3px solid var(--hue-gold); border-radius: 3px 0 0 3px; }
+[dir="rtl"] .fund-card { flex-direction: row-reverse; text-align: right; }
+[dir="rtl"] .c-row { flex-direction: row-reverse; text-align: right; }
+[dir="rtl"] .c-lbl { text-align: right; }
+[dir="rtl"] .c-val { text-align: right; }
+[dir="rtl"] .contact-form-wrap label { text-align: right; }
+[dir="rtl"] .foot-grid { text-align: right; }
+[dir="rtl"] .foot-links { text-align: right; }
+[dir="rtl"] .award-txt { text-align: right; }
+[dir="rtl"] .phl { border-left: none; border-right: 2px solid var(--hue-gold); }
+[dir="rtl"] .dl-card { flex-direction: row-reverse; }
+[dir="rtl"] .dl-arr { margin-left: 0; margin-right: auto; }
+[dir="rtl"] .hstat { direction: rtl; }
+[dir="rtl"] .pr-lbl { border-right: none; border-left: 1px solid var(--light-line); padding-left: 1.2rem; padding-right: 0; }
+[dir="rtl"] .pr-items { flex-direction: row-reverse; }
+[dir="rtl"] .pr-badge { flex-direction: row-reverse; text-align: right; }
+[dir="rtl"] .social-btns { flex-direction: row-reverse; }
+[dir="rtl"] .mem-links { flex-direction: row-reverse; }
+[dir="rtl"] .mem-skills { flex-direction: row-reverse; }
+[dir="rtl"] .hw-hdr { flex-direction: row-reverse; }
+[dir="rtl"] .hw-hdr div { text-align: right; }
+[dir="rtl"] .dp-row { flex-direction: row-reverse; }
+[dir="rtl"] .mode-row { flex-direction: row-reverse; }
+[dir="rtl"] .spec-table td:first-child { text-align: right; padding-right: 0; padding-left: .5rem; }
+[dir="rtl"] .spec-table td:last-child { text-align: right; }
+[dir="rtl"] .form-grp { text-align: right; }
+[dir="rtl"] .form-grp input, [dir="rtl"] .form-grp select, [dir="rtl"] .form-grp textarea { text-align: right; direction: rtl; }
+[dir="rtl"] .cc-hdr { flex-direction: row-reverse; }
+[dir="rtl"] .task-table th, [dir="rtl"] .task-table td { text-align: right; }
+[dir="rtl"] .task-contrib { flex-direction: row-reverse; }
+[dir="rtl"] .sw-layer { flex-direction: column; }
+[dir="rtl"] .sw-lbl { text-align: right; }
+[dir="rtl"] .lat-strip { flex-direction: row-reverse; }
+[dir="rtl"] .pipe-nodes { flex-direction: row-reverse; }
+[dir="rtl"] .parr { transform: scaleX(-1); }
+[dir="rtl"] .pnode-name, [dir="rtl"] .pnode-sub { direction: ltr; text-align: center; }
+[dir="rtl"] .eyebrow { margin-right: 0; }
+[dir="rtl"] .gal-filters { flex-direction: row-reverse; }
+[dir="rtl"] .tg-top { flex-direction: row-reverse; text-align: right; }
+[dir="rtl"] .tg-btns { flex-direction: row-reverse; }
+[dir="rtl"] .sim-h { text-align: right; }
+[dir="rtl"] .acc-item { text-align: right; }
+[dir="rtl"] .acc-item .name, [dir="rtl"] .acc-item .code { text-align: right; }
+[dir="rtl"] .dp-k, [dir="rtl"] .dp-v { font-size: .64rem; }
 </style>
 </head>
 <body>
@@ -1188,8 +1311,8 @@ footer{
 <div class="info-bar" role="banner">
   <div class="info-bar-left">
     <div class="info-item">📍 <span>New Damietta, Egypt</span></div>
-    <div class="info-item">📞 <a href="tel:+201144455582">+201144455582</a></div>
-    <div class="info-item">✉️ <a href="mailto:Admin@horus.edu.eg">Admin@horus.edu.eg</a></div>
+    <div class="info-item">📞 <a href="tel:+201559933466">+201559933466</a></div>
+    <div class="info-item">✉️ <a href="mailto:eesllm@icloud.com">eesllm@icloud.com</a></div>
   </div>
   <div class="info-bar-right">
     <a href="https://www.facebook.com/hue.eg/" target="_blank" rel="noopener" class="social-ico" aria-label="Facebook page of Horus University Egypt">f</a>
@@ -1198,7 +1321,7 @@ footer{
     <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener" class="social-ico" aria-label="Faculty of Engineering website">🌐</a>
     <span style="width:1px;height:16px;background:rgba(255,255,255,.1);"></span>
     <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:.58rem;color:rgba(200,169,66,.7);letter-spacing:.12em;">eng.horus.edu.eg</a>
-    <button class="lang-btn" id="langToggle" onclick="toggleLang()" aria-label="Switch to Arabic / تبديل للعربية">
+    <button class="lang-btn" id="langToggle" onclick="toggleLang()" aria-label="Switch language / تبديل اللغة">
       <span class="ar-lbl" id="langLabel">العربية</span>
     </button>
   </div>
@@ -1212,22 +1335,13 @@ footer{
     <div class="logo-box" aria-label="Horus University Egypt logo">
       <img src="hue.jpeg" alt="HUE Logo">
     </div>
-    <div class="logo-divider" role="separator"></div>
-    <div class="logo-box" aria-label="Faculty of Engineering logo">
-      <img src="eng.jpeg" alt="Faculty of Engineering Logo">
-    </div>
+
   </div>
   <div class="uni-center">
-    <div class="uni-name" id="uniName">Horus University Egypt</div>
     <div class="uni-faculty" id="uniFaculty">Faculty of Engineering</div>
     <div class="uni-dept" id="uniDept">Department of Communications &amp; Electronics Engineering · New Damietta, Egypt</div>
   </div>
-  <div class="uni-accred" aria-label="Institutional accreditations">
-    <span class="acc-pill">NAQAAE</span>
-    <span class="acc-pill">ISO 21001</span>
-    <span class="acc-pill">EGAC</span>
-    <span class="acc-pill">ASRT</span>
-  </div>
+
 </div>
 
 <!-- ══════════════════════════
@@ -1236,11 +1350,7 @@ footer{
 <nav role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
     <button class="nav-logo" onclick="showPage('home')" aria-label="Go to homepage">
-      <div class="nav-eye" aria-hidden="true"></div>
-      <div class="nav-logo-txt">
-        <div class="l1">HUE — Faculty of Engineering</div>
-        <div class="l2">DEPT. COMMUNICATIONS &amp; ELECTRONICS · 2026</div>
-      </div>
+      <img src="white_eye.png" alt="HUE C-UAS Logo" class="nav-eye-img" aria-hidden="true">
     </button>
     <div class="nav-tabs" id="navTabs" role="menubar">
       <button class="nav-close" id="navClose" onclick="closeMob()" style="display:none;" aria-label="Close menu">✕</button>
@@ -1285,7 +1395,7 @@ footer{
           for Drone <span class="accent">Detection,</span><br>
           Tracking &amp; Neutralization
         </h1>
-        <p class="hero-sub">
+        <p class="hero-sub" id="hero-sub-txt">
           Bridging the Granularity Gap between conventional radar and
           autonomous micro-UAVs through edge-native AI, optical tracking,
           and multi-spectral RF fusion — engineered at Horus University Egypt.
@@ -1403,22 +1513,67 @@ footer{
       </div>
       <div class="flow-track" role="list">
         <div class="fstep" role="listitem">
-          <div class="fstep-node" aria-hidden="true">📡<span class="fstep-num">1</span></div>
+          <div class="fstep-node" aria-hidden="true">
+  <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M24 24 Q12 12 8 4" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/>
+    <path d="M24 24 Q32 8 40 4" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="24" cy="24" r="4" fill="#c8a942" opacity=".7"/>
+    <path d="M24 28v16" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/>
+    <path d="M14 40 Q24 36 34 40" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/>
+    <path d="M16 16 Q20 12 24 24 Q28 12 32 16" stroke="rgba(200,169,66,.3)" stroke-width="1.5" fill="none"/>
+  </svg>
+  <span class="fstep-num">1</span>
+</div>
           <h4>Surveillance</h4>
           <p>Autonomous PTZ scanning or RF-triggered Slew-to-Cue. Hikvision DarkFighter 25× zoom covers 360° continuously, day and night.</p>
         </div>
         <div class="fstep" role="listitem">
-          <div class="fstep-node" aria-hidden="true">🧠<span class="fstep-num">2</span></div>
+          <div class="fstep-node" aria-hidden="true">
+  <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="24" cy="24" r="14" stroke="#c8a942" stroke-width="2"/>
+    <circle cx="18" cy="20" r="2" fill="#c8a942" opacity=".8"/>
+    <circle cx="30" cy="20" r="2" fill="#c8a942" opacity=".8"/>
+    <circle cx="24" cy="30" r="2" fill="#c8a942" opacity=".8"/>
+    <line x1="18" y1="20" x2="30" y2="20" stroke="#c8a942" stroke-width="1.2" opacity=".5"/>
+    <line x1="18" y1="20" x2="24" y2="30" stroke="#c8a942" stroke-width="1.2" opacity=".5"/>
+    <line x1="30" y1="20" x2="24" y2="30" stroke="#c8a942" stroke-width="1.2" opacity=".5"/>
+    <circle cx="10" cy="24" r="2" fill="#c8a942" opacity=".5"/>
+    <circle cx="38" cy="24" r="2" fill="#c8a942" opacity=".5"/>
+    <line x1="12" y1="24" x2="16" y2="22" stroke="#c8a942" stroke-width="1.2" opacity=".4"/>
+    <line x1="36" y1="24" x2="32" y2="22" stroke="#c8a942" stroke-width="1.2" opacity=".4"/>
+  </svg>
+  <span class="fstep-num">2</span>
+</div>
           <h4>AI Identification</h4>
           <p>YOLOv8n INT8 on Raspberry Pi 5 processes 30 FPS in real time. Reliable Drone / Bird / Background discrimination — mAP@50: 0.888.</p>
         </div>
         <div class="fstep" role="listitem">
-          <div class="fstep-node" aria-hidden="true">🎯<span class="fstep-num">3</span></div>
+          <div class="fstep-node" aria-hidden="true">
+  <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="24" cy="24" r="14" stroke="#c8a942" stroke-width="2"/>
+    <circle cx="24" cy="24" r="8" stroke="#c8a942" stroke-width="1.5" opacity=".5"/>
+    <circle cx="24" cy="24" r="3" fill="#c8a942" opacity=".9"/>
+    <line x1="24" y1="4" x2="24" y2="13" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/>
+    <line x1="24" y1="35" x2="24" y2="44" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/>
+    <line x1="4" y1="24" x2="13" y2="24" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/>
+    <line x1="35" y1="24" x2="44" y2="24" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+  <span class="fstep-num">3</span>
+</div>
           <h4>Kinetic Lock</h4>
           <p>Discrete Kalman Filter + PID controller maintains target centroid. Direct ISAPI injection achieves sub-10ms PTZ command latency.</p>
         </div>
         <div class="fstep" role="listitem">
-          <div class="fstep-node" aria-hidden="true">📲<span class="fstep-num">4</span></div>
+          <div class="fstep-node" aria-hidden="true">
+  <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="14" y="6" width="20" height="36" rx="3" stroke="#c8a942" stroke-width="2"/>
+    <line x1="20" y1="38" x2="28" y2="38" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/>
+    <path d="M32 14 Q38 14 38 20 Q38 26 32 26" stroke="#c8a942" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".7"/>
+    <path d="M32 18 Q35 18 35 21 Q35 24 32 24" stroke="#c8a942" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".5"/>
+    <circle cx="24" cy="20" r="4" stroke="#c8a942" stroke-width="1.5" fill="none"/>
+  </svg>
+  <span class="fstep-num">4</span>
+</div>
           <h4>Operator Alert</h4>
           <p>Encrypted Telegram alerts with JPEG snapshots over 4G. Remote ARM / DISARM via bot commands. Mean alert delay: 1.2 seconds.</p>
         </div>
@@ -1434,8 +1589,10 @@ footer{
       <div class="sec-rule"></div>
       <div class="ach-grid">
         <div class="ach-card">
-          <div class="ach-ico" aria-hidden="true">📄</div>
-          <h4>Peer-Reviewed Publication</h4>
+          <div class="ach-ico" aria-hidden="true">
+  <svg width="34" height="34" viewBox="0 0 48 48" fill="none"><path d="M12 4h16l10 10v30a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" stroke="#c8a942" stroke-width="2"/><polyline points="28,4 28,14 38,14" stroke="#c8a942" stroke-width="2"/><line x1="16" y1="22" x2="32" y2="22" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="28" x2="32" y2="28" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="34" x2="24" y2="34" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/></svg>
+</div>
+<h4>Peer-Reviewed Publication</h4>
           <p>"Bridging the Granularity Gap" — published in the Horus University Journal of Engineering (HUJE / ISSN 3062-4991). First multi-spectral C-UAS systematic review from the department, indexed on EKB Portal.</p>
         </div>
         <div class="ach-card feature">
@@ -1444,13 +1601,17 @@ footer{
           <p>National Radio Science Conference 2026 — Egypt's premier radio engineering forum. Competing nationally against leading university and research centre teams.</p>
         </div>
         <div class="ach-card">
-          <div class="ach-ico" aria-hidden="true">💰</div>
-          <h4>Dual External Funding</h4>
+          <div class="ach-ico" aria-hidden="true">
+  <svg width="34" height="34" viewBox="0 0 48 48" fill="none"><rect x="6" y="14" width="36" height="24" rx="3" stroke="#c8a942" stroke-width="2"/><path d="M14 14V10a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4" stroke="#c8a942" stroke-width="2"/><circle cx="24" cy="26" r="6" stroke="#c8a942" stroke-width="2"/><path d="M24 22v8M21 25h5" stroke="#c8a942" stroke-width="1.5" stroke-linecap="round"/></svg>
+</div>
+<h4>Dual External Funding</h4>
           <p>Granted by ASRT's Badayty programme <em>and</em> the Ministry of Higher Education's Innovators Support Fund — rare dual institutional endorsement for student-led research.</p>
         </div>
         <div class="ach-card">
-          <div class="ach-ico" aria-hidden="true">🧠</div>
-          <h4>Edge AI Proof of Concept</h4>
+          <div class="ach-ico" aria-hidden="true">
+  <svg width="34" height="34" viewBox="0 0 48 48" fill="none"><rect x="6" y="18" width="26" height="18" rx="2" stroke="#c8a942" stroke-width="2"/><path d="M32 24h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4" stroke="#c8a942" stroke-width="2"/><path d="M10 18v-6a8 8 0 0 1 16 0v6" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><circle cx="19" cy="28" r="3" stroke="#c8a942" stroke-width="2"/><line x1="19" y1="31" x2="19" y2="36" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/></svg>
+</div>
+<h4>Edge AI Proof of Concept</h4>
           <p>Successfully deployed YOLOv8n INT8 on Raspberry Pi 5 — a validated software proof of concept demonstrating the full detection-to-alert pipeline on COTS hardware.</p>
         </div>
         <div class="ach-card feature">
@@ -1459,8 +1620,10 @@ footer{
           <p>PRISMA-compliant review of 50 high-impact C-UAS studies (2018–2025). Defines the Granularity Gap, benchmarks edge AI deployments, and proposes a Cyber-Physical UTM framework.</p>
         </div>
         <div class="ach-card">
-          <div class="ach-ico" aria-hidden="true">🔧</div>
-          <h4>Full System Architecture</h4>
+          <div class="ach-ico" aria-hidden="true">
+  <svg width="34" height="34" viewBox="0 0 48 48" fill="none"><rect x="6" y="6" width="14" height="14" rx="2" stroke="#c8a942" stroke-width="2"/><rect x="28" y="6" width="14" height="14" rx="2" stroke="#c8a942" stroke-width="2"/><rect x="6" y="28" width="14" height="14" rx="2" stroke="#c8a942" stroke-width="2"/><rect x="28" y="28" width="14" height="14" rx="2" stroke="#c8a942" stroke-width="2"/><path d="M20 13h8M13 20v8M35 20v8M20 35h8" stroke="#c8a942" stroke-width="1.5" stroke-linecap="round"/></svg>
+</div>
+<h4>Full System Architecture</h4>
           <p>Designed a complete 5-layer cyber-physical stack: optical acquisition → edge AI inference → Kalman tracking → ISAPI actuation → Telegram telemetry. All layers software-validated.</p>
         </div>
       </div>
@@ -1570,7 +1733,7 @@ footer{
       <div class="eyebrow" style="color:rgba(200,169,66,.8)">Academic Output</div>
       <h1 class="sec-h light" id="research-heading">Research &amp; Publications</h1>
       <div class="sec-rule"></div>
-      <p class="sec-lead light">Peer-reviewed publication, competitive awards, and externally funded innovation — the academic footprint of this work extends well beyond the graduation project itself.</p>
+      <p class="sec-lead light" id="research-lead">Peer-reviewed publication, competitive awards, and externally funded innovation — the academic footprint of this work extends well beyond the graduation project itself.</p>
     </div>
   </div>
 
@@ -1638,7 +1801,7 @@ footer{
     <div class="eyebrow" style="margin-top:.5rem;">Project Documentation</div>
     <div class="dl-grid" style="margin-top:.8rem;">
       <a href="Manuscript.pdf" download class="dl-card" aria-label="Download published review paper PDF">
-        <div class="dl-ico" aria-hidden="true">📑</div>
+        <div class="dl-ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--hue-gold)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
         <div>
           <div class="dl-name">Published Review Article — HUJE</div>
           <div class="dl-meta">Manuscript.pdf · Peer-Reviewed · ISSN 3062-4991</div>
@@ -1646,7 +1809,7 @@ footer{
         <div class="dl-arr" aria-hidden="true">↓</div>
       </a>
       <a href="Book.pdf" download class="dl-card" aria-label="Download graduation project book PDF">
-        <div class="dl-ico" aria-hidden="true">📄</div>
+        <div class="dl-ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--hue-gold)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
         <div>
           <div class="dl-name">Graduation Project Book / Monograph</div>
           <div class="dl-meta">Book.pdf · Full Technical Documentation</div>
@@ -1654,7 +1817,7 @@ footer{
         <div class="dl-arr" aria-hidden="true">↓</div>
       </a>
       <a href="https://github.com/islam-8" target="_blank" rel="noopener" class="dl-card" aria-label="View source code on GitHub">
-        <div class="dl-ico" aria-hidden="true">⌥</div>
+        <div class="dl-ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:var(--hue-gold)"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg></div>
         <div>
           <div class="dl-name">Source Code — GitHub</div>
           <div class="dl-meta">github.com/islam-8 · YOLOv8 Pipeline · Tracking · ISAPI</div>
@@ -1662,7 +1825,7 @@ footer{
         <div class="dl-arr" aria-hidden="true">↗</div>
       </a>
       <a href="https://islam-8.github.io/portfolio/" target="_blank" rel="noopener" class="dl-card" aria-label="View lead researcher portfolio">
-        <div class="dl-ico" aria-hidden="true">🧑‍💻</div>
+        <div class="dl-ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--hue-gold)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <div>
           <div class="dl-name">Lead Researcher Portfolio</div>
           <div class="dl-meta">islam-8.github.io/portfolio · Systems Engineer · 2026</div>
@@ -1677,10 +1840,22 @@ footer{
       <h2 class="sec-h">Funding &amp; Institutional Support</h2>
       <div class="sec-rule"></div>
       <div class="fund-grid">
-        <div class="fund-card"><div class="fund-ico" aria-hidden="true">🏛️</div><div><div class="fund-tag">ASRT — Badayty Initiative</div><h4>Academy of Scientific Research &amp; Technology</h4><p>Project Badayty (بدايتي) — ASRT's flagship innovation funding programme. Awarded to high-potential student-led research with national security or commercial application.</p></div></div>
-        <div class="fund-card"><div class="fund-ico" aria-hidden="true">🎓</div><div><div class="fund-tag">ISF — Innovators Support Fund</div><h4>Ministry of Higher Education</h4><p>صندوق رعاية المبتكرين والنوابغ — Ministry-level recognition and financial support for breakthrough engineering innovations in Egyptian universities.</p></div></div>
-        <div class="fund-card"><div class="fund-ico" aria-hidden="true">🔬</div><div><div class="fund-tag">HUE Research Office</div><h4>Horus University Egypt</h4><p>Full institutional backing — supervised publication, laboratory resources, conference participation, and project administration throughout the 2025–2026 academic year.</p></div></div>
-        <div class="fund-card"><div class="fund-ico" aria-hidden="true">🌐</div><div><div class="fund-tag">ITC 2026 Submission</div><h4>ITC Technology Competition</h4><p>Proposal submitted to ITC 2026 at prototype stage. Full technical transparency applied. Clear Phase II roadmap documented in the project monograph.</p></div></div>
+        <div class="fund-card">
+          <div class="fund-logo-wrap"><img src="assets/asrt.jpg" alt="ASRT" class="fund-logo"></div>
+          <div><div class="fund-tag">ASRT — Badayty Initiative</div><h4>Academy of Scientific Research &amp; Technology</h4><p>Project Badayty (بدايتي) — ASRT's flagship innovation funding programme. Awarded to high-potential student-led research with national security or commercial application.</p></div>
+        </div>
+        <div class="fund-card">
+          <div class="fund-logo-wrap"><img src="assets/isf.png" alt="ISF" class="fund-logo"></div>
+          <div><div class="fund-tag">ISF — Innovators Support Fund</div><h4>Ministry of Higher Education</h4><p>صندوق رعاية المبتكرين والنوابغ — Ministry-level recognition and financial support for breakthrough engineering innovations in Egyptian universities.</p></div>
+        </div>
+        <div class="fund-card">
+          <div class="fund-logo-wrap"><img src="hue.jpeg" alt="HUE" class="fund-logo"></div>
+          <div><div class="fund-tag">HUE Research Office</div><h4>Horus University Egypt</h4><p>Full institutional backing — supervised publication, laboratory resources, conference participation, and project administration throughout the 2025–2026 academic year.</p></div>
+        </div>
+        <div class="fund-card">
+          <div class="fund-logo-wrap"><img src="assets/logo.webp" alt="ITC" class="fund-logo"></div>
+          <div><div class="fund-tag">ITC 2026 Submission</div><h4>ITC Technology Competition</h4><p>Proposal submitted to ITC 2026 at prototype stage. Full technical transparency applied. Clear Phase II roadmap documented in the project monograph.</p></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1778,13 +1953,12 @@ footer{
 </div>
         <div class="mem-name">Islam Emad Ahmed Ismail</div>
         <div class="mem-id">Student ID: 1211108 · ORCID: <a href="https://orcid.org/0009-0002-2829-4912" target="_blank" rel="noopener" style="color:var(--hue-gold);">0009-0002-2829-4912</a></div>
-        <div class="mem-role">6G &amp; AI Researcher · Lead System Engineer</div>
+        <div class="mem-role">Lead Researcher · ECE Student · Class of 2026</div>
         <div class="mem-skills">
-          <span class="msk">Conceptualization</span><span class="msk">Methodology</span>
-          <span class="msk">Formal Analysis</span><span class="msk">Visualization</span>
-          <span class="msk">YOLOv8 Pipeline</span><span class="msk">Raspberry Pi 5</span>
-          <span class="msk">Kalman Tracker</span><span class="msk">6G/RF Architecture</span>
-          <span class="msk">Python</span><span class="msk">GStreamer</span><span class="msk">ISAPI</span>
+          <span class="msk">Python</span><span class="msk">YOLOv8</span>
+          <span class="msk">Raspberry Pi 5</span><span class="msk">Embedded Linux</span>
+          <span class="msk">OpenCV</span><span class="msk">Computer Vision</span>
+          <span class="msk">Signal Processing</span><span class="msk">Research Writing</span>
         </div>
         <div class="mem-links">
           <a href="https://islam-8.github.io/portfolio/" target="_blank" rel="noopener" class="mem-link" aria-label="Portfolio website of Islam Emad">🌐 Portfolio</a>
@@ -1912,9 +2086,7 @@ footer{
       </div>
     </div>
 
-    <div class="photo-note" role="note">
-      <strong>📌 Photo Integration Guide:</strong> Every avatar shows initials as a placeholder. To add official photos, replace each <code>.mem-av</code> or <code>.sup-av</code> div with <code>&lt;img src="assets/team/name.jpg" alt="Full name" class="mem-av"&gt;</code>. The layout, borders, and sizing are fully configured — just drop in the JPG/PNG files.
-    </div>
+
   </section>
 </div><!-- /page-team -->
 
@@ -1926,7 +2098,7 @@ footer{
   <div class="page-banner">
     <div class="page-banner-inner">
       <div class="eyebrow" style="color:rgba(200,169,66,.8)">Visual Documentation</div>
-      <h1 class="sec-h light">Project Media Gallery</h1>
+      <h1 class="sec-h light" id="gallery-heading">Project Media Gallery</h1>
       <div class="sec-rule"></div>
     </div>
   </div>
@@ -1939,18 +2111,18 @@ footer{
     <button class="fbtn" onclick="filterGal('vid',this)">Video</button>
   </div>
   <div class="gal-grid" id="galGrid" role="list">
-    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="Full System Assembly Prototype Unit"><div class="gal-ph"><span class="gico" aria-hidden="true">🔩</span><span class="glbl">Full System Assembly<br>Prototype Unit</span></div><div class="gal-ov" aria-hidden="true">Full System Assembly<br>Prototype Unit</div></div>
-    <div class="gal-item" data-cat="field" role="listitem" tabindex="0" aria-label="Real-Time HUD output with 0.95 confidence"><div class="gal-ph"><span class="gico" aria-hidden="true">🎯</span><span class="glbl">Real-Time HUD Output<br>Confidence: 0.95</span></div><div class="gal-ov" aria-hidden="true">Live HUD: Target Lock<br>CONF: 0.95 · RANGE: 450m</div></div>
-    <div class="gal-item" data-cat="conf" role="listitem" tabindex="0" aria-label="NRSC 2026 Award Ceremony photo"><div class="gal-ph"><span class="gico" aria-hidden="true">🏆</span><span class="glbl">NRSC 2026<br>Award Ceremony</span></div><div class="gal-ov" aria-hidden="true">NRSC 2026<br>5th Best Poster Award</div></div>
-    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="HTOOL SA-6G RF Spectrum Analyzer"><div class="gal-ph"><span class="gico" aria-hidden="true">📡</span><span class="glbl">HTOOL SA-6G<br>RF Spectrum Analyzer</span></div><div class="gal-ov" aria-hidden="true">RF Sensing Core<br>35 MHz – 6.2 GHz</div></div>
-    <div class="gal-item" data-cat="sw" role="listitem" tabindex="0" aria-label="YOLOv8n Training curve mAP@50 0.888 epoch 8"><div class="gal-ph"><span class="gico" aria-hidden="true">📊</span><span class="glbl">YOLOv8n Training<br>mAP@50: 0.888 @ Epoch 8</span></div><div class="gal-ov" aria-hidden="true">Training Convergence<br>Custom HUE Drone Dataset</div></div>
-    <div class="gal-item" data-cat="field" role="listitem" tabindex="0" aria-label="Field Deployment New Damietta Region"><div class="gal-ph"><span class="gico" aria-hidden="true">🌅</span><span class="glbl">Field Deployment<br>New Damietta Region</span></div><div class="gal-ov" aria-hidden="true">Outdoor Field Trial<br>New Damietta · 2026</div></div>
-    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="SolidWorks CAD custom L-bracket design"><div class="gal-ph"><span class="gico" aria-hidden="true">🔧</span><span class="glbl">SolidWorks CAD<br>Custom L-Bracket</span></div><div class="gal-ov" aria-hidden="true">CAD Design<br>Modular L-Bracket Assembly</div></div>
-    <div class="gal-item" data-cat="sw" role="listitem" tabindex="0" aria-label="Normalized confusion matrix Drone Bird Background"><div class="gal-ph"><span class="gico" aria-hidden="true">🧮</span><span class="glbl">Confusion Matrix<br>Drone / Bird / BG</span></div><div class="gal-ov" aria-hidden="true">Normalized Confusion Matrix<br>3-Class Discrimination</div></div>
-    <div class="gal-item" data-cat="conf" role="listitem" tabindex="0" aria-label="NRSC 2026 Poster presentation"><div class="gal-ph"><span class="gico" aria-hidden="true">📜</span><span class="glbl">NRSC 2026 Poster<br>Team Presentation</span></div><div class="gal-ov" aria-hidden="true">Conference Poster<br>NRSC 2026</div></div>
-    <div class="gal-item" data-cat="vid" role="listitem" tabindex="0" aria-label="Live system demo real-time tracking video"><div class="gal-ph"><span class="gico" aria-hidden="true">▶️</span><span class="glbl">Live System Demo<br>Real-time Tracking HUD</span></div><div class="gal-ov" aria-hidden="true">Demo Video<br>Real-time Drone Tracking</div></div>
-    <div class="gal-item" data-cat="conf" role="listitem" tabindex="0" aria-label="Team photo at NRSC award ceremony"><div class="gal-ph"><span class="gico" aria-hidden="true">📸</span><span class="glbl">Team Photo<br>NRSC Award Ceremony</span></div><div class="gal-ov" aria-hidden="true">Team Horus<br>NRSC 2026 Ceremony</div></div>
-    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="Raspberry Pi 5 compute node"><div class="gal-ph"><span class="gico" aria-hidden="true">🖥️</span><span class="glbl">Raspberry Pi 5<br>Compute Node</span></div><div class="gal-ov" aria-hidden="true">Raspberry Pi 5<br>BCM2712 SoC · 2.4GHz</div></div>
+    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="Full System Assembly Prototype Unit"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="14" width="36" height="24" rx="3" stroke="#c8a942" stroke-width="2"/><path d="M16 14V10M32 14V10M24 14V8" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="26" r="5" stroke="#c8a942" stroke-width="2"/><path d="M10 26h4M34 26h4" stroke="#c8a942" stroke-width="1.5" stroke-linecap="round"/></svg><span class="glbl">Full System Assembly<br>Prototype Unit</span></div><div class="gal-ov" aria-hidden="true">Full System Assembly<br>Prototype Unit</div></div>
+    <div class="gal-item" data-cat="field" role="listitem" tabindex="0" aria-label="Real-Time HUD output with 0.95 confidence"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="20" r="8" stroke="#c8a942" stroke-width="2"/><path d="M24 4v4M24 32v4M40 20h-4M12 20H8M35.3 8.7l-2.8 2.8M15.5 28.5l-2.8 2.8M35.3 31.3l-2.8-2.8M15.5 11.5l-2.8-2.8" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="20" r="3" fill="#c8a942" opacity=".5"/></svg><span class="glbl">Real-Time HUD Output<br>Confidence: 0.95</span></div><div class="gal-ov" aria-hidden="true">Live HUD: Target Lock<br>CONF: 0.95 · RANGE: 450m</div></div>
+    <div class="gal-item" data-cat="conf" role="listitem" tabindex="0" aria-label="NRSC 2026 Award Ceremony photo"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 6l3.7 7.4 8.3 1.2-6 5.8 1.4 8.3L24 24.7l-7.4 3.9 1.4-8.3-6-5.8 8.3-1.2L24 6z" stroke="#c8a942" stroke-width="2" stroke-linejoin="round"/><path d="M12 38h24M16 44h16" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/></svg><span class="glbl">NRSC 2026<br>Award Ceremony</span></div><div class="gal-ov" aria-hidden="true">NRSC 2026<br>5th Best Poster Award</div></div>
+    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="HTOOL SA-6G RF Spectrum Analyzer"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="14" width="36" height="24" rx="3" stroke="#c8a942" stroke-width="2"/><path d="M16 14V10M32 14V10M24 14V8" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="26" r="5" stroke="#c8a942" stroke-width="2"/><path d="M10 26h4M34 26h4" stroke="#c8a942" stroke-width="1.5" stroke-linecap="round"/></svg><span class="glbl">HTOOL SA-6G<br>RF Spectrum Analyzer</span></div><div class="gal-ov" aria-hidden="true">RF Sensing Core<br>35 MHz – 6.2 GHz</div></div>
+    <div class="gal-item" data-cat="sw" role="listitem" tabindex="0" aria-label="YOLOv8n Training curve mAP@50 0.888 epoch 8"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 38V28M16 38V20M24 38V24M32 38V14M40 38V8" stroke="#c8a942" stroke-width="3" stroke-linecap="round"/><path d="M6 38h36" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/></svg><span class="glbl">YOLOv8n Training<br>mAP@50: 0.888 @ Epoch 8</span></div><div class="gal-ov" aria-hidden="true">Training Convergence<br>Custom HUE Drone Dataset</div></div>
+    <div class="gal-item" data-cat="field" role="listitem" tabindex="0" aria-label="Field Deployment New Damietta Region"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="20" r="8" stroke="#c8a942" stroke-width="2"/><path d="M24 4v4M24 32v4M40 20h-4M12 20H8M35.3 8.7l-2.8 2.8M15.5 28.5l-2.8 2.8M35.3 31.3l-2.8-2.8M15.5 11.5l-2.8-2.8" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="20" r="3" fill="#c8a942" opacity=".5"/></svg><span class="glbl">Field Deployment<br>New Damietta Region</span></div><div class="gal-ov" aria-hidden="true">Outdoor Field Trial<br>New Damietta · 2026</div></div>
+    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="SolidWorks CAD custom L-bracket design"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="32" height="32" rx="2" stroke="#c8a942" stroke-width="2"/><path d="M8 16h32M16 8v32" stroke="#c8a942" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="28" cy="28" r="6" stroke="#c8a942" stroke-width="2"/><path d="M28 22v12M22 28h12" stroke="#c8a942" stroke-width="1.5" stroke-linecap="round"/></svg><span class="glbl">SolidWorks CAD<br>Custom L-Bracket</span></div><div class="gal-ov" aria-hidden="true">CAD Design<br>Modular L-Bracket Assembly</div></div>
+    <div class="gal-item" data-cat="sw" role="listitem" tabindex="0" aria-label="Normalized confusion matrix Drone Bird Background"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 38V28M16 38V20M24 38V24M32 38V14M40 38V8" stroke="#c8a942" stroke-width="3" stroke-linecap="round"/><path d="M6 38h36" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/></svg><span class="glbl">Confusion Matrix<br>Drone / Bird / BG</span></div><div class="gal-ov" aria-hidden="true">Normalized Confusion Matrix<br>3-Class Discrimination</div></div>
+    <div class="gal-item" data-cat="conf" role="listitem" tabindex="0" aria-label="NRSC 2026 Poster presentation"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 36V12a2 2 0 0 1 2-2h28a2 2 0 0 1 2 2v24a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2z" stroke="#c8a942" stroke-width="2"/><path d="M14 18h20M14 24h20M14 30h12" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/></svg><span class="glbl">NRSC 2026 Poster<br>Team Presentation</span></div><div class="gal-ov" aria-hidden="true">Conference Poster<br>NRSC 2026</div></div>
+    <div class="gal-item" data-cat="vid" role="listitem" tabindex="0" aria-label="Live system demo real-time tracking video"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="10" width="28" height="28" rx="3" stroke="#c8a942" stroke-width="2"/><path d="M32 18l12-6v24l-12-6V18z" stroke="#c8a942" stroke-width="2" stroke-linejoin="round"/><circle cx="18" cy="24" r="5" stroke="#c8a942" stroke-width="2"/><path d="M16 24l4-2v4l-4-2z" fill="#c8a942" opacity=".5"/></svg><span class="glbl">Live System Demo<br>Real-time Tracking HUD</span></div><div class="gal-ov" aria-hidden="true">Demo Video<br>Real-time Drone Tracking</div></div>
+    <div class="gal-item" data-cat="conf" role="listitem" tabindex="0" aria-label="Team photo at NRSC award ceremony"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="16" r="6" stroke="#c8a942" stroke-width="2"/><path d="M6 38c0-6.627 5.373-12 12-12" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="16" r="6" stroke="#c8a942" stroke-width="2"/><path d="M44 38c0-6.627-5.373-12-12-12" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><path d="M18 38c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/></svg><span class="glbl">Team Photo<br>NRSC Award Ceremony</span></div><div class="gal-ov" aria-hidden="true">Team Horus<br>NRSC 2026 Ceremony</div></div>
+    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="Raspberry Pi 5 compute node"><div class="gal-ph"><svg class="gico-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="32" height="32" rx="3" stroke="#c8a942" stroke-width="2"/><circle cx="24" cy="24" r="7" stroke="#c8a942" stroke-width="2"/><circle cx="24" cy="24" r="3" fill="#c8a942" opacity=".5"/><circle cx="14" cy="14" r="2" stroke="#c8a942" stroke-width="1.5"/><circle cx="34" cy="14" r="2" stroke="#c8a942" stroke-width="1.5"/><circle cx="14" cy="34" r="2" stroke="#c8a942" stroke-width="1.5"/><circle cx="34" cy="34" r="2" stroke="#c8a942" stroke-width="1.5"/></svg><span class="glbl">Raspberry Pi 5<br>Compute Node</span></div><div class="gal-ov" aria-hidden="true">Raspberry Pi 5<br>BCM2712 SoC · 2.4GHz</div></div>
   </div>
 </div><!-- /page-gallery -->
 
@@ -1962,9 +2134,9 @@ footer{
   <div class="page-banner">
     <div class="page-banner-inner">
       <div class="eyebrow" style="color:rgba(200,169,66,.8)">Interactive Demo</div>
-      <h1 class="sec-h light">Live System Simulation</h1>
+      <h1 class="sec-h light" id="sim-heading">Live System Simulation</h1>
       <div class="sec-rule"></div>
-      <p class="sec-lead light">Visualisation of the C-UAS pipeline architecture. Toggle AUTO / MANUAL mode, simulate detection events, and observe the data flow — mirroring the actual system behaviour described in the published research.</p>
+      <p class="sec-lead light" id="sim-lead">Visualisation of the C-UAS pipeline architecture. Toggle AUTO / MANUAL mode, simulate detection events, and observe the data flow — mirroring the actual system behaviour described in the published research.</p>
     </div>
   </div>
 
@@ -2101,7 +2273,7 @@ footer{
       <div class="eyebrow" style="color:rgba(200,169,66,.8)">Get in Touch</div>
       <h1 class="sec-h light">Contact &amp; Location</h1>
       <div class="sec-rule"></div>
-      <p class="sec-lead light">Faculty of Engineering — Horus University Egypt, New Damietta. For academic enquiries, collaboration proposals, and research correspondence.</p>
+      <p class="sec-lead light" id="contact-lead">Faculty of Engineering — Horus University Egypt, New Damietta. For academic enquiries, collaboration proposals, and research correspondence.</p>
     </div>
   </div>
 
@@ -2113,7 +2285,7 @@ footer{
           <div class="c-row"><div class="c-ico" aria-hidden="true">🏛️</div><div><div class="c-lbl">Institution</div><div class="c-val">Horus University Egypt (HUE)</div></div></div>
           <div class="c-row"><div class="c-ico" aria-hidden="true">🎓</div><div><div class="c-lbl">Faculty &amp; Department</div><div class="c-val">Faculty of Engineering<br>Dept. of Communications &amp; Electronics Engineering</div></div></div>
           <div class="c-row"><div class="c-ico" aria-hidden="true">📮</div><div><div class="c-lbl">Address</div><div class="c-val">International Coastal Road, New Damietta<br>Damietta Governorate, 8027101 — Egypt</div></div></div>
-          <div class="c-row"><div class="c-ico" aria-hidden="true">📞</div><div><div class="c-lbl">Telephone</div><div class="c-val"><a href="tel:+201144455582">+201144455582</a></div></div></div>
+          <div class="c-row"><div class="c-ico" aria-hidden="true">📞</div><div><div class="c-lbl">Telephone</div><div class="c-val"><a href="tel:+201559933466">+201559933466</a></div></div></div>
           <div class="c-row"><div class="c-ico" aria-hidden="true">🌐</div><div><div class="c-lbl">Faculty Website</div><div class="c-val"><a href="https://eng.horus.edu.eg" target="_blank" rel="noopener">eng.horus.edu.eg</a></div></div></div>
           <div class="c-row"><div class="c-ico" aria-hidden="true">✉️</div><div><div class="c-lbl">Email</div><div class="c-val"><a href="mailto:Admin@horus.edu.eg">Admin@horus.edu.eg</a><br><a href="mailto:info@horus.edu.eg">info@horus.edu.eg</a></div></div></div>
         </div>
@@ -2668,15 +2840,16 @@ var TRANSLATIONS = {
   'ntab-sim':      {en:'Live Demo',     ar:'عرض مباشر'},
   'ntab-contact':  {en:'Contact',       ar:'تواصل معنا'},
   /* ── university header ── */
-  'uniName':   {en:'Horus University Egypt',       ar:'جامعة حورس مصر'},
-  'uniFaculty':{en:'Faculty of Engineering',        ar:'كلية الهندسة'},
+  'uniFaculty':{en:'Faculty of Engineering', ar:'كلية الهندسة'},
   'uniDept':   {en:'Department of Communications & Electronics Engineering · New Damietta, Egypt',
                 ar:'قسم هندسة الاتصالات والإلكترونيات · دمياط الجديدة، مصر'},
   /* ── hero ── */
   'hero-title':    {en:'Advanced System<br>for Drone <span class="accent">Detection,</span><br>Tracking &amp; Neutralization',
                     ar:'نظام متقدم<br>للكشف عن الطائرات <span class="accent">المسيّرة</span><br>وتتبعها وتحييدها'},
+  'hero-sub-txt':  {en:'Bridging the Granularity Gap between conventional radar and autonomous micro-UAVs through edge-native AI, optical tracking, and multi-spectral RF fusion — engineered at Horus University Egypt.',
+                    ar:'سد فجوة الدقة بين الرادار التقليدي والطائرات المسيّرة الدقيقة من خلال الذكاء الاصطناعي على الحافة، والتتبع البصري، ودمج RF متعدد الأطياف — مُطوَّر في جامعة حورس مصر.'},
   /* ── problem section ── */
-  'problem-heading':{en:'The Granularity Gap', ar:'فجوة الدقة (Granularity Gap)'},
+  'problem-heading':{en:'The Granularity Gap', ar:'فجوة الدقة'},
   /* ── conops ── */
   'conops-heading': {en:'System Workflow',     ar:'مسار عمل النظام'},
   /* ── achievements ── */
@@ -2685,26 +2858,98 @@ var TRANSLATIONS = {
   'arch-heading':   {en:'Architecture &amp; Data Flow',ar:'المعمارية وتدفق البيانات'},
   /* ── research page ── */
   'research-heading':{en:'Research &amp; Publications', ar:'الأبحاث والمنشورات'},
+  'research-lead':  {en:'Peer-reviewed publication, competitive awards, and externally funded innovation — the academic footprint of this work extends well beyond the graduation project itself.',
+                     ar:'نشر علمي محكَّم، وجوائز تنافسية، وابتكار ممول خارجياً — البصمة الأكاديمية لهذا العمل تتخطى حدود مشروع التخرج.'},
   /* ── team page ── */
   'sup-heading':    {en:'Supervisory Committee',ar:'لجنة الإشراف'},
   'team-heading':   {en:'Team Horus — Class of 2026', ar:'فريق حورس — دفعة 2026'},
+  /* ── sim page ── */
+  'sim-heading':    {en:'Live System Simulation', ar:'محاكاة النظام المباشرة'},
+  'sim-lead':       {en:'Visualisation of the C-UAS pipeline architecture. Toggle AUTO / MANUAL mode, simulate detection events, and observe the data flow — mirroring the actual system behaviour described in the published research.',
+                     ar:'تصوير لمعمارية خط أنابيب نظام C-UAS. بدّل بين وضع AUTO / MANUAL، وقم بمحاكاة أحداث الكشف، وراقب تدفق البيانات.'},
   /* ── contact page ── */
   'form-heading':   {en:'Send an Enquiry',     ar:'أرسل استفساراً'},
+  'contact-lead':   {en:'Faculty of Engineering — Horus University Egypt, New Damietta. For academic enquiries, collaboration proposals, and research correspondence.',
+                     ar:'كلية الهندسة — جامعة حورس مصر، دمياط الجديدة. للاستفسارات الأكاديمية، ومقترحات التعاون، والمراسلات البحثية.'},
+  /* ── gallery page ── */
+  'gallery-heading':{en:'Project Media Gallery', ar:'معرض وسائط المشروع'},
+  /* ── footer ── */
+  'foot-brand-name-txt':{en:'Advanced C-UAS System', ar:'نظام C-UAS المتقدم'},
 };
 
 function toggleLang(){
   isArabic = !isArabic;
-  var html = document.getElementById('htmlRoot');
-  html.setAttribute('lang',  isArabic ? 'ar' : 'en');
-  html.setAttribute('dir',   isArabic ? 'rtl' : 'ltr');
+  var rootEl = document.getElementById('htmlRoot');
+  rootEl.setAttribute('lang',  isArabic ? 'ar' : 'en');
+  rootEl.setAttribute('dir',   isArabic ? 'rtl' : 'ltr');
   document.getElementById('langLabel').textContent = isArabic ? 'English' : 'العربية';
+
   Object.keys(TRANSLATIONS).forEach(function(id){
     var el = document.getElementById(id);
     if(!el) return;
     var val = isArabic ? TRANSLATIONS[id].ar : TRANSLATIONS[id].en;
+    if(typeof val !== 'string') return;
     if(val.indexOf('<')!==-1) el.innerHTML = val;
     else el.textContent = val;
   });
+
+  /* translate nav-cta */
+  var cta = document.querySelector('.nav-cta');
+  if(cta) cta.textContent = isArabic ? 'المنشورات ↗' : 'Publications ↗';
+
+  /* translate filter buttons */
+  var filterMap = {
+    'all':   isArabic ? 'الكل'       : 'All',
+    'hw':    isArabic ? 'الأجهزة'    : 'Hardware',
+    'field': isArabic ? 'التجارب'    : 'Field Trials',
+    'sw':    isArabic ? 'البرمجيات'  : 'Software / AI',
+    'conf':  isArabic ? 'المؤتمرات'  : 'Conference',
+    'vid':   isArabic ? 'الفيديو'    : 'Video'
+  };
+  document.querySelectorAll('.fbtn').forEach(function(b){
+    var fn = b.getAttribute('onclick')||'';
+    var m = fn.match(/filterGal\('([^']+)'/);
+    if(m && filterMap[m[1]]) b.textContent = filterMap[m[1]];
+  });
+
+  /* translate form labels */
+  var formLabels = [
+    ['cf-name',    isArabic?'الاسم الكامل *'      :'Full Name *'],
+    ['cf-org',     isArabic?'المؤسسة'              :'Institution'],
+    ['cf-email',   isArabic?'البريد الإلكتروني *'  :'Email Address *'],
+    ['cf-subject', isArabic?'الموضوع *'             :'Subject *'],
+    ['cf-msg',     isArabic?'الرسالة *'             :'Message *']
+  ];
+  formLabels.forEach(function(pair){
+    var lbl = document.querySelector('label[for="'+pair[0]+'"]');
+    if(lbl) lbl.textContent = pair[1];
+  });
+
+  /* translate form submit button */
+  var subBtn = document.querySelector('.form-submit');
+  if(subBtn) subBtn.textContent = isArabic ? 'إرسال الرسالة' : 'Send Message';
+
+  /* translate map button */
+  var mapBtn = document.querySelector('.map-btn');
+  if(mapBtn) mapBtn.textContent = isArabic ? 'فتح في خرائط جوجل ↗' : 'Open in Google Maps ↗';
+
+  /* translate hero buttons */
+  var heroBtns = document.querySelectorAll('.hero-btns .btn-gold, .hero-btns .btn-outline');
+  if(heroBtns[0]) heroBtns[0].textContent = isArabic ? 'استكشاف المعمارية' : 'Explore Architecture';
+  if(heroBtns[1]) heroBtns[1].textContent = isArabic ? '▶ عرض مباشر' : '▶ Live Demo';
+
+  /* RTL-aware layout fixes */
+  if(isArabic){
+    document.querySelectorAll('.sec-lead,.sec-h,.eyebrow,.card p,.ach-card p,.fund-card p,.mem-name,.mem-role,.sup-name,.sup-rank,.sup-dept').forEach(function(el){
+      el.style.textAlign = 'right';
+    });
+    document.querySelectorAll('.eyebrow').forEach(function(el){el.style.justifyContent='flex-end';});
+  } else {
+    document.querySelectorAll('.sec-lead,.sec-h,.eyebrow,.card p,.ach-card p,.fund-card p,.mem-name,.mem-role,.sup-name,.sup-rank,.sup-dept').forEach(function(el){
+      el.style.textAlign = '';
+    });
+    document.querySelectorAll('.eyebrow').forEach(function(el){el.style.justifyContent='';});
+  }
 }
 
 /* ── KEYBOARD NAV for gallery items ── */
