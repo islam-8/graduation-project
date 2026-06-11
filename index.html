@@ -1,0 +1,2716 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Advanced C-UAS System — Drone Detection, Tracking & Neutralization | Horus University Egypt 2026</title>
+
+<!-- SEO Meta -->
+<meta name="description" content="Graduation project 2026 — Advanced System for Drone Detection, Tracking and Neutralization. Edge AI YOLOv8n, 88.8% mAP@50, 139ms latency. NRSC 2026 Best Poster. Horus University Egypt, Faculty of Engineering.">
+<meta name="keywords" content="C-UAS, drone detection, anti-drone, YOLOv8, Raspberry Pi 5, edge AI, Horus University Egypt, NRSC 2026, graduation project 2026">
+<meta name="author" content="Islam Emad Ismail · Team Horus 2026">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://islam-8.github.io/cuas/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="HUE C-UAS System — Drone Detection & Neutralization 2026">
+<meta property="og:description" content="NRSC 2026 Best Poster · 88.8% mAP@50 · 139ms latency · ASRT & ISF funded. Horus University Egypt.">
+<meta property="og:image" content="https://islam-8.github.io/portfolio/assets/me.jpg">
+<meta property="og:url" content="https://islam-8.github.io/cuas/">
+<meta property="og:locale" content="en_EG">
+<meta property="og:locale:alternate" content="ar_EG">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HUE C-UAS System — Drone Detection & Neutralization">
+<meta name="twitter:description" content="NRSC 2026 Best Poster · 88.8% mAP@50 · Edge AI on Raspberry Pi 5. Horus University Egypt.">
+<meta name="twitter:site" content="@HUE_eg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Noto+Kufi+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════ */
+:root{
+  --hue-navy:      #0d1b3e;
+  --hue-navy-deep: #071229;
+  --hue-navy-mid:  #162248;
+  --hue-navy-soft: #1e2f5a;
+  --hue-gold:      #c8a942;
+  --hue-gold-lt:   #dfc06a;
+  --hue-gold-dim:  rgba(200,169,66,.12);
+  --hue-gold-brd:  rgba(200,169,66,.3);
+  --white:         #ffffff;
+  --cream:         #faf8f3;
+  --off-white:     #f4f2ec;
+  --light-line:    #e8e4d8;
+  --mid-line:      #d0cab8;
+  --text-1:        #0d1b3e;
+  --text-2:        #2c3a5a;
+  --text-3:        #556080;
+  --text-4:        #8090aa;
+  --hud-grn:       #2ecc71;
+  --hud-red:       #e74c3c;
+  --hud-amb:       #f39c12;
+  --radius-sm:     3px;
+  --radius-md:     6px;
+  --sh-card:       0 2px 16px rgba(13,27,62,.08);
+  --sh-lift:       0 8px 32px rgba(13,27,62,.14);
+  --sh-gold:       0 4px 24px rgba(200,169,66,.2);
+  --trans:         all .22s ease;
+  --font-display:  'Playfair Display', serif;
+  --font-body:     'Inter', sans-serif;
+  --font-mono:     'Roboto Mono', monospace;
+  --font-arabic:   'Noto Kufi Arabic', sans-serif;
+}
+
+/* Arabic RTL */
+[dir="rtl"] {
+  --font-display: 'Noto Kufi Arabic', sans-serif;
+  --font-body:    'Noto Kufi Arabic', sans-serif;
+}
+[dir="rtl"] body { font-family: var(--font-arabic); }
+[dir="rtl"] .eyebrow::before { order: 1; margin-left: .65rem; margin-right: 0; }
+[dir="rtl"] .eyebrow { flex-direction: row-reverse; }
+[dir="rtl"] .sec-rule { margin-right: 0; }
+[dir="rtl"] .info-bar-left { flex-direction: row-reverse; }
+[dir="rtl"] .card.gold-left { border-left: none; border-right: 3px solid var(--hue-gold); }
+[dir="rtl"] .paper-abstract { border-left: none; border-right: 3px solid var(--hue-gold); border-radius: 3px 0 0 3px; }
+[dir="rtl"] .phl { border-left: none; border-right: 2px solid var(--hue-gold); }
+[dir="rtl"] .sw-layer { grid-template-columns: 140px 1fr auto; border-left: none; border-right: 3px solid var(--hue-navy); }
+[dir="rtl"] .sw-meta { border-left: none; border-right: 1px solid var(--light-line); }
+[dir="rtl"] .dl-card { border-left: none; border-right: 3px solid var(--hue-navy); }
+[dir="rtl"] .dl-card:hover { border-right-color: var(--hue-gold); border-left-color: var(--light-line); }
+[dir="rtl"] .acc-item { border-left: none; border-right: 2px solid var(--hue-gold); }
+[dir="rtl"] .photo-note { border-left: none; border-right: 3px solid var(--hue-navy); }
+[dir="rtl"] .award-strip { border-left: none; border-right: 4px solid var(--hue-gold); }
+[dir="rtl"] .foot-copy { text-align: left; }
+[dir="rtl"] .nav-inner { flex-direction: row-reverse; }
+[dir="rtl"] .hero-hud { direction: ltr; } /* keep HUD in LTR always */
+
+/* ══════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:var(--font-body);background:var(--cream);color:var(--text-1);overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:inherit;border:none;background:none;}
+img{display:block;max-width:100%;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--hue-navy-deep);}
+::-webkit-scrollbar-thumb{background:var(--hue-gold);border-radius:3px;}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--hue-gold);
+  outline-offset: 3px;
+}
+
+/* Skip to content */
+.skip-link {
+  position: absolute; top: -40px; left: 0; z-index: 9999;
+  background: var(--hue-gold); color: var(--hue-navy);
+  padding: .5rem 1rem; font-weight: 700; font-size: .8rem;
+  transition: top .2s;
+}
+.skip-link:focus { top: 0; }
+
+/* ══════════════════════════════════════════
+   LANGUAGE TOGGLE BUTTON
+══════════════════════════════════════════ */
+.lang-btn {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-family: var(--font-mono); font-size: .6rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: .3rem .75rem; border-radius: 2px;
+  border: 1px solid rgba(200,169,66,.4);
+  background: rgba(200,169,66,.08); color: var(--hue-gold);
+  cursor: pointer; transition: var(--trans);
+}
+.lang-btn:hover { background: var(--hue-gold); color: var(--hue-navy-deep); }
+.lang-btn .ar-lbl { font-family: var(--font-arabic); font-size: .7rem; }
+
+/* ══════════════════════════════════════════
+   TOP INFO BAR
+══════════════════════════════════════════ */
+.info-bar{
+  background:var(--hue-navy-deep);
+  border-bottom:1px solid rgba(200,169,66,.18);
+  padding:.38rem 4%;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:.68rem;font-family:var(--font-body);
+  color:rgba(255,255,255,.5);
+  gap:1rem;flex-wrap:wrap;
+}
+.info-bar-left{display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;}
+.info-item{display:flex;align-items:center;gap:.35rem;}
+.info-item a{color:rgba(255,255,255,.5);transition:color .2s;}
+.info-item a:hover{color:var(--hue-gold);}
+.info-bar-right{display:flex;align-items:center;gap:.65rem;}
+.social-ico{
+  width:24px;height:24px;border-radius:3px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;color:rgba(255,255,255,.5);
+  transition:var(--trans);
+}
+.social-ico:hover{background:var(--hue-gold);color:var(--hue-navy);border-color:var(--hue-gold);}
+
+/* ══════════════════════════════════════════
+   UNIVERSITY HEADER
+══════════════════════════════════════════ */
+.uni-header{
+  background:var(--white);
+  border-bottom:3px solid var(--hue-gold);
+  padding:.8rem 4%;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  box-shadow:0 2px 12px rgba(13,27,62,.08);
+}
+.uni-logos{display:flex;align-items:center;gap:2.5rem;}
+.logo-box{
+  height:58px;display:flex;align-items:center;justify-content:center;
+  border:1.5px dashed rgba(200,169,66,.35);border-radius:3px;
+  padding:.3rem .8rem;min-width:80px;
+  background:rgba(200,169,66,.04);
+}
+.logo-box img{height:100%;width:auto;object-fit:contain;}
+.logo-divider{width:1px;height:44px;background:var(--light-line);}
+.uni-center{text-align:center;flex:1;}
+.uni-name{
+  font-family:var(--font-display);
+  font-size:1.18rem;font-weight:700;
+  color:var(--hue-navy);letter-spacing:.04em;
+  line-height:1.1;
+}
+.uni-faculty{
+  font-size:.7rem;font-weight:500;
+  color:var(--hue-gold);letter-spacing:.12em;
+  text-transform:uppercase;margin-top:.22rem;
+  font-family:var(--font-body);
+}
+.uni-dept{
+  font-size:.6rem;color:var(--text-3);
+  letter-spacing:.08em;margin-top:.15rem;
+  font-family:var(--font-mono);
+}
+.uni-accred{
+  display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:flex-end;
+}
+.acc-pill{
+  font-family:var(--font-mono);font-size:.56rem;
+  background:var(--hue-navy);color:var(--hue-gold);
+  border:1px solid var(--hue-gold-brd);
+  padding:.18rem .55rem;border-radius:2px;
+  letter-spacing:.08em;white-space:nowrap;
+}
+
+/* ══════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════ */
+nav{
+  position:sticky;top:0;z-index:1000;
+  background:var(--hue-navy);
+  border-bottom:2px solid var(--hue-gold);
+  box-shadow:0 3px 20px rgba(13,27,62,.35);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 4%;max-width:1440px;margin:0 auto;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:.7rem;
+  padding:.55rem 0;cursor:pointer;flex-shrink:0;
+}
+.nav-logo:focus-visible{outline-color:var(--hue-gold);}
+.nav-eye{
+  width:34px;height:34px;flex-shrink:0;
+  background:var(--hue-gold);
+  clip-path:ellipse(50% 38% at 50% 50%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;position:relative;
+  aria-hidden:true;
+}
+.nav-eye::after{
+  content:'';
+  position:absolute;width:10px;height:10px;
+  border-radius:50%;background:var(--hue-navy);
+}
+.nav-logo-txt .l1{
+  font-family:var(--font-display);font-size:1rem;font-weight:700;
+  color:var(--white);letter-spacing:.04em;
+}
+.nav-logo-txt .l2{
+  font-family:var(--font-mono);font-size:.52rem;
+  color:rgba(200,169,66,.75);letter-spacing:.12em;margin-top:.05rem;
+}
+.nav-tabs{display:flex;align-items:center;}
+.nav-tab{
+  display:flex;align-items:center;
+  height:50px;padding:0 1.1rem;
+  font-size:.72rem;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.68);
+  border-bottom:3px solid transparent;
+  transition:var(--trans);cursor:pointer;
+  white-space:nowrap;font-family:var(--font-body);
+  background:none;border-top:none;border-left:none;border-right:none;
+}
+.nav-tab:hover{color:var(--hue-gold-lt);background:rgba(200,169,66,.06);}
+.nav-tab.active{
+  color:var(--hue-gold);
+  border-bottom-color:var(--hue-gold);
+  background:rgba(200,169,66,.08);
+}
+.nav-cta{
+  background:var(--hue-gold);color:var(--hue-navy-deep);
+  font-family:var(--font-body);font-size:.7rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:.5rem 1.2rem;border-radius:var(--radius-sm);
+  border:none;cursor:pointer;
+  transition:background .2s,box-shadow .2s;
+  white-space:nowrap;flex-shrink:0;
+}
+.nav-cta:hover{background:var(--hue-gold-lt);box-shadow:var(--sh-gold);}
+.nav-mob{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px;}
+.nav-mob span{width:22px;height:2px;background:var(--white);border-radius:1px;}
+
+/* Nav right cluster */
+.nav-right-cluster{display:flex;align-items:center;gap:.6rem;}
+
+/* ══════════════════════════════════════════
+   PAGE ENGINE + HASH ROUTING
+══════════════════════════════════════════ */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ══════════════════════════════════════════
+   SHARED TYPOGRAPHY
+══════════════════════════════════════════ */
+.sec-wrap{max-width:1200px;margin:0 auto;padding:4rem 4%;}
+.sec-wrap.wide{max-width:1440px;}
+.eyebrow{
+  display:flex;align-items:center;gap:.65rem;
+  font-family:var(--font-mono);font-size:.6rem;
+  letter-spacing:.25em;color:var(--hue-gold);
+  text-transform:uppercase;margin-bottom:.55rem;
+}
+.eyebrow::before{
+  content:'';flex-shrink:0;
+  width:28px;height:1px;background:var(--hue-gold);
+}
+.sec-h{
+  font-family:var(--font-display);
+  font-size:clamp(1.7rem,3.2vw,2.6rem);
+  font-weight:700;color:var(--hue-navy);
+  line-height:1.1;
+}
+.sec-h.light{color:var(--white);}
+.sec-rule{
+  width:48px;height:3px;
+  background:linear-gradient(90deg,var(--hue-gold),rgba(200,169,66,.2));
+  margin:.7rem 0 2rem;border-radius:2px;
+}
+.sec-rule.center{margin-left:auto;margin-right:auto;}
+.sec-lead{
+  font-size:.93rem;color:var(--text-2);
+  line-height:1.8;max-width:640px;
+}
+.sec-lead.light{color:rgba(255,255,255,.65);}
+
+/* ══════════════════════════════════════════
+   PAGE HERO BANNER
+══════════════════════════════════════════ */
+.page-banner{
+  background:var(--hue-navy);
+  padding:3.5rem 4% 3rem;
+  position:relative;overflow:hidden;
+  border-bottom:3px solid var(--hue-gold);
+}
+.page-banner::before{
+  content:'';position:absolute;
+  top:-60px;right:-60px;
+  width:320px;height:320px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(200,169,66,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.page-banner-inner{max-width:1200px;margin:0 auto;}
+
+/* ══════════════════════════════════════════
+   CARDS
+══════════════════════════════════════════ */
+.card{
+  background:var(--white);border:1px solid var(--light-line);
+  border-radius:var(--radius-sm);padding:1.6rem;
+  box-shadow:var(--sh-card);transition:var(--trans);
+}
+.card:hover{box-shadow:var(--sh-lift);transform:translateY(-3px);}
+.card.gold-top{border-top:3px solid var(--hue-gold);}
+.card.navy-top{border-top:3px solid var(--hue-navy);}
+.card.gold-left{border-left:3px solid var(--hue-gold);}
+
+.spec-table{width:100%;border-collapse:collapse;}
+.spec-table tr{border-bottom:1px solid var(--light-line);}
+.spec-table tr:last-child{border-bottom:none;}
+.spec-table td{padding:.42rem 0;font-size:.8rem;vertical-align:top;}
+.spec-table td:first-child{
+  font-family:var(--font-mono);font-size:.62rem;
+  color:var(--text-3);letter-spacing:.08em;width:42%;padding-right:.5rem;
+}
+.spec-table td:last-child{color:var(--text-1);font-weight:500;}
+
+.chip{
+  display:inline-block;
+  font-family:var(--font-mono);font-size:.6rem;
+  padding:.18rem .55rem;border-radius:2px;
+  background:var(--off-white);border:1px solid var(--light-line);
+  color:var(--text-2);margin:.18rem .18rem 0 0;
+}
+.chip.navy{background:var(--hue-navy);color:var(--hue-gold);border-color:var(--hue-navy);}
+.chip.gold{background:rgba(200,169,66,.1);color:#8b6f1e;border-color:rgba(200,169,66,.3);}
+.chip.green{background:rgba(46,204,113,.08);color:#1a7a42;border-color:rgba(46,204,113,.25);}
+
+/* BUTTONS */
+.btn-navy{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--hue-navy);color:var(--white);
+  font-family:var(--font-body);font-size:.75rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.62rem 1.5rem;border-radius:var(--radius-sm);
+  border:1px solid var(--hue-navy);transition:var(--trans);cursor:pointer;
+}
+.btn-navy:hover{background:var(--hue-navy-soft);box-shadow:var(--sh-lift);}
+.btn-gold{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--hue-gold);color:var(--hue-navy-deep);
+  font-family:var(--font-body);font-size:.75rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.62rem 1.5rem;border-radius:var(--radius-sm);
+  border:1px solid var(--hue-gold);transition:var(--trans);cursor:pointer;
+}
+.btn-gold:hover{background:var(--hue-gold-lt);box-shadow:var(--sh-gold);}
+.btn-outline{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:transparent;color:var(--hue-navy);
+  font-family:var(--font-body);font-size:.75rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.62rem 1.5rem;border-radius:var(--radius-sm);
+  border:1px solid var(--mid-line);transition:var(--trans);cursor:pointer;
+}
+.btn-outline:hover{border-color:var(--hue-navy);color:var(--hue-navy);}
+
+/* ══════════════════════════════════════════
+   HOME — HERO
+══════════════════════════════════════════ */
+.hero{
+  background:var(--hue-navy-deep);
+  min-height:calc(100vh - 130px);
+  display:flex;align-items:center;
+  position:relative;overflow:hidden;
+}
+.hero-bg-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(200,169,66,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(200,169,66,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+}
+.hero-bg-radial{
+  position:absolute;
+  top:50%;right:8%;transform:translateY(-50%);
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(200,169,66,.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-scan{
+  position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,rgba(200,169,66,.4) 50%,transparent 100%);
+  animation:scanH 5s linear infinite;opacity:.4;
+  pointer-events:none;
+}
+@keyframes scanH{0%{top:0}100%{top:100%}}
+@media(prefers-reduced-motion:reduce){.hero-scan,.hud-target,.htarget{animation:none;}}
+
+.hero-corner{position:absolute;width:28px;height:28px;pointer-events:none;}
+.hero-corner::before,.hero-corner::after{content:'';position:absolute;background:var(--hue-gold);opacity:.4;}
+.hero-corner::before{width:100%;height:1px;top:0;left:0;}
+.hero-corner::after{width:1px;height:100%;top:0;left:0;}
+.hc-tl{top:20px;left:20px;}
+.hc-tr{top:20px;right:20px;transform:scaleX(-1);}
+.hc-bl{bottom:20px;left:20px;transform:scaleY(-1);}
+.hc-br{bottom:20px;right:20px;transform:scale(-1);}
+
+.hero-inner{
+  max-width:1200px;margin:0 auto;padding:5rem 4%;
+  display:grid;grid-template-columns:1fr 420px;
+  gap:4rem;align-items:center;width:100%;
+  position:relative;z-index:2;
+}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:rgba(200,169,66,.1);
+  border:1px solid rgba(200,169,66,.25);
+  font-family:var(--font-mono);font-size:.6rem;
+  color:var(--hue-gold);letter-spacing:.2em;text-transform:uppercase;
+  padding:.3rem .85rem;border-radius:2px;margin-bottom:1.3rem;
+}
+.hero-kicker::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:var(--hud-grn);animation:blink 2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(2.2rem,4.5vw,3.8rem);
+  font-weight:700;color:var(--white);
+  line-height:1.05;letter-spacing:-.5px;
+  margin-bottom:1rem;
+}
+.hero-title .accent{color:var(--hue-gold);font-style:italic;}
+.hero-sub{
+  font-size:.9rem;color:rgba(255,255,255,.58);
+  line-height:1.8;max-width:520px;margin-bottom:2rem;
+}
+.hero-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:.8rem;margin-bottom:2.2rem;
+}
+.hstat{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(200,169,66,.18);
+  border-radius:var(--radius-sm);
+  padding:.85rem .6rem;text-align:center;
+}
+.hstat-val{
+  font-family:var(--font-display);
+  font-size:1.7rem;font-weight:700;
+  color:var(--hue-gold);line-height:1;
+  display:block;
+}
+.hstat-lbl{
+  font-family:var(--font-mono);
+  font-size:.52rem;color:rgba(255,255,255,.42);
+  letter-spacing:.12em;text-transform:uppercase;
+  display:block;margin-top:.22rem;
+}
+.hero-btns{display:flex;gap:.85rem;flex-wrap:wrap;}
+
+/* Hero HUD */
+.hero-hud{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(200,169,66,.25);
+  border-radius:var(--radius-md);
+  overflow:hidden;
+}
+.hud-top{
+  background:rgba(200,169,66,.1);
+  border-bottom:1px solid rgba(200,169,66,.2);
+  padding:.6rem 1rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.hud-top-lbl{font-family:var(--font-mono);font-size:.6rem;color:var(--hue-gold);letter-spacing:.18em;text-transform:uppercase;}
+.hud-clock{font-family:var(--font-mono);font-size:.58rem;color:rgba(255,255,255,.35);}
+.hud-body{padding:1.1rem;}
+.hud-vis{
+  width:100%;height:120px;
+  background:rgba(0,0,0,.3);border:1px solid rgba(200,169,66,.1);
+  border-radius:3px;margin-bottom:.85rem;
+  position:relative;overflow:hidden;
+}
+.hud-cross-h{position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(200,169,66,.12);}
+.hud-cross-v{position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(200,169,66,.12);}
+.hud-target{
+  position:absolute;width:22px;height:22px;
+  border:1.5px solid var(--hue-gold);
+  display:flex;align-items:center;justify-content:center;
+  animation:tfly 8s ease-in-out infinite;
+  left:calc(50% - 11px);top:calc(50% - 11px);
+}
+.hud-target::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--hue-gold);}
+@keyframes tfly{0%,100%{transform:translate(0,0)}25%{transform:translate(36px,-22px)}50%{transform:translate(-18px,18px)}75%{transform:translate(26px,26px)}}
+.hud-conf{position:absolute;bottom:5px;right:7px;font-family:var(--font-mono);font-size:.5rem;color:var(--hud-grn);}
+.hud-row{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.hud-row:last-child{border-bottom:none;}
+.hud-k{font-family:var(--font-mono);font-size:.55rem;color:rgba(255,255,255,.3);letter-spacing:.1em;}
+.hud-v{font-family:var(--font-mono);font-size:.65rem;color:var(--hud-grn);font-weight:500;}
+.hud-v.gold{color:var(--hue-gold);}
+.hud-v.amb{color:var(--hud-amb);}
+
+/* PARTNERS RIBBON */
+.partners-ribbon{
+  background:var(--white);
+  border-bottom:2px solid var(--light-line);
+  padding:.75rem 4%;
+  display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;
+}
+.pr-lbl{
+  font-family:var(--font-mono);font-size:.56rem;
+  letter-spacing:.2em;color:var(--text-4);text-transform:uppercase;
+  padding-right:1.2rem;border-right:1px solid var(--light-line);
+  white-space:nowrap;
+}
+.pr-items{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;flex:1;}
+.pr-badge{display:flex;align-items:center;gap:.5rem;padding:.35rem .7rem;border:1px solid var(--light-line);border-radius:3px;background:var(--cream);}
+.pr-badge-ico{
+  width:26px;height:26px;border-radius:2px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-body);font-size:.52rem;font-weight:700;
+  color:var(--white);flex-shrink:0;
+}
+.pr-badge-name{font-size:.68rem;font-weight:600;color:var(--text-1);}
+.pr-badge-type{font-size:.56rem;color:var(--text-3);}
+
+/* PROBLEM / SOLUTION */
+.problem-sec{background:var(--hue-navy);}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;}
+.problem-vis{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(200,169,66,.25);
+  border-radius:var(--radius-md);
+  padding:1.8rem;font-family:var(--font-mono);
+}
+.vis-lbl{
+  font-size:.58rem;color:var(--hue-gold);letter-spacing:.2em;
+  text-transform:uppercase;margin-bottom:1.2rem;
+  border-bottom:1px solid rgba(200,169,66,.2);padding-bottom:.5rem;
+}
+.bar-group{display:flex;gap:1.5rem;align-items:flex-end;justify-content:center;margin:1rem 0 .9rem;}
+.bar-item{text-align:center;}
+.bar-rect{width:62px;border-radius:3px 3px 0 0;margin:0 auto .4rem;border:1px solid;}
+.bar-rect.low{height:52px;background:rgba(231,76,60,.35);border-color:rgba(231,76,60,.6);}
+.bar-rect.med{height:100px;background:rgba(200,169,66,.3);border-color:rgba(200,169,66,.6);}
+.bar-rect.hi{height:158px;background:rgba(46,204,113,.3);border-color:rgba(46,204,113,.6);}
+.bar-lbl{font-size:.58rem;color:rgba(255,255,255,.4);line-height:1.5;}
+.bar-val{font-size:.8rem;color:var(--white);font-weight:600;}
+.vis-note{font-size:.54rem;color:rgba(255,255,255,.3);text-align:center;line-height:1.6;margin-top:.5rem;}
+
+/* CONOPS */
+.conops-sec{background:var(--off-white);}
+.flow-track{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  position:relative;gap:0;
+}
+.flow-track::before{
+  content:'';position:absolute;
+  top:36px;left:calc(12.5% + 6px);right:calc(12.5% + 6px);
+  height:2px;
+  background:linear-gradient(90deg,var(--hue-navy),var(--hue-gold));
+  z-index:0;
+}
+.fstep{text-align:center;padding:0 .8rem;position:relative;z-index:1;}
+.fstep-node{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--hue-navy);
+  border:2px solid var(--hue-gold);
+  margin:0 auto .9rem;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  font-size:1.45rem;position:relative;
+  box-shadow:0 4px 16px rgba(13,27,62,.25);
+  transition:var(--trans);
+}
+.fstep:hover .fstep-node{transform:scale(1.06);box-shadow:var(--sh-gold);}
+.fstep-num{
+  position:absolute;top:-6px;right:-6px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--hue-gold);color:var(--hue-navy-deep);
+  font-family:var(--font-mono);font-size:.55rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.fstep h4{font-family:var(--font-display);font-size:.95rem;font-weight:700;color:var(--hue-navy);margin-bottom:.35rem;}
+.fstep p{font-size:.74rem;color:var(--text-2);line-height:1.6;}
+
+/* ACHIEVEMENTS */
+.ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.ach-card{
+  background:var(--white);border:1px solid var(--light-line);
+  border-radius:var(--radius-sm);padding:1.5rem;
+  position:relative;overflow:hidden;
+  transition:var(--trans);
+}
+.ach-card::after{
+  content:'';position:absolute;
+  bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--hue-navy),var(--hue-gold));
+}
+.ach-card:hover{box-shadow:var(--sh-lift);transform:translateY(-4px);}
+.ach-card.feature{border-top:3px solid var(--hue-gold);}
+.ach-ico{font-size:1.8rem;margin-bottom:.85rem;}
+.ach-card h4{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--hue-navy);margin-bottom:.35rem;}
+.ach-card p{font-size:.78rem;color:var(--text-2);line-height:1.7;}
+.ach-num{font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--hue-gold);line-height:1;margin-bottom:.15rem;}
+
+/* ══════════════════════════════════════════
+   ARCHITECTURE PAGE
+══════════════════════════════════════════ */
+.arch-hw{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+.hw-card{background:var(--white);border:1px solid var(--light-line);border-radius:var(--radius-sm);overflow:hidden;}
+.hw-hdr{
+  background:var(--hue-navy);padding:.8rem 1.1rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+.hw-hdr .h-ico{font-size:1.2rem;}
+.hw-hdr h4{font-family:var(--font-body);font-size:.82rem;font-weight:700;color:var(--white);letter-spacing:.05em;text-transform:uppercase;}
+.hw-hdr span{font-family:var(--font-mono);font-size:.54rem;color:var(--hue-gold);margin-top:.08rem;}
+.hw-body{padding:.9rem 1.1rem;}
+
+.sw-stack{display:flex;flex-direction:column;gap:.5rem;}
+.sw-layer{display:grid;grid-template-columns:140px 1fr auto;border:1px solid var(--light-line);overflow:hidden;border-radius:var(--radius-sm);}
+.sw-lbl{
+  background:var(--hue-navy);color:var(--white);
+  padding:.8rem 1rem;font-family:var(--font-body);
+  font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  display:flex;align-items:center;gap:.4rem;
+}
+.sw-chips{padding:.8rem 1rem;display:flex;align-items:center;flex-wrap:wrap;gap:.25rem;}
+.sw-meta{
+  padding:.8rem 1rem;
+  font-size:.72rem;color:var(--text-3);
+  border-left:1px solid var(--light-line);
+  min-width:180px;line-height:1.5;
+  display:flex;align-items:center;
+}
+
+.pipeline-diag{
+  background:var(--hue-navy-deep);border:1px solid rgba(200,169,66,.2);
+  border-radius:var(--radius-md);padding:2rem;
+  overflow-x:auto;
+}
+.pipe-nodes{display:flex;align-items:center;justify-content:space-between;min-width:620px;gap:.4rem;}
+.pnode{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(200,169,66,.25);
+  border-radius:3px;
+  padding:.65rem .7rem;text-align:center;
+  flex:1;min-width:85px;
+}
+.pnode-ico{font-size:1.3rem;display:block;margin-bottom:.2rem;}
+.pnode-name{font-family:var(--font-mono);font-size:.58rem;color:var(--hue-gold);font-weight:600;}
+.pnode-sub{font-family:var(--font-mono);font-size:.5rem;color:rgba(255,255,255,.3);margin-top:.1rem;}
+.parr{color:var(--hue-gold);font-size:.9rem;opacity:.5;flex-shrink:0;padding:0 .1rem;}
+.lat-strip{display:flex;justify-content:center;gap:.6rem;margin-top:1.3rem;flex-wrap:wrap;align-items:center;}
+.lat-item{text-align:center;font-family:var(--font-mono);}
+.lat-val{font-size:.95rem;color:var(--hud-grn);font-weight:600;display:block;}
+.lat-lbl{font-size:.52rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.1em;}
+.lat-sep{color:rgba(255,255,255,.25);font-size:1rem;}
+
+/* ══════════════════════════════════════════
+   RESEARCH PAGE
+══════════════════════════════════════════ */
+.award-strip{
+  background:linear-gradient(135deg,var(--hue-navy-deep),var(--hue-navy));
+  border:1px solid rgba(200,169,66,.35);
+  border-left:4px solid var(--hue-gold);
+  border-radius:var(--radius-sm);
+  padding:1.5rem 1.8rem;
+  display:flex;align-items:center;gap:1.4rem;
+  margin-bottom:2rem;
+}
+.award-ico{font-size:2.4rem;flex-shrink:0;}
+.award-txt h3{font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--hue-gold);}
+.award-txt p{color:rgba(255,255,255,.58);font-size:.8rem;margin-top:.22rem;line-height:1.6;}
+
+.paper-card{
+  background:var(--white);border:1px solid var(--light-line);
+  border-radius:var(--radius-sm);overflow:hidden;
+  margin-bottom:1.5rem;
+  box-shadow:var(--sh-card);transition:var(--trans);
+}
+.paper-card:hover{box-shadow:var(--sh-lift);}
+.paper-hdr{background:var(--hue-navy);padding:1.4rem 1.8rem;position:relative;overflow:hidden;}
+.paper-hdr::before{
+  content:'\201C';
+  position:absolute;top:-1rem;right:1.5rem;
+  font-size:7rem;color:rgba(200,169,66,.06);
+  font-family:var(--font-display);line-height:1;
+}
+.paper-type{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-family:var(--font-mono);font-size:.6rem;
+  background:rgba(200,169,66,.15);border:1px solid rgba(200,169,66,.35);
+  color:var(--hue-gold);padding:.18rem .65rem;border-radius:2px;
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:.7rem;
+}
+.paper-title{font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--white);line-height:1.35;}
+.paper-body{padding:1.4rem 1.8rem;}
+.paper-meta{font-size:.8rem;color:var(--text-2);line-height:1.8;margin-bottom:.9rem;}
+.paper-meta strong{color:var(--text-1);}
+.paper-abstract{
+  font-size:.82rem;color:var(--text-2);line-height:1.75;margin-bottom:1rem;
+  padding:1rem;background:var(--cream);
+  border-left:3px solid var(--hue-gold);border-radius:0 3px 3px 0;
+}
+.paper-hl{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:1.2rem;}
+.phl{
+  font-size:.72rem;background:var(--off-white);
+  border:1px solid var(--light-line);border-left:2px solid var(--hue-gold);
+  padding:.28rem .65rem;color:var(--text-1);
+}
+.paper-actions{display:flex;gap:.75rem;flex-wrap:wrap;}
+
+.fund-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.fund-card{
+  display:flex;gap:1rem;align-items:flex-start;
+  background:var(--white);border:1px solid var(--light-line);
+  border-top:2px solid var(--hue-navy);border-radius:var(--radius-sm);padding:1.3rem;
+}
+.fund-ico{width:40px;height:40px;flex-shrink:0;background:var(--hue-navy);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.fund-card h4{font-family:var(--font-body);font-size:.85rem;font-weight:700;color:var(--hue-navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.25rem;}
+.fund-card p{font-size:.74rem;color:var(--text-2);line-height:1.6;}
+.fund-tag{display:inline-block;font-family:var(--font-mono);font-size:.56rem;background:rgba(200,169,66,.1);border:1px solid rgba(200,169,66,.3);color:#8b6f1e;padding:.12rem .45rem;border-radius:2px;margin-bottom:.35rem;}
+
+.dl-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.dl-card{
+  display:flex;align-items:center;gap:1rem;
+  background:var(--white);border:1px solid var(--light-line);
+  border-left:3px solid var(--hue-navy);border-radius:var(--radius-sm);
+  padding:1.1rem 1.3rem;transition:var(--trans);text-decoration:none;color:inherit;
+}
+.dl-card:hover{border-left-color:var(--hue-gold);box-shadow:var(--sh-lift);}
+.dl-ico{width:36px;height:36px;flex-shrink:0;background:var(--hue-navy);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.dl-name{font-size:.84rem;font-weight:600;color:var(--text-1);}
+.dl-meta{font-family:var(--font-mono);font-size:.58rem;color:var(--text-3);margin-top:.15rem;}
+.dl-arr{margin-left:auto;font-size:1.1rem;color:var(--hue-gold);}
+
+/* ══════════════════════════════════════════
+   TEAM PAGE
+══════════════════════════════════════════ */
+.team-sup-sec{background:var(--hue-navy);padding:3.5rem 4% 4rem;}
+.sup-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:1.8rem;}
+.sup-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(200,169,66,.2);
+  border-radius:var(--radius-sm);
+  padding:1.8rem 1.4rem;text-align:center;
+  transition:var(--trans);
+}
+.sup-card:hover{background:rgba(255,255,255,.07);border-color:rgba(200,169,66,.45);}
+.sup-av{
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(200,169,66,.12);
+  border:2px solid var(--hue-gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:1.4rem;font-weight:700;
+  color:var(--hue-gold);margin:0 auto 1rem;overflow:hidden;
+}
+.sup-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.sup-name{font-family:var(--font-display);font-size:.98rem;font-weight:700;color:var(--white);line-height:1.25;margin-bottom:.3rem;}
+.sup-rank{font-family:var(--font-mono);font-size:.6rem;color:var(--hue-gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.4rem;}
+.sup-dept{font-size:.68rem;color:rgba(255,255,255,.38);line-height:1.5;}
+.sup-tags{display:flex;flex-wrap:wrap;gap:.28rem;justify-content:center;margin-top:.65rem;}
+.stag{font-family:var(--font-mono);font-size:.56rem;background:rgba(200,169,66,.08);border:1px solid rgba(200,169,66,.2);color:rgba(255,255,255,.5);padding:.12rem .45rem;border-radius:2px;}
+.sup-links{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-top:.7rem;}
+.sup-link{
+  font-family:var(--font-mono);font-size:.52rem;letter-spacing:.08em;
+  background:rgba(200,169,66,.06);border:1px solid rgba(200,169,66,.2);
+  color:var(--hue-gold);padding:.15rem .5rem;border-radius:2px;
+  transition:var(--trans);
+}
+.sup-link:hover{background:rgba(200,169,66,.18);}
+
+.members-wrap{padding:3.5rem 4% 4rem;max-width:1200px;margin:0 auto;}
+.mem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.8rem;}
+.mem-card{
+  background:var(--white);border:1px solid var(--light-line);
+  border-radius:var(--radius-sm);padding:1.5rem;
+  border-top:2px solid var(--hue-navy);transition:var(--trans);
+}
+.mem-card:hover{box-shadow:var(--sh-lift);transform:translateY(-3px);}
+.mem-card.lead-card{border-top-color:var(--hue-gold);}
+.mem-av{
+  width:54px;height:54px;border-radius:50%;
+  background:var(--off-white);border:2px solid var(--light-line);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-body);font-size:.85rem;font-weight:700;
+  color:var(--hue-navy);margin-bottom:.9rem;overflow:hidden;
+}
+.mem-card.lead-card .mem-av{border-color:var(--hue-gold);background:rgba(200,169,66,.06);}
+.mem-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.lead-badge{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-family:var(--font-mono);font-size:.56rem;
+  background:rgba(200,169,66,.1);border:1px solid rgba(200,169,66,.35);
+  color:#8b6f1e;padding:.14rem .5rem;border-radius:2px;margin-bottom:.4rem;
+  text-transform:uppercase;letter-spacing:.1em;
+}
+.mem-name{font-family:var(--font-body);font-size:.9rem;font-weight:700;color:var(--hue-navy);line-height:1.2;margin-bottom:.15rem;}
+.mem-id{font-family:var(--font-mono);font-size:.58rem;color:var(--text-3);}
+.mem-role{font-size:.7rem;color:var(--hue-gold);font-weight:600;margin:.35rem 0 .55rem;text-transform:uppercase;letter-spacing:.06em;}
+.mem-skills{display:flex;flex-wrap:wrap;gap:.25rem;margin-bottom:.65rem;}
+.msk{font-family:var(--font-mono);font-size:.58rem;background:var(--off-white);border:1px solid var(--light-line);padding:.12rem .42rem;color:var(--text-2);}
+.mem-links{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.5rem;}
+.mem-link{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-family:var(--font-mono);font-size:.58rem;
+  background:var(--hue-navy);color:var(--hue-gold);
+  border:1px solid var(--hue-navy);
+  padding:.22rem .65rem;border-radius:2px;
+  transition:var(--trans);
+}
+.mem-link:hover{background:var(--hue-gold);color:var(--hue-navy-deep);}
+.photo-note{
+  margin-top:2rem;padding:1rem 1.3rem;
+  background:var(--off-white);border-left:3px solid var(--hue-navy);
+  font-size:.78rem;color:var(--text-2);line-height:1.7;
+}
+
+/* Task assignment table */
+.task-table-wrap{overflow-x:auto;margin-top:2rem;}
+.task-table{width:100%;border-collapse:collapse;font-size:.78rem;}
+.task-table th{
+  background:var(--hue-navy);color:var(--hue-gold);
+  font-family:var(--font-mono);font-size:.6rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:.65rem .8rem;text-align:left;
+}
+.task-table td{
+  padding:.55rem .8rem;
+  border-bottom:1px solid var(--light-line);
+  vertical-align:top;
+  color:var(--text-2);
+}
+.task-table tr:last-child td{border-bottom:none;}
+.task-table tr:hover td{background:var(--off-white);}
+.task-table td:first-child{font-weight:600;color:var(--hue-navy);font-size:.82rem;}
+.task-table td:nth-child(2){font-family:var(--font-mono);font-size:.6rem;color:var(--hue-gold);}
+.task-contrib{
+  display:flex;flex-wrap:wrap;gap:.25rem;
+}
+.tc{font-family:var(--font-mono);font-size:.55rem;background:var(--off-white);border:1px solid var(--light-line);padding:.1rem .38rem;color:var(--text-2);}
+
+/* ══════════════════════════════════════════
+   GALLERY PAGE
+══════════════════════════════════════════ */
+.gal-filters{
+  padding:1rem 4%;border-bottom:1px solid var(--light-line);
+  background:var(--white);
+  display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;
+}
+.fbtn{
+  font-family:var(--font-body);font-size:.7rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:.35rem .9rem;border:1px solid var(--light-line);
+  background:var(--white);color:var(--text-2);cursor:pointer;
+  transition:var(--trans);border-radius:2px;
+}
+.fbtn.active,.fbtn:hover{background:var(--hue-navy);color:var(--hue-gold);border-color:var(--hue-navy);}
+.gal-grid{
+  max-width:1200px;margin:0 auto;padding:2rem 4%;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;
+}
+.gal-item{
+  position:relative;overflow:hidden;cursor:pointer;
+  background:var(--off-white);border:1px solid var(--light-line);
+  aspect-ratio:4/3;border-radius:var(--radius-sm);
+  display:flex;align-items:center;justify-content:center;
+  transition:var(--trans);
+}
+.gal-item:hover{transform:scale(1.02);box-shadow:var(--sh-lift);}
+.gal-item:hover .gal-ov{opacity:1;}
+.gal-item img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.gal-ph{text-align:center;padding:1.2rem;z-index:1;position:relative;}
+.gal-ph .gico{font-size:1.8rem;display:block;margin-bottom:.35rem;}
+.gal-ph .glbl{font-size:.68rem;color:var(--text-3);line-height:1.4;}
+.gal-ov{
+  position:absolute;inset:0;
+  background:rgba(13,27,62,.88);
+  opacity:0;transition:opacity .22s;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:1rem;
+  font-family:var(--font-body);font-size:.78rem;font-weight:600;
+  color:var(--hue-gold);letter-spacing:.06em;text-transform:uppercase;
+}
+
+/* ══════════════════════════════════════════
+   LIVE SIMULATION
+══════════════════════════════════════════ */
+.sim-layout{
+  max-width:1200px;margin:0 auto;padding:2.5rem 4%;
+  display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;
+}
+.sim-h{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--hue-navy);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--hue-gold);}
+.dash-panel{background:var(--hue-navy-deep);border:1px solid rgba(200,169,66,.25);border-radius:var(--radius-md);overflow:hidden;font-family:var(--font-mono);}
+.dp-hdr{background:rgba(200,169,66,.08);border-bottom:1px solid rgba(200,169,66,.2);padding:.65rem 1rem;display:flex;align-items:center;justify-content:space-between;}
+.dp-title{font-size:.62rem;color:var(--hue-gold);letter-spacing:.2em;text-transform:uppercase;}
+.dp-clock{font-size:.55rem;color:rgba(255,255,255,.3);}
+.dp-body{padding:1.1rem;}
+.mode-row{display:flex;align-items:center;justify-content:center;gap:1.1rem;padding:.4rem 0 .9rem;}
+.mode-lbl{font-family:var(--font-display);font-size:.88rem;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.25);transition:color .25s;}
+.mode-lbl.on-auto{color:var(--hud-grn);text-shadow:0 0 10px rgba(46,204,113,.35);}
+.mode-lbl.on-manual{color:var(--hud-amb);text-shadow:0 0 10px rgba(243,156,18,.35);}
+.toggle{position:relative;width:54px;height:24px;cursor:pointer;flex-shrink:0;}
+.toggle input{position:absolute;opacity:0;width:0;height:0;}
+.toggle-track{position:absolute;inset:0;border-radius:12px;background:rgba(46,204,113,.12);border:1px solid var(--hud-grn);transition:all .3s;}
+.toggle input:checked~.toggle-track{background:rgba(243,156,18,.12);border-color:var(--hud-amb);}
+.toggle-thumb{position:absolute;top:3px;left:4px;width:16px;height:16px;border-radius:50%;background:var(--hud-grn);box-shadow:0 0 8px var(--hud-grn);transition:all .35s cubic-bezier(.68,-.55,.27,1.55);}
+.toggle input:checked~.toggle-thumb{transform:translateX(28px);background:var(--hud-amb);box-shadow:0 0 8px var(--hud-amb);}
+.mode-desc{text-align:center;font-size:.58rem;color:rgba(255,255,255,.28);min-height:2em;margin-bottom:.9rem;padding:0 .5rem;line-height:1.5;}
+.dp-row{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.dp-row:last-child{border-bottom:none;}
+.dp-k{font-size:.56rem;color:rgba(255,255,255,.3);letter-spacing:.08em;}
+.dp-v{font-size:.64rem;color:var(--hud-grn);font-weight:500;}
+.dp-v.gold{color:var(--hue-gold);}
+.dp-v.amb{color:var(--hud-amb);}
+.dp-v.red{color:var(--hud-red);}
+.dp-sep{height:1px;background:rgba(255,255,255,.06);margin:.75rem 0;}
+.pbar-wrap{margin-bottom:.55rem;}
+.pbar-top{display:flex;justify-content:space-between;font-size:.52rem;color:rgba(255,255,255,.28);margin-bottom:.2rem;}
+.pbar{height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;}
+.pfill{height:100%;border-radius:2px;transition:width 1.2s ease;}
+.pfill.grn{background:var(--hud-grn);}
+.pfill.gld{background:var(--hue-gold);}
+
+/* Telegram widget */
+.tg-widget{background:var(--hue-navy-deep);border:1px solid rgba(200,169,66,.2);border-radius:var(--radius-md);overflow:hidden;}
+.tg-top{background:#1d6fa4;padding:.65rem 1rem;display:flex;align-items:center;gap:.65rem;}
+.tg-av{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+.tg-info h5{font-family:var(--font-body);font-size:.8rem;font-weight:700;color:var(--white);}
+.tg-info span{font-size:.6rem;color:rgba(255,255,255,.65);}
+.tg-msgs{padding:.85rem;background:#141e30;min-height:240px;max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:.5rem;}
+.tmsg{background:rgba(255,255,255,.06);border-radius:3px;padding:.6rem;font-family:var(--font-mono);font-size:.6rem;color:rgba(255,255,255,.78);line-height:1.6;animation:msgIn .3s ease-out;}
+.tmsg.a{border-left:3px solid var(--hud-red);}
+.tmsg.i{border-left:3px solid var(--hud-grn);}
+.tmsg.l{border-left:3px solid var(--hue-gold);}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.tmsg-ts{font-size:.5rem;color:rgba(255,255,255,.22);text-align:right;margin-top:.2rem;}
+.tg-btns{padding:.85rem;background:#141e30;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:.5rem;flex-wrap:wrap;}
+.tbtn{
+  padding:.4rem .85rem;border:none;border-radius:3px;
+  font-family:var(--font-body);font-size:.68rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:opacity .2s;
+}
+.tbtn:hover{opacity:.85;}
+.tbtn.r{background:var(--hud-red);color:var(--white);}
+.tbtn.g{background:var(--hud-grn);color:#0a2a14;}
+.tbtn.gd{background:var(--hue-gold);color:var(--hue-navy-deep);}
+.tbtn.b{background:#1d6fa4;color:var(--white);}
+
+/* HUD vis (reused in sim) */
+.hud-vis-sm{width:100%;height:108px;background:rgba(0,0,0,.35);border:1px solid rgba(200,169,66,.12);border-radius:3px;margin-bottom:.9rem;position:relative;overflow:hidden;}
+.hcross-h{position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(200,169,66,.1);}
+.hcross-v{position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(200,169,66,.1);}
+.htarget{position:absolute;width:20px;height:20px;border:1.5px solid var(--hue-gold);display:flex;align-items:center;justify-content:center;animation:tfly2 8s ease-in-out infinite;left:calc(50% - 10px);top:calc(50% - 10px);}
+.htarget::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--hue-gold);}
+@keyframes tfly2{0%,100%{transform:translate(0,0)}25%{transform:translate(38px,-20px)}50%{transform:translate(-16px,18px)}75%{transform:translate(24px,22px)}}
+.hconf{position:absolute;bottom:5px;right:7px;font-family:var(--font-mono);font-size:.5rem;color:var(--hud-grn);}
+
+/* ══════════════════════════════════════════
+   CONTACT PAGE
+══════════════════════════════════════════ */
+.contact-layout{
+  max-width:1200px;margin:0 auto;padding:3rem 4%;
+  display:grid;grid-template-columns:1.05fr 1fr;gap:2.5rem;
+}
+.contact-card{background:var(--white);border:1px solid var(--light-line);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:1.3rem;box-shadow:var(--sh-card);}
+.cc-hdr{background:var(--hue-navy);padding:.8rem 1.2rem;display:flex;align-items:center;gap:.55rem;}
+.cc-hdr h4{font-family:var(--font-body);font-size:.82rem;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.08em;}
+.cc-body{padding:1.1rem 1.4rem;}
+.c-row{display:flex;align-items:flex-start;gap:.85rem;padding:.72rem 0;border-bottom:1px solid var(--off-white);}
+.c-row:last-child{border-bottom:none;}
+.c-ico{width:30px;height:30px;flex-shrink:0;background:var(--off-white);border:1px solid var(--light-line);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:.9rem;margin-top:.05rem;}
+.c-lbl{font-family:var(--font-mono);font-size:.58rem;color:var(--text-3);letter-spacing:.1em;text-transform:uppercase;}
+.c-val{font-size:.82rem;font-weight:500;color:var(--text-1);margin-top:.15rem;line-height:1.55;}
+.c-val a{color:var(--hue-navy);transition:color .2s;}
+.c-val a:hover{color:var(--hue-gold);}
+.social-btns{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:.55rem;}
+.soc-btn{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-family:var(--font-body);font-size:.7rem;font-weight:600;
+  padding:.38rem .85rem;border:1px solid var(--light-line);
+  border-radius:3px;color:var(--text-1);transition:var(--trans);
+}
+.soc-btn:hover{background:var(--hue-navy);color:var(--hue-gold);border-color:var(--hue-navy);}
+.map-box{
+  width:100%;height:260px;
+  background:linear-gradient(135deg,var(--hue-navy-deep),var(--hue-navy));
+  border:1px solid var(--light-line);border-radius:var(--radius-sm);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.7rem;position:relative;overflow:hidden;margin-bottom:1.3rem;
+}
+.map-box::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(200,169,66,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(200,169,66,.06) 1px,transparent 1px);
+  background-size:35px 35px;pointer-events:none;
+}
+.map-ico{font-size:2rem;position:relative;z-index:1;}
+.map-lbl{font-family:var(--font-mono);font-size:.6rem;color:var(--hue-gold);letter-spacing:.18em;text-transform:uppercase;position:relative;z-index:1;}
+.map-addr{font-size:.72rem;color:rgba(255,255,255,.5);text-align:center;line-height:1.7;position:relative;z-index:1;}
+.map-btn{
+  background:var(--hue-gold);color:var(--hue-navy-deep);
+  border:none;cursor:pointer;padding:.42rem 1.2rem;border-radius:3px;
+  font-family:var(--font-body);font-size:.75rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;position:relative;z-index:1;transition:background .2s;
+}
+.map-btn:hover{background:var(--hue-gold-lt);}
+.contact-form-wrap{background:var(--white);border:1px solid var(--light-line);border-radius:var(--radius-sm);padding:1.8rem;box-shadow:var(--sh-card);}
+.form-title{font-family:var(--font-display);font-size:1.25rem;font-weight:700;color:var(--hue-navy);padding-bottom:.65rem;margin-bottom:1.4rem;border-bottom:2px solid var(--hue-gold);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.9rem;}
+.form-grp{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.9rem;}
+.form-grp label{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);}
+.form-grp input,.form-grp select,.form-grp textarea{
+  border:1px solid var(--light-line);background:var(--cream);
+  padding:.6rem .85rem;font-family:var(--font-body);font-size:.82rem;
+  color:var(--text-1);border-radius:var(--radius-sm);outline:none;transition:border-color .2s;
+}
+.form-grp input:focus,.form-grp select:focus,.form-grp textarea:focus{border-color:var(--hue-navy);background:var(--white);}
+.form-grp textarea{resize:vertical;min-height:105px;}
+.form-submit{
+  width:100%;background:var(--hue-navy);color:var(--white);
+  border:none;border-radius:var(--radius-sm);padding:.72rem 2rem;
+  font-family:var(--font-body);font-size:.82rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:var(--trans);
+}
+.form-submit:hover{background:var(--hue-gold);color:var(--hue-navy-deep);}
+.form-note{font-size:.7rem;color:var(--text-3);margin-top:.75rem;line-height:1.65;}
+#form-toast{
+  position:fixed;bottom:2rem;right:2rem;z-index:9999;
+  background:var(--hue-navy);border:1px solid var(--hue-gold);
+  border-radius:var(--radius-sm);padding:.9rem 1.4rem;
+  font-family:var(--font-mono);font-size:.7rem;color:var(--hue-gold);
+  box-shadow:var(--sh-gold);
+  transform:translateY(120%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  display:flex;align-items:center;gap:.55rem;
+}
+#form-toast.show{transform:translateY(0);}
+.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.acc-item{
+  background:var(--cream);border:1px solid var(--light-line);
+  border-left:2px solid var(--hue-gold);padding:.8rem 1rem;border-radius:var(--radius-sm);
+}
+.acc-item .code{font-family:var(--font-mono);font-size:.58rem;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase;}
+.acc-item .name{font-size:.8rem;font-weight:600;color:var(--hue-navy);margin-top:.12rem;}
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer{
+  background:var(--hue-navy-deep);
+  border-top:3px solid var(--hue-gold);
+  padding:2.5rem 4% 1.5rem;
+}
+.foot-grid{
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1.3fr 1fr 1fr;
+  gap:3rem;padding-bottom:2rem;
+  border-bottom:1px solid rgba(200,169,66,.12);
+}
+.foot-brand-name{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:.3rem;}
+.foot-brand-name span{color:var(--hue-gold);}
+.foot-brand-sub{font-size:.7rem;color:rgba(255,255,255,.38);line-height:1.7;margin-top:.3rem;}
+.foot-col-h{font-family:var(--font-mono);font-size:.6rem;color:rgba(255,255,255,.35);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.85rem;}
+.foot-links{list-style:none;}
+.foot-links li{margin-bottom:.32rem;}
+.foot-links a,.foot-links span,.foot-links button{font-size:.78rem;color:rgba(255,255,255,.4);transition:color .2s;cursor:pointer;background:none;border:none;padding:0;font-family:var(--font-body);}
+.foot-links a:hover,.foot-links span:hover,.foot-links button:hover{color:var(--hue-gold);}
+.foot-bottom{
+  max-width:1200px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding-top:1.5rem;gap:2rem;flex-wrap:wrap;
+}
+.foot-disc{
+  font-family:var(--font-mono);font-size:.6rem;
+  color:rgba(255,255,255,.22);line-height:1.7;max-width:620px;
+  border:1px solid rgba(200,169,66,.1);border-radius:3px;padding:.7rem 1rem;
+  background:rgba(200,169,66,.03);
+}
+.foot-disc strong{color:rgba(200,169,66,.55);}
+.foot-copy{font-family:var(--font-mono);font-size:.6rem;color:rgba(255,255,255,.25);text-align:right;line-height:1.7;}
+.foot-copy a{color:rgba(200,169,66,.5);transition:color .2s;}
+.foot-copy a:hover{color:var(--hue-gold);}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr;gap:2.5rem;}
+  .hero-bg-radial{display:none;}
+  .hero-hud{max-width:480px;}
+  .hero-stats{grid-template-columns:repeat(4,1fr);}
+  .problem-grid,.sim-layout,.contact-layout,.foot-grid{grid-template-columns:1fr;}
+  .arch-hw{grid-template-columns:1fr 1fr;}
+  .flow-track{grid-template-columns:1fr 1fr;gap:1.2rem;}
+  .flow-track::before{display:none;}
+  .sw-layer{grid-template-columns:1fr;border-left:3px solid var(--hue-navy);}
+  .sw-meta{border-left:none;border-top:1px solid var(--light-line);}
+  .sup-grid,.mem-grid{grid-template-columns:1fr 1fr;}
+  .ach-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  .nav-tabs{display:none;}
+  .nav-mob{display:flex;}
+  .nav-tabs.open{
+    display:flex;flex-direction:column;
+    position:fixed;top:0;left:0;right:0;bottom:0;
+    background:var(--hue-navy-deep);z-index:2000;
+    padding:5rem 2rem 2rem;align-items:flex-start;gap:.2rem;
+    overflow-y:auto;
+  }
+  .nav-tab{height:auto;padding:.85rem .5rem;font-size:.85rem;width:100%;border-bottom:1px solid rgba(200,169,66,.1) !important;border-left:none;}
+  .nav-close{display:flex;position:fixed;top:1rem;right:1.5rem;z-index:2001;font-size:1.5rem;color:var(--white);cursor:pointer;}
+  .info-bar,.uni-accred{display:none;}
+  .uni-logos{gap:1rem;}
+  .arch-hw{grid-template-columns:1fr;}
+  .sup-grid,.mem-grid,.ach-grid,.fund-grid,.dl-grid,.gal-grid,.form-row{grid-template-columns:1fr;}
+  .mem-card.lead-card{grid-column:auto;}
+  .hero-stats{grid-template-columns:repeat(2,1fr);}
+  .foot-grid{grid-template-columns:1fr;}
+  .foot-bottom{flex-direction:column;}
+  .foot-copy{text-align:left;}
+  .pipe-nodes{flex-direction:column;align-items:stretch;}
+/* Pipeline step indicators */
+.pipe-step{
+  font-family:var(--font-mono);font-size:.52rem;
+  background:rgba(255,255,255,.04);border:1px solid rgba(200,169,66,.15);
+  color:rgba(255,255,255,.4);padding:.22rem .55rem;border-radius:2px;
+  transition:all .3s;
+}
+.pipe-step.active{
+  background:rgba(200,169,66,.15);border-color:rgba(200,169,66,.5);
+  color:var(--hue-gold);box-shadow:0 0 8px rgba(200,169,66,.15);
+}
+.pipe-step.done{
+  background:rgba(46,204,113,.08);border-color:rgba(46,204,113,.3);
+  color:var(--hud-grn);
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ══════════════════════════
+     TOP INFO BAR
+══════════════════════════ -->
+<div class="info-bar" role="banner">
+  <div class="info-bar-left">
+    <div class="info-item">📍 <span>New Damietta, Egypt</span></div>
+    <div class="info-item">📞 <a href="tel:+201144455582">+201144455582</a></div>
+    <div class="info-item">✉️ <a href="mailto:Admin@horus.edu.eg">Admin@horus.edu.eg</a></div>
+  </div>
+  <div class="info-bar-right">
+    <a href="https://www.facebook.com/hue.eg/" target="_blank" rel="noopener" class="social-ico" aria-label="Facebook page of Horus University Egypt">f</a>
+    <a href="https://twitter.com/HUE_eg" target="_blank" rel="noopener" class="social-ico" aria-label="Twitter / X account of HUE">𝕏</a>
+    <a href="https://github.com/islam-8" target="_blank" rel="noopener" class="social-ico" aria-label="GitHub — Islam Emad">⌥</a>
+    <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener" class="social-ico" aria-label="Faculty of Engineering website">🌐</a>
+    <span style="width:1px;height:16px;background:rgba(255,255,255,.1);"></span>
+    <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:.58rem;color:rgba(200,169,66,.7);letter-spacing:.12em;">eng.horus.edu.eg</a>
+    <button class="lang-btn" id="langToggle" onclick="toggleLang()" aria-label="Switch to Arabic / تبديل للعربية">
+      <span class="ar-lbl" id="langLabel">العربية</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     UNIVERSITY HEADER
+══════════════════════════ -->
+<div class="uni-header">
+  <div class="uni-logos">
+    <div class="logo-box" aria-label="Horus University Egypt logo placeholder">
+      <div style="text-align:center;font-family:var(--font-mono);font-size:.52rem;color:rgba(200,169,66,.6);line-height:1.4;letter-spacing:.06em;">HUE<br>LOGO</div>
+    </div>
+    <div class="logo-divider" role="separator"></div>
+    <div class="logo-box" aria-label="Faculty of Engineering logo placeholder">
+      <div style="text-align:center;font-family:var(--font-mono);font-size:.52rem;color:rgba(200,169,66,.6);line-height:1.4;letter-spacing:.06em;">FACULTY<br>LOGO</div>
+    </div>
+  </div>
+  <div class="uni-center">
+    <div class="uni-name" id="uniName">Horus University Egypt</div>
+    <div class="uni-faculty" id="uniFaculty">Faculty of Engineering</div>
+    <div class="uni-dept" id="uniDept">Department of Communications &amp; Electronics Engineering · New Damietta, Egypt</div>
+  </div>
+  <div class="uni-accred" aria-label="Institutional accreditations">
+    <span class="acc-pill">NAQAAE</span>
+    <span class="acc-pill">ISO 21001</span>
+    <span class="acc-pill">EGAC</span>
+    <span class="acc-pill">ASRT</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     NAVIGATION
+══════════════════════════ -->
+<nav role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <button class="nav-logo" onclick="showPage('home')" aria-label="Go to homepage">
+      <div class="nav-eye" aria-hidden="true"></div>
+      <div class="nav-logo-txt">
+        <div class="l1">HUE — Faculty of Engineering</div>
+        <div class="l2">DEPT. COMMUNICATIONS &amp; ELECTRONICS · 2026</div>
+      </div>
+    </button>
+    <div class="nav-tabs" id="navTabs" role="menubar">
+      <button class="nav-close" id="navClose" onclick="closeMob()" style="display:none;" aria-label="Close menu">✕</button>
+      <button class="nav-tab active" id="ntab-home"     onclick="showPage('home')"     role="menuitem">Overview</button>
+      <button class="nav-tab"       id="ntab-arch"     onclick="showPage('arch')"     role="menuitem">Architecture</button>
+      <button class="nav-tab"       id="ntab-research" onclick="showPage('research')" role="menuitem">Research</button>
+      <button class="nav-tab"       id="ntab-team"     onclick="showPage('team')"     role="menuitem">Team</button>
+      <button class="nav-tab"       id="ntab-gallery"  onclick="showPage('gallery')"  role="menuitem">Gallery</button>
+      <button class="nav-tab"       id="ntab-sim"      onclick="showPage('sim')"      role="menuitem">Live Demo</button>
+      <button class="nav-tab"       id="ntab-contact"  onclick="showPage('contact')"  role="menuitem">Contact</button>
+    </div>
+    <div class="nav-right-cluster">
+      <button class="nav-cta" onclick="showPage('research')">Publications ↗</button>
+      <button class="nav-mob" id="mobBtn" onclick="openMob()" aria-label="Open navigation menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content">
+
+<!-- ══════════════════════════════════════════════════
+     PAGE: HOME
+══════════════════════════════════════════════════ -->
+<div id="page-home" class="page active" role="main">
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-bg-radial" aria-hidden="true"></div>
+    <div class="hero-scan" aria-hidden="true"></div>
+    <div class="hero-corner hc-tl" aria-hidden="true"></div>
+    <div class="hero-corner hc-tr" aria-hidden="true"></div>
+    <div class="hero-corner hc-bl" aria-hidden="true"></div>
+    <div class="hero-corner hc-br" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <div>
+        <div class="hero-kicker" aria-label="Project tag">Graduation Project 2026 · HUE · ECE Dept.</div>
+        <h1 class="hero-title" id="hero-title">
+          Advanced System<br>
+          for Drone <span class="accent">Detection,</span><br>
+          Tracking &amp; Neutralization
+        </h1>
+        <p class="hero-sub">
+          Bridging the Granularity Gap between conventional radar and
+          autonomous micro-UAVs through edge-native AI, optical tracking,
+          and multi-spectral RF fusion — engineered at Horus University Egypt.
+        </p>
+        <div class="hero-stats" role="list" aria-label="Academic achievements">
+          <div class="hstat" role="listitem"><span class="hstat-val" style="font-size:1.1rem;">HUJE</span><span class="hstat-lbl">Peer-Reviewed Publication</span></div>
+          <div class="hstat" role="listitem"><span class="hstat-val">5<sup style="font-size:.5em">th</sup></span><span class="hstat-lbl">NRSC 2026 Best Poster</span></div>
+          <div class="hstat" role="listitem"><span class="hstat-val" style="font-size:1.1rem;">ASRT</span><span class="hstat-lbl">+ ISF Dual Funding</span></div>
+          <div class="hstat" role="listitem"><span class="hstat-val">50</span><span class="hstat-lbl">Studies Reviewed</span></div>
+        </div>
+        <div class="hero-btns">
+          <button class="btn-gold" onclick="showPage('arch')">Explore Architecture</button>
+          <button class="btn-outline" style="color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.2);" onclick="showPage('sim')">▶ Live Demo</button>
+        </div>
+      </div>
+
+      <div class="hero-hud" aria-label="System status panel" role="complementary">
+        <div class="hud-top">
+          <span class="hud-top-lbl">▸ C-UAS Control Panel</span>
+          <span class="hud-clock" id="hudClock" aria-live="polite" aria-label="Current time">--:--:--</span>
+        </div>
+        <div class="hud-body">
+          <div class="hud-vis" aria-hidden="true">
+            <div class="hud-cross-h"></div>
+            <div class="hud-cross-v"></div>
+            <div class="hud-target"></div>
+            <div class="hud-conf" id="hudConf">CONF: --</div>
+          </div>
+          <div class="hud-row"><span class="hud-k">SYSTEM STATUS</span><span class="hud-v">PATROL MODE</span></div>
+          <div class="hud-row"><span class="hud-k">AI MODEL</span><span class="hud-v gold">YOLOv8n INT8</span></div>
+          <div class="hud-row"><span class="hud-k">INFERENCE</span><span class="hud-v">30 FPS · 31ms</span></div>
+          <div class="hud-row"><span class="hud-k">PTZ STATUS</span><span class="hud-v">SCANNING</span></div>
+          <div class="hud-row"><span class="hud-k">RF ANALYZER</span><span class="hud-v amb">HW READY</span></div>
+          <div class="hud-row"><span class="hud-k">TELEMETRY</span><span class="hud-v">4G · 1.2s DELAY</span></div>
+          <div class="hud-row"><span class="hud-k">TRACKING</span><span class="hud-v gold">KALMAN ACTIVE</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNERS RIBBON -->
+  <div class="partners-ribbon" role="complementary" aria-label="Endorsing institutions">
+    <div class="pr-lbl">Endorsed By</div>
+    <div class="pr-items">
+      <div class="pr-badge"><div class="pr-badge-ico" style="background:#0d1b3e;font-size:.55rem" aria-hidden="true">HUE</div><div><div class="pr-badge-name">Horus University</div><div class="pr-badge-type">Academic Institution</div></div></div>
+      <div class="pr-badge" style="border-color:rgba(181,0,25,.3);background:rgba(181,0,25,.04);">
+        <div style="width:50px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg viewBox="0 0 80 36" width="50" height="28" aria-label="ASRT logo">
+            <rect width="80" height="36" rx="3" fill="#b50019"/>
+            <text x="40" y="14" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="white" text-anchor="middle">ASRT</text>
+            <text x="40" y="26" font-family="Arial,sans-serif" font-size="5.5" fill="rgba(255,255,255,.85)" text-anchor="middle">Academy Sci. Res.</text>
+          </svg>
+        </div>
+        <div><div class="pr-badge-name">ASRT Badayty</div><div class="pr-badge-type">Research Funding</div></div>
+      </div>
+      <div class="pr-badge" style="border-color:rgba(0,106,62,.3);background:rgba(0,106,62,.04);">
+        <div style="width:50px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg viewBox="0 0 80 36" width="50" height="28" aria-label="ISF logo">
+            <rect width="80" height="36" rx="3" fill="#006a3e"/>
+            <text x="40" y="14" font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle">ISF</text>
+            <text x="40" y="26" font-family="Arial,sans-serif" font-size="5.5" fill="rgba(255,255,255,.85)" text-anchor="middle">Innovators Fund</text>
+          </svg>
+        </div>
+        <div><div class="pr-badge-name">Innovators Support Fund</div><div class="pr-badge-type">Min. Higher Education</div></div>
+      </div>
+      <div class="pr-badge"><div class="pr-badge-ico" style="background:#4a4a6a;font-size:.44rem" aria-hidden="true">NAQAAE</div><div><div class="pr-badge-name">NAQAAE</div><div class="pr-badge-type">Accreditation Body</div></div></div>
+      <div class="pr-badge"><div class="pr-badge-ico" style="background:#005080;font-size:.5rem" aria-hidden="true">EGAC</div><div><div class="pr-badge-name">EGAC</div><div class="pr-badge-type">Engineering Accreditation</div></div></div>
+      <div class="pr-badge" style="border-color:rgba(200,169,66,.4);background:rgba(200,169,66,.06);">
+        <div style="width:50px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg viewBox="0 0 80 36" width="50" height="28" aria-label="NRSC 2026 Award">
+            <rect width="80" height="36" rx="3" fill="#7a0000"/>
+            <text x="40" y="13" font-family="Arial,sans-serif" font-size="8.5" font-weight="700" fill="#c8a942" text-anchor="middle">🏆 NRSC</text>
+            <text x="40" y="27" font-family="Arial,sans-serif" font-size="6" fill="rgba(255,255,255,.85)" text-anchor="middle">2026 · 5th Best Poster</text>
+          </svg>
+        </div>
+        <div><div class="pr-badge-name">NRSC 2026</div><div class="pr-badge-type">5th Best Poster Award</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM -->
+  <section class="problem-sec" aria-labelledby="problem-heading">
+    <div class="sec-wrap">
+      <div class="problem-grid">
+        <div>
+          <div class="eyebrow" style="color:var(--hue-gold-lt)">Core Research Problem</div>
+          <h2 class="sec-h light" id="problem-heading">The Granularity Gap</h2>
+          <div class="sec-rule"></div>
+          <p class="sec-lead light" style="margin-bottom:1rem;">Conventional air-defense was engineered for supersonic missiles with RCS &gt; 5m². Today's micro-drones operate at σ &lt; 0.01m² — collapsing radar detection probability from ~80% down to barely 12% and vanishing into Doppler notch filters when hovering.</p>
+          <p class="sec-lead light">This project bridges that gap through optical-primary detection with 25× zoom and a YOLOv8n INT8 edge AI pipeline running on commercial off-the-shelf hardware at a fraction of the cost of conventional C-UAS solutions.</p>
+        </div>
+        <div class="problem-vis" aria-label="Detection probability chart">
+          <div class="vis-lbl">// Detection Probability · Class I UAS (σ &lt; 0.01 m²)</div>
+          <div class="bar-group" role="img" aria-label="Bar chart: Radar 12%, Optical 55%, Proposed 94%">
+            <div class="bar-item"><div class="bar-val">12%</div><div class="bar-rect low" role="presentation"></div><div class="bar-lbl">Radar<br>Pd≈0.12</div></div>
+            <div class="bar-item"><div class="bar-val">55%</div><div class="bar-rect med" role="presentation"></div><div class="bar-lbl">Optical<br>Pd≈0.55</div></div>
+            <div class="bar-item"><div class="bar-val">94%</div><div class="bar-rect hi" role="presentation"></div><div class="bar-lbl">Proposed<br>Pd≈0.94</div></div>
+          </div>
+          <div class="vis-note">Urban environment · Range 800m · Optical-primary + RF Correlation (Phase II)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONOPS -->
+  <section class="conops-sec" aria-labelledby="conops-heading">
+    <div class="sec-wrap">
+      <div style="text-align:center;margin-bottom:2.5rem;">
+        <div class="eyebrow" style="justify-content:center;">Concept of Operations</div>
+        <h2 class="sec-h" id="conops-heading">System Workflow</h2>
+        <div class="sec-rule center"></div>
+      </div>
+      <div class="flow-track" role="list">
+        <div class="fstep" role="listitem">
+          <div class="fstep-node" aria-hidden="true">📡<span class="fstep-num">1</span></div>
+          <h4>Surveillance</h4>
+          <p>Autonomous PTZ scanning or RF-triggered Slew-to-Cue. Hikvision DarkFighter 25× zoom covers 360° continuously, day and night.</p>
+        </div>
+        <div class="fstep" role="listitem">
+          <div class="fstep-node" aria-hidden="true">🧠<span class="fstep-num">2</span></div>
+          <h4>AI Identification</h4>
+          <p>YOLOv8n INT8 on Raspberry Pi 5 processes 30 FPS in real time. Reliable Drone / Bird / Background discrimination — mAP@50: 0.888.</p>
+        </div>
+        <div class="fstep" role="listitem">
+          <div class="fstep-node" aria-hidden="true">🎯<span class="fstep-num">3</span></div>
+          <h4>Kinetic Lock</h4>
+          <p>Discrete Kalman Filter + PID controller maintains target centroid. Direct ISAPI injection achieves sub-10ms PTZ command latency.</p>
+        </div>
+        <div class="fstep" role="listitem">
+          <div class="fstep-node" aria-hidden="true">📲<span class="fstep-num">4</span></div>
+          <h4>Operator Alert</h4>
+          <p>Encrypted Telegram alerts with JPEG snapshots over 4G. Remote ARM / DISARM via bot commands. Mean alert delay: 1.2 seconds.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY ACHIEVEMENTS -->
+  <section style="background:var(--white);" aria-labelledby="ach-heading">
+    <div class="sec-wrap">
+      <div class="eyebrow">Academic &amp; Engineering Achievements</div>
+      <h2 class="sec-h" id="ach-heading">Key Achievements</h2>
+      <div class="sec-rule"></div>
+      <div class="ach-grid">
+        <div class="ach-card">
+          <div class="ach-ico" aria-hidden="true">📄</div>
+          <h4>Peer-Reviewed Publication</h4>
+          <p>"Bridging the Granularity Gap" — published in the Horus University Journal of Engineering (HUJE / ISSN 3062-4991). First multi-spectral C-UAS systematic review from the department, indexed on EKB Portal.</p>
+        </div>
+        <div class="ach-card feature">
+          <div class="ach-num">5<sup style="font-size:.55em">th</sup></div>
+          <h4>NRSC 2026 — Best Poster</h4>
+          <p>National Radio Science Conference 2026 — Egypt's premier radio engineering forum. Competing nationally against leading university and research centre teams.</p>
+        </div>
+        <div class="ach-card">
+          <div class="ach-ico" aria-hidden="true">💰</div>
+          <h4>Dual External Funding</h4>
+          <p>Granted by ASRT's Badayty programme <em>and</em> the Ministry of Higher Education's Innovators Support Fund — rare dual institutional endorsement for student-led research.</p>
+        </div>
+        <div class="ach-card">
+          <div class="ach-ico" aria-hidden="true">🧠</div>
+          <h4>Edge AI Proof of Concept</h4>
+          <p>Successfully deployed YOLOv8n INT8 on Raspberry Pi 5 — a validated software proof of concept demonstrating the full detection-to-alert pipeline on COTS hardware.</p>
+        </div>
+        <div class="ach-card feature">
+          <div class="ach-num">50</div>
+          <h4>Systematic Literature Review</h4>
+          <p>PRISMA-compliant review of 50 high-impact C-UAS studies (2018–2025). Defines the Granularity Gap, benchmarks edge AI deployments, and proposes a Cyber-Physical UTM framework.</p>
+        </div>
+        <div class="ach-card">
+          <div class="ach-ico" aria-hidden="true">🔧</div>
+          <h4>Full System Architecture</h4>
+          <p>Designed a complete 5-layer cyber-physical stack: optical acquisition → edge AI inference → Kalman tracking → ISAPI actuation → Telegram telemetry. All layers software-validated.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-home -->
+
+
+<!-- ══════════════════════════════════════════════════
+     PAGE: ARCHITECTURE
+══════════════════════════════════════════════════ -->
+<div id="page-arch" class="page">
+  <div class="page-banner" role="banner">
+    <div class="page-banner-inner">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">System Design</div>
+      <h1 class="sec-h light" id="arch-heading">Architecture &amp; Data Flow</h1>
+      <div class="sec-rule"></div>
+      <p class="sec-lead light">A five-layer cyber-physical stack running on Raspberry Pi 5 — from zero-copy hardware video decoding through INT8 edge AI inference to direct ISAPI PTZ actuation and encrypted remote telemetry.</p>
+    </div>
+  </div>
+
+  <div class="sec-wrap">
+    <div class="eyebrow">Hardware Layer</div>
+    <h2 class="sec-h">Component Suite</h2>
+    <div class="sec-rule"></div>
+    <div class="arch-hw">
+      <div class="hw-card">
+        <div class="hw-hdr"><span class="h-ico" aria-hidden="true">🖥️</span><div><h4>Compute Core</h4><span>Raspberry Pi 5</span></div></div>
+        <div class="hw-body"><table class="spec-table"><tr><td>SoC</td><td>BCM2712 Cortex-A76</td></tr><tr><td>Clock</td><td>2.4 GHz Quad-Core</td></tr><tr><td>RAM</td><td>8 GB LPDDR4X-4267</td></tr><tr><td>NPU</td><td>VideoCore VII</td></tr><tr><td>I/O</td><td>PCIe 2.0 × 1 · USB 3.0</td></tr><tr><td>Cost</td><td>~$80 COTS</td></tr></table></div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-hdr"><span class="h-ico" aria-hidden="true">📷</span><div><h4>Optical Sensor</h4><span>Hikvision DS-2DE4225IW</span></div></div>
+        <div class="hw-body"><table class="spec-table"><tr><td>Zoom</td><td>25× Optical (4.8–120mm)</td></tr><tr><td>Sensor</td><td>1/2.8" DarkFighter CMOS</td></tr><tr><td>Min. Illum.</td><td>0.005 Lux (F1.6)</td></tr><tr><td>FoV</td><td>57.6° wide / 2.5° tele</td></tr><tr><td>Stream</td><td>RTSP / H.265</td></tr><tr><td>Control</td><td>Direct ISAPI injection</td></tr></table></div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-hdr"><span class="h-ico" aria-hidden="true">📡</span><div><h4>RF Analyzer</h4><span>HTOOL SA-6G</span></div></div>
+        <div class="hw-body"><table class="spec-table"><tr><td>Range</td><td>35 MHz – 6.2 GHz</td></tr><tr><td>Dyn. Range</td><td>75 dB</td></tr><tr><td>Resolution</td><td>16-bit FFT</td></tr><tr><td>Interface</td><td>USB-C Serial</td></tr><tr><td>Status</td><td>HW mounted · Driver dev.</td></tr><tr><td>Phase</td><td>Phase II integration</td></tr></table></div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-hdr"><span class="h-ico" aria-hidden="true">🔧</span><div><h4>Mechanical</h4><span>CAD + KINGJOY VT-2100L</span></div></div>
+        <div class="hw-body"><table class="spec-table"><tr><td>Bracket</td><td>SolidWorks L-Bracket</td></tr><tr><td>Tripod</td><td>KINGJOY VT-2100L</td></tr><tr><td>Max Payload</td><td>15 kg</td></tr><tr><td>System Wt.</td><td>4.3 kg</td></tr><tr><td>Safety Factor</td><td>3.48 ×</td></tr><tr><td>Thermal</td><td>Active PWM + 40mm cutout</td></tr></table></div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-hdr"><span class="h-ico" aria-hidden="true">📻</span><div><h4>RF Neutralization</h4><span>Phase II — Theoretical</span></div></div>
+        <div class="hw-body"><table class="spec-table"><tr><td>Architecture</td><td>GaN SSPA Directional</td></tr><tr><td>Output Power</td><td>10 W</td></tr><tr><td>J/S Target</td><td>&gt; 20 dB threshold</td></tr><tr><td>Range</td><td>Up to 1.5 km</td></tr><tr><td>Frequencies</td><td>2.4 / 5.8 GHz + GNSS</td></tr><tr><td>Status</td><td>Theoretical · Reg. pending</td></tr></table></div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-hdr"><span class="h-ico" aria-hidden="true">🔋</span><div><h4>Power System</h4><span>Dual-Mode Supply</span></div></div>
+        <div class="hw-body"><table class="spec-table"><tr><td>Primary</td><td>12V DC / PoE+ 802.3at</td></tr><tr><td>Backup</td><td>4S Li-Po (14.8V)</td></tr><tr><td>Idle Power</td><td>8.5 W</td></tr><tr><td>Peak Power</td><td>24.2 W</td></tr><tr><td>Protection</td><td>IP66 · TVS 4000V</td></tr><tr><td>Display</td><td>On-board HDMI Monitor</td></tr></table></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--off-white);">
+    <div class="sec-wrap">
+      <div class="eyebrow">Software Architecture</div>
+      <h2 class="sec-h">5-Layer Processing Stack</h2>
+      <div class="sec-rule"></div>
+      <div class="sw-stack">
+        <div class="sw-layer"><div class="sw-lbl">⚡ Acquisition</div><div class="sw-chips"><span class="chip navy">GStreamer</span><span class="chip">RTSP/H.265</span><span class="chip">DMA Buffers</span><span class="chip">Zero-Copy</span><span class="chip">v4l2h265dec</span></div><div class="sw-meta">VideoCore VII hardware decoder. Eliminates CPU copy overhead. Glass-to-buffer: <strong>42ms</strong>.</div></div>
+        <div class="sw-layer"><div class="sw-lbl">🧠 Perception</div><div class="sw-chips"><span class="chip navy">YOLOv8n INT8</span><span class="chip">NumPy SIMD</span><span class="chip">Post-Train Quant.</span><span class="chip gold">mAP@50: 0.888</span><span class="chip green">30 FPS</span></div><div class="sw-meta">4× memory reduction via INT8. Vectorized target selection O(N)→O(1). Inference: <strong>31ms</strong>.</div></div>
+        <div class="sw-layer"><div class="sw-lbl">📊 Estimation</div><div class="sw-chips"><span class="chip navy">Kalman Filter</span><span class="chip">State [x,y,vx,vy]</span><span class="chip">CV Motion Model</span><span class="chip">Occlusion Coasting</span></div><div class="sw-meta">Discrete Kalman Filter compensates PTZ lag and maintains track during temporary occlusions.</div></div>
+        <div class="sw-layer"><div class="sw-lbl">📡 Telemetry</div><div class="sw-chips"><span class="chip navy">Telegram Bot API</span><span class="chip">WebSockets 30Hz</span><span class="chip">Asyncio</span><span class="chip">4G LTE</span><span class="chip">ARM / DISARM</span></div><div class="sw-meta">Encrypted alerts with JPEG snapshots. Full-duplex remote command. Mean delay: <strong>1.2s</strong>.</div></div>
+        <div class="sw-layer"><div class="sw-lbl">🎯 Actuation</div><div class="sw-chips"><span class="chip navy">ISAPI Direct Injection</span><span class="chip">PID Controller</span><span class="chip">XML HTTP PUT</span><span class="chip green">τ_net &lt; 10ms</span><span class="chip">systemd Daemon</span></div><div class="sw-meta">Bypasses ONVIF overhead. Direct velocity vector injection. Always-on via systemd. <strong>66ms</strong> actuation.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-wrap">
+    <div class="eyebrow">End-to-End Pipeline</div>
+    <h2 class="sec-h">Data Flow Diagram</h2>
+    <div class="sec-rule"></div>
+    <div class="pipeline-diag" role="img" aria-label="Pipeline diagram: Camera → GStreamer → YOLOv8n → Kalman → PID → Telegram totalling 139ms">
+      <div class="pipe-nodes">
+        <div class="pnode"><span class="pnode-ico" aria-hidden="true">📷</span><span class="pnode-name">CAMERA</span><span class="pnode-sub">RTSP/H.265<br>25× PTZ</span></div>
+        <div class="parr" aria-hidden="true">→</div>
+        <div class="pnode"><span class="pnode-ico" aria-hidden="true">⚡</span><span class="pnode-name">GSTREAMER</span><span class="pnode-sub">Zero-Copy<br>DMA Buffer</span></div>
+        <div class="parr" aria-hidden="true">→</div>
+        <div class="pnode"><span class="pnode-ico" aria-hidden="true">🧠</span><span class="pnode-name">YOLOv8n</span><span class="pnode-sub">INT8 Quant.<br>NPU Accel.</span></div>
+        <div class="parr" aria-hidden="true">→</div>
+        <div class="pnode"><span class="pnode-ico" aria-hidden="true">📊</span><span class="pnode-name">KALMAN</span><span class="pnode-sub">State Est.<br>Prediction</span></div>
+        <div class="parr" aria-hidden="true">→</div>
+        <div class="pnode"><span class="pnode-ico" aria-hidden="true">🎯</span><span class="pnode-name">PID CTRL</span><span class="pnode-sub">ISAPI PTZ<br>Injection</span></div>
+        <div class="parr" aria-hidden="true">→</div>
+        <div class="pnode"><span class="pnode-ico" aria-hidden="true">📲</span><span class="pnode-name">TELEGRAM</span><span class="pnode-sub">Alert+Cmd<br>4G / WiFi</span></div>
+      </div>
+      <div class="lat-strip" aria-label="Latency breakdown">
+        <div class="lat-item"><span class="lat-val">42ms</span><span class="lat-lbl">Acquisition</span></div>
+        <div class="lat-sep" aria-hidden="true">+</div>
+        <div class="lat-item"><span class="lat-val">31ms</span><span class="lat-lbl">Inference</span></div>
+        <div class="lat-sep" aria-hidden="true">+</div>
+        <div class="lat-item"><span class="lat-val">66ms</span><span class="lat-lbl">Actuation</span></div>
+        <div class="lat-sep" aria-hidden="true">=</div>
+        <div class="lat-item"><span class="lat-val" style="color:var(--hue-gold)">139ms</span><span class="lat-lbl" style="color:rgba(200,169,66,.5)">Total Loop</span></div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-arch -->
+
+
+<!-- ══════════════════════════════════════════════════
+     PAGE: RESEARCH
+══════════════════════════════════════════════════ -->
+<div id="page-research" class="page">
+  <div class="page-banner">
+    <div class="page-banner-inner">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">Academic Output</div>
+      <h1 class="sec-h light" id="research-heading">Research &amp; Publications</h1>
+      <div class="sec-rule"></div>
+      <p class="sec-lead light">Peer-reviewed publication, competitive awards, and externally funded innovation — the academic footprint of this work extends well beyond the graduation project itself.</p>
+    </div>
+  </div>
+
+  <div class="sec-wrap">
+    <div class="award-strip" role="region" aria-label="Award highlight">
+      <div class="award-ico" aria-hidden="true">🏆</div>
+      <div class="award-txt">
+        <h3>5th Place — Best Poster Award · NRSC 2026</h3>
+        <p>National Radio Science Conference 2026 · Egypt's premier radio science forum. The team competed against leading Egyptian university and research centre teams.</p>
+      </div>
+    </div>
+
+    <!-- Main paper -->
+    <div class="paper-card">
+      <div class="paper-hdr">
+        <div class="paper-type">✓ Peer-Reviewed · Published 2026</div>
+        <h2 class="paper-title">Bridging the Granularity Gap: A Systematic Review of Multi-Spectral C-UAS Architectures</h2>
+      </div>
+      <div class="paper-body">
+        <p class="paper-meta">
+          <strong>Journal:</strong> Horus University Journal of Engineering (HUJE) · EKB Portal · ISSN: 3062-4991<br>
+          <strong>Authors:</strong> Amr Hussein Abdallah · Islam Emad Ismail* · Rawan Elbialy · Sagy Shawky · Abdelaziz Eltohami · Rafeek Marzouk · Islam Hesham · Rania Elabd · Mervat El-Seddek<br>
+          <strong>*Corresponding Author ORCID:</strong> <a href="https://orcid.org/0009-0002-2829-4912" target="_blank" rel="noopener">0009-0002-2829-4912</a>
+        </p>
+        <div class="paper-abstract">
+          Systematic review of 50 high-impact C-UAS studies (2018–2025) covering the architectural transition from single-sensor to multi-spectral fusion. Evaluates the Granularity Gap, benchmarks INT8 quantized Edge AI deployments, and proposes a Cyber-Physical framework integrated with UTM networks for scalable airspace security.
+        </div>
+        <div class="paper-hl">
+          <div class="phl">PRISMA Methodology</div>
+          <div class="phl">50 Primary Studies</div>
+          <div class="phl">Granularity Gap Analysis</div>
+          <div class="phl">YOLOv10 Benchmark</div>
+          <div class="phl">UTM Integration Framework</div>
+          <div class="phl">Edge AI Survey</div>
+        </div>
+        <div class="paper-actions">
+          <a href="https://huje.journals.ekb.eg/article_508720.html" target="_blank" rel="noopener" class="btn-navy">↗ View Online — HUJE</a>
+          <a href="Manuscript.pdf" download class="btn-gold" aria-label="Download the published paper PDF">↓ Download Paper (PDF)</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conference paper -->
+    <div class="paper-card">
+      <div class="paper-hdr" style="background:var(--hue-navy-mid);">
+        <div class="paper-type" style="background:rgba(200,169,66,.2);border-color:rgba(200,169,66,.4);">🏆 NRSC 2026 — Poster Presentation</div>
+        <h2 class="paper-title">Advanced System for Drone Detection, Tracking and Neutralization: Field Validation Results</h2>
+      </div>
+      <div class="paper-body">
+        <p class="paper-meta">
+          <strong>Venue:</strong> National Radio Science Conference (NRSC) 2026 · Egypt<br>
+          <strong>Recognition:</strong> 5th Best Poster Award — Competing nationally among engineering faculties
+        </p>
+        <div class="paper-hl">
+          <div class="phl">1.2km Validated Range</div>
+          <div class="phl">139ms Loop Latency</div>
+          <div class="phl">mAP@50: 0.888</div>
+          <div class="phl">Outdoor Field Trials</div>
+          <div class="phl">24/7 Operation</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Downloads -->
+    <div class="eyebrow" style="margin-top:.5rem;">Project Documentation</div>
+    <div class="dl-grid" style="margin-top:.8rem;">
+      <a href="Manuscript.pdf" download class="dl-card" aria-label="Download published review paper PDF">
+        <div class="dl-ico" aria-hidden="true">📑</div>
+        <div>
+          <div class="dl-name">Published Review Article — HUJE</div>
+          <div class="dl-meta">Manuscript.pdf · Peer-Reviewed · ISSN 3062-4991</div>
+        </div>
+        <div class="dl-arr" aria-hidden="true">↓</div>
+      </a>
+      <a href="Book.pdf" download class="dl-card" aria-label="Download graduation project book PDF">
+        <div class="dl-ico" aria-hidden="true">📄</div>
+        <div>
+          <div class="dl-name">Graduation Project Book / Monograph</div>
+          <div class="dl-meta">Book.pdf · Full Technical Documentation</div>
+        </div>
+        <div class="dl-arr" aria-hidden="true">↓</div>
+      </a>
+      <a href="https://github.com/islam-8" target="_blank" rel="noopener" class="dl-card" aria-label="View source code on GitHub">
+        <div class="dl-ico" aria-hidden="true">⌥</div>
+        <div>
+          <div class="dl-name">Source Code — GitHub</div>
+          <div class="dl-meta">github.com/islam-8 · YOLOv8 Pipeline · Tracking · ISAPI</div>
+        </div>
+        <div class="dl-arr" aria-hidden="true">↗</div>
+      </a>
+      <a href="https://islam-8.github.io/portfolio/" target="_blank" rel="noopener" class="dl-card" aria-label="View lead researcher portfolio">
+        <div class="dl-ico" aria-hidden="true">🧑‍💻</div>
+        <div>
+          <div class="dl-name">Lead Researcher Portfolio</div>
+          <div class="dl-meta">islam-8.github.io/portfolio · Systems Engineer · 2026</div>
+        </div>
+        <div class="dl-arr" aria-hidden="true">↗</div>
+      </a>
+    </div>
+
+    <!-- Funding -->
+    <div style="margin-top:2.5rem;">
+      <div class="eyebrow">External Recognition</div>
+      <h2 class="sec-h">Funding &amp; Institutional Support</h2>
+      <div class="sec-rule"></div>
+      <div class="fund-grid">
+        <div class="fund-card"><div class="fund-ico" aria-hidden="true">🏛️</div><div><div class="fund-tag">ASRT — Badayty Initiative</div><h4>Academy of Scientific Research &amp; Technology</h4><p>Project Badayty (بدايتي) — ASRT's flagship innovation funding programme. Awarded to high-potential student-led research with national security or commercial application.</p></div></div>
+        <div class="fund-card"><div class="fund-ico" aria-hidden="true">🎓</div><div><div class="fund-tag">ISF — Innovators Support Fund</div><h4>Ministry of Higher Education</h4><p>صندوق رعاية المبتكرين والنوابغ — Ministry-level recognition and financial support for breakthrough engineering innovations in Egyptian universities.</p></div></div>
+        <div class="fund-card"><div class="fund-ico" aria-hidden="true">🔬</div><div><div class="fund-tag">HUE Research Office</div><h4>Horus University Egypt</h4><p>Full institutional backing — supervised publication, laboratory resources, conference participation, and project administration throughout the 2025–2026 academic year.</p></div></div>
+        <div class="fund-card"><div class="fund-ico" aria-hidden="true">🌐</div><div><div class="fund-tag">ITC 2026 Submission</div><h4>ITC Technology Competition</h4><p>Proposal submitted to ITC 2026 at prototype stage. Full technical transparency applied. Clear Phase II roadmap documented in the project monograph.</p></div></div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-research -->
+
+
+<!-- ══════════════════════════════════════════════════
+     PAGE: TEAM
+══════════════════════════════════════════════════ -->
+<div id="page-team" class="page">
+  <section class="team-sup-sec" aria-labelledby="sup-heading">
+    <div style="max-width:1200px;margin:0 auto;padding:0 4%;">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">Faculty Supervision</div>
+      <h1 class="sec-h light" id="sup-heading">Supervisory Committee</h1>
+      <div class="sec-rule"></div>
+      <div class="sup-grid">
+
+        <article class="sup-card">
+          <div class="sup-av">
+  <img src="assets/team/amr.jpg" alt="Prof. Dr. Amr Hussein">
+</div>
+          <div class="sup-name">Prof. Dr. Amr Hussein Hussein Abdullah</div>
+          <div class="sup-rank">Full Professor · Principal Supervisor</div>
+          <div class="sup-dept">
+            Dept. of Communications &amp; Electronics Engineering<br>
+            Horus University Egypt · Vice Dean (Community Affairs)
+          </div>
+          <div class="sup-tags">
+            <span class="stag">Ph.D. Tanta 2012</span>
+            <span class="stag">Antennas</span>
+            <span class="stag">SCOPUS Author</span>
+          </div>
+          <div class="sup-links">
+            <a href="https://scholar.google.ae/citations?user=nZbEowAAAAJ&hl=en" target="_blank" rel="noopener" class="sup-link" aria-label="Google Scholar profile of Prof. Amr Hussein">Scholar</a>
+            <a href="https://orcid.org/0000-0002-9685-2528" target="_blank" rel="noopener" class="sup-link" aria-label="ORCID profile of Prof. Amr Hussein">ORCID</a>
+            <a href="https://www.researchgate.net/profile/Amr-Hussein-6" target="_blank" rel="noopener" class="sup-link" aria-label="ResearchGate of Prof. Amr Hussein">ResGate</a>
+          </div>
+        </article>
+
+        <article class="sup-card">
+          <div class="sup-av">
+  <img src="assets/team/mervat.jpg" alt="Assoc. Prof. Mervat El-Seddek">
+</div>
+          <div class="sup-name">Assoc. Prof. Dr. Mervat Mohamed Hassan Elseddek</div>
+          <div class="sup-rank">Associate Professor · Co-Supervisor</div>
+          <div class="sup-dept">
+            Dept. of Communications &amp; Electronics Engineering<br>
+            IEEE Senior Member · NAQAAE Certified Reviewer
+          </div>
+          <div class="sup-tags">
+            <span class="stag">Ph.D. Mansoura 2015</span>
+            <span class="stag">DSP / AI</span>
+            <span class="stag">IEEE Senior Member</span>
+          </div>
+          <div class="sup-links">
+            <a href="https://scholar.google.com/citations?user=bfEfWVQAAAAJ&hl=en" target="_blank" rel="noopener" class="sup-link" aria-label="Google Scholar profile of Assoc. Prof. Mervat El-Seddek">Scholar</a>
+            <a href="https://orcid.org/0000-0001-5854-0948" target="_blank" rel="noopener" class="sup-link" aria-label="ORCID profile">ORCID</a>
+            <a href="http://www.researchgate.net/profile/Mervat-El-Seddek" target="_blank" rel="noopener" class="sup-link" aria-label="ResearchGate profile">ResGate</a>
+          </div>
+        </article>
+
+        <article class="sup-card">
+          <div class="sup-av">
+  <img src="assets/team/rania.jpg" alt="Dr. Rania El-Abd">
+</div>
+          <div class="sup-name">Assis. Dr. Rania Hamdy El-Abd</div>
+          <div class="sup-rank">Assistant Professor · Co-Supervisor</div>
+          <div class="sup-dept">
+            Dept. of Communications &amp; Electronics Engineering<br>
+            Horus University, Egypt
+          </div>
+          <div class="sup-tags">
+            <span class="stag">Supervision</span>
+            <span class="stag">Project Administration</span>
+          </div>
+          <div class="sup-links">
+            <a href="https://eng.horus.edu.eg/wp-content/uploads/2025/11/CV-رانيا-حمدى-محمد-محمد-مصبح-العبد.pdf" target="_blank" rel="noopener" class="sup-link" aria-label="Download CV of Dr. Rania El-Abd">CV ↓</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="members-wrap" aria-labelledby="team-heading">
+    <div class="eyebrow">Engineering Team</div>
+    <h2 class="sec-h" id="team-heading">Team Horus — Class of 2026</h2>
+    <div class="sec-rule"></div>
+    <div class="mem-grid">
+
+      <article class="mem-card lead-card" style="grid-column:1/-1;">
+        <div class="lead-badge">★ Lead Researcher &amp; Corresponding Author</div>
+        <div class="mem-av" style="border-color:var(--hue-gold);background:rgba(200,169,66,.06);">
+  <img src="assets/team/islam.jpg" alt="Islam Emad">
+</div>
+        <div class="mem-name">Islam Emad Ahmed Ismail</div>
+        <div class="mem-id">Student ID: 1211108 · ORCID: <a href="https://orcid.org/0009-0002-2829-4912" target="_blank" rel="noopener" style="color:var(--hue-gold);">0009-0002-2829-4912</a></div>
+        <div class="mem-role">6G &amp; AI Researcher · Lead System Engineer</div>
+        <div class="mem-skills">
+          <span class="msk">Conceptualization</span><span class="msk">Methodology</span>
+          <span class="msk">Formal Analysis</span><span class="msk">Visualization</span>
+          <span class="msk">YOLOv8 Pipeline</span><span class="msk">Raspberry Pi 5</span>
+          <span class="msk">Kalman Tracker</span><span class="msk">6G/RF Architecture</span>
+          <span class="msk">Python</span><span class="msk">GStreamer</span><span class="msk">ISAPI</span>
+        </div>
+        <div class="mem-links">
+          <a href="https://islam-8.github.io/portfolio/" target="_blank" rel="noopener" class="mem-link" aria-label="Portfolio website of Islam Emad">🌐 Portfolio</a>
+          <a href="https://github.com/islam-8" target="_blank" rel="noopener" class="mem-link" aria-label="GitHub profile of Islam Emad">⌥ GitHub</a>
+          <a href="https://www.linkedin.com/in/islam-ismail-18a88b381" target="_blank" rel="noopener" class="mem-link" aria-label="LinkedIn profile of Islam Emad">in LinkedIn</a>
+          <a href="mailto:eesllm@icloud.com" class="mem-link" aria-label="Email Islam Emad">✉ Email</a>
+          <a href="https://orcid.org/0009-0002-2829-4912" target="_blank" rel="noopener" class="mem-link" aria-label="ORCID profile of Islam Emad">ORCID</a>
+        </div>
+      </article>
+
+      <article class="mem-card">
+        <div class="mem-av">
+  <img src="assets/team/abdelaziz.jpg" alt="Abdelaziz Eltohami">
+</div>
+        <div class="mem-name">Abdelaziz Eltohami Mohamed</div>
+        <div class="mem-id">ID: 1211105</div>
+        <div class="mem-role">Hardware Engineer</div>
+        <div class="mem-skills"><span class="msk">Validation</span><span class="msk">Investigation</span><span class="msk">Data Collection</span><span class="msk">CAD/SolidWorks</span></div>
+      </article>
+
+      <article class="mem-card">
+        <div class="mem-av">
+  <img src="assets/team/rafeek.jpg" alt="Rafeek Marzouk">
+</div>
+        <div class="mem-name">Rafeek Marzouk El-Fauomy</div>
+        <div class="mem-id">ID: 1233007</div>
+        <div class="mem-role">RF &amp; Signal Processing</div>
+        <div class="mem-skills"><span class="msk">Validation</span><span class="msk">Investigation</span><span class="msk">Data Collection</span><span class="msk">Spectrum Analysis</span></div>
+      </article>
+
+      <article class="mem-card">
+        <div class="mem-av">
+  <img src="assets/team/rawan.jpg" alt="Rawan Elbialy">
+</div>
+        <div class="mem-name">Rawan Mohammed Elbialy</div>
+        <div class="mem-id">ID: 1211174</div>
+        <div class="mem-role">Data Collection &amp; Validation</div>
+        <div class="mem-skills"><span class="msk">Validation</span><span class="msk">Investigation</span><span class="msk">Dataset Curation</span></div>
+      </article>
+
+      <article class="mem-card">
+        <div class="mem-av">
+  <img src="assets/team/sagy.jpg" alt="Sagy Shawky">
+</div>
+        <div class="mem-name">Sagy Shawky Abo El-Naga</div>
+        <div class="mem-id">ID: 1221602</div>
+        <div class="mem-role">Control Systems &amp; Testing</div>
+        <div class="mem-skills"><span class="msk">Validation</span><span class="msk">Investigation</span><span class="msk">FMEA</span><span class="msk">Field Testing</span></div>
+      </article>
+
+      <article class="mem-card">
+        <div class="mem-av">
+  <img src="assets/team/hesham.jpg" alt="Islam Hesham">
+</div>
+        <div class="mem-name">Islam Hesham Hamed</div>
+        <div class="mem-id">ID: 1201040</div>
+        <div class="mem-role">Software &amp; System Integration</div>
+        <div class="mem-skills"><span class="msk">Validation</span><span class="msk">Investigation</span><span class="msk">Python</span><span class="msk">Embedded Linux</span></div>
+      </article>
+
+    </div>
+
+    <!-- Task Assignment Table -->
+    <div style="margin-top:2.5rem;">
+      <div class="eyebrow">CRediT Taxonomy</div>
+      <h2 class="sec-h">Project Contribution Matrix</h2>
+      <div class="sec-rule"></div>
+      <div class="task-table-wrap">
+        <table class="task-table" aria-label="Project contribution assignments per team member">
+          <thead>
+            <tr>
+              <th scope="col">Team Member</th>
+              <th scope="col">Role</th>
+              <th scope="col">CRediT Contributions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Islam Emad Ismail</td>
+              <td>Lead Researcher</td>
+              <td><div class="task-contrib"><span class="tc">Conceptualization</span><span class="tc">Methodology</span><span class="tc">Software Development</span><span class="tc">Formal Analysis</span><span class="tc">Visualization</span><span class="tc">Writing — Original Draft</span><span class="tc">Writing — Review &amp; Editing</span></div></td>
+            </tr>
+            <tr>
+              <td>Abdelaziz Eltohami</td>
+              <td>Hardware Engineer</td>
+              <td><div class="task-contrib"><span class="tc">Validation</span><span class="tc">Investigation</span><span class="tc">Data Collection</span><span class="tc">CAD / Mechanical Design</span><span class="tc">Physical Assembly</span></div></td>
+            </tr>
+            <tr>
+              <td>Rafeek Marzouk</td>
+              <td>RF Specialist</td>
+              <td><div class="task-contrib"><span class="tc">Validation</span><span class="tc">Investigation</span><span class="tc">RF Spectrum Analysis</span><span class="tc">Data Collection</span><span class="tc">Hardware Characterization</span></div></td>
+            </tr>
+            <tr>
+              <td>Rawan Elbialy</td>
+              <td>Data &amp; Validation</td>
+              <td><div class="task-contrib"><span class="tc">Validation</span><span class="tc">Investigation</span><span class="tc">Dataset Curation</span><span class="tc">Annotation</span><span class="tc">Literature Review Support</span></div></td>
+            </tr>
+            <tr>
+              <td>Sagy Shawky</td>
+              <td>Control &amp; Testing</td>
+              <td><div class="task-contrib"><span class="tc">Validation</span><span class="tc">Investigation</span><span class="tc">Field Testing</span><span class="tc">FMEA Analysis</span><span class="tc">Safety Assessment</span></div></td>
+            </tr>
+            <tr>
+              <td>Islam Hesham</td>
+              <td>SW Integration</td>
+              <td><div class="task-contrib"><span class="tc">Validation</span><span class="tc">Investigation</span><span class="tc">Software Integration</span><span class="tc">Embedded Linux</span><span class="tc">System Testing</span></div></td>
+            </tr>
+            <tr>
+              <td>Prof. Dr. Amr Hussein</td>
+              <td>Principal Supervisor</td>
+              <td><div class="task-contrib"><span class="tc">Supervision</span><span class="tc">Project Administration</span><span class="tc">Funding Acquisition</span><span class="tc">Writing — Review &amp; Editing</span></div></td>
+            </tr>
+            <tr>
+              <td>Assoc. Prof. Mervat El-Seddek</td>
+              <td>Co-Supervisor</td>
+              <td><div class="task-contrib"><span class="tc">Supervision</span><span class="tc">Project Administration</span><span class="tc">Writing — Review &amp; Editing</span></div></td>
+            </tr>
+            <tr>
+              <td>Assis. Dr. Rania El-Abd</td>
+              <td>Co-Supervisor</td>
+              <td><div class="task-contrib"><span class="tc">Supervision</span><span class="tc">Project Administration</span><span class="tc">Writing — Review &amp; Editing</span></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="photo-note" role="note">
+      <strong>📌 Photo Integration Guide:</strong> Every avatar shows initials as a placeholder. To add official photos, replace each <code>.mem-av</code> or <code>.sup-av</code> div with <code>&lt;img src="assets/team/name.jpg" alt="Full name" class="mem-av"&gt;</code>. The layout, borders, and sizing are fully configured — just drop in the JPG/PNG files.
+    </div>
+  </section>
+</div><!-- /page-team -->
+
+
+<!-- ══════════════════════════════════════════════════
+     PAGE: GALLERY
+══════════════════════════════════════════════════ -->
+<div id="page-gallery" class="page">
+  <div class="page-banner">
+    <div class="page-banner-inner">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">Visual Documentation</div>
+      <h1 class="sec-h light">Project Media Gallery</h1>
+      <div class="sec-rule"></div>
+    </div>
+  </div>
+  <div class="gal-filters" role="group" aria-label="Filter gallery by category">
+    <button class="fbtn active" onclick="filterGal('all',this)">All</button>
+    <button class="fbtn" onclick="filterGal('hw',this)">Hardware</button>
+    <button class="fbtn" onclick="filterGal('field',this)">Field Trials</button>
+    <button class="fbtn" onclick="filterGal('sw',this)">Software / AI</button>
+    <button class="fbtn" onclick="filterGal('conf',this)">Conference</button>
+    <button class="fbtn" onclick="filterGal('vid',this)">Video</button>
+  </div>
+  <div class="gal-grid" id="galGrid" role="list">
+    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="Full System Assembly Prototype Unit"><div class="gal-ph"><span class="gico" aria-hidden="true">🔩</span><span class="glbl">Full System Assembly<br>Prototype Unit</span></div><div class="gal-ov" aria-hidden="true">Full System Assembly<br>Prototype Unit</div></div>
+    <div class="gal-item" data-cat="field" role="listitem" tabindex="0" aria-label="Real-Time HUD output with 0.95 confidence"><div class="gal-ph"><span class="gico" aria-hidden="true">🎯</span><span class="glbl">Real-Time HUD Output<br>Confidence: 0.95</span></div><div class="gal-ov" aria-hidden="true">Live HUD: Target Lock<br>CONF: 0.95 · RANGE: 450m</div></div>
+    <div class="gal-item" data-cat="conf" role="listitem" tabindex="0" aria-label="NRSC 2026 Award Ceremony photo"><div class="gal-ph"><span class="gico" aria-hidden="true">🏆</span><span class="glbl">NRSC 2026<br>Award Ceremony</span></div><div class="gal-ov" aria-hidden="true">NRSC 2026<br>5th Best Poster Award</div></div>
+    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="HTOOL SA-6G RF Spectrum Analyzer"><div class="gal-ph"><span class="gico" aria-hidden="true">📡</span><span class="glbl">HTOOL SA-6G<br>RF Spectrum Analyzer</span></div><div class="gal-ov" aria-hidden="true">RF Sensing Core<br>35 MHz – 6.2 GHz</div></div>
+    <div class="gal-item" data-cat="sw" role="listitem" tabindex="0" aria-label="YOLOv8n Training curve mAP@50 0.888 epoch 8"><div class="gal-ph"><span class="gico" aria-hidden="true">📊</span><span class="glbl">YOLOv8n Training<br>mAP@50: 0.888 @ Epoch 8</span></div><div class="gal-ov" aria-hidden="true">Training Convergence<br>Custom HUE Drone Dataset</div></div>
+    <div class="gal-item" data-cat="field" role="listitem" tabindex="0" aria-label="Field Deployment New Damietta Region"><div class="gal-ph"><span class="gico" aria-hidden="true">🌅</span><span class="glbl">Field Deployment<br>New Damietta Region</span></div><div class="gal-ov" aria-hidden="true">Outdoor Field Trial<br>New Damietta · 2026</div></div>
+    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="SolidWorks CAD custom L-bracket design"><div class="gal-ph"><span class="gico" aria-hidden="true">🔧</span><span class="glbl">SolidWorks CAD<br>Custom L-Bracket</span></div><div class="gal-ov" aria-hidden="true">CAD Design<br>Modular L-Bracket Assembly</div></div>
+    <div class="gal-item" data-cat="sw" role="listitem" tabindex="0" aria-label="Normalized confusion matrix Drone Bird Background"><div class="gal-ph"><span class="gico" aria-hidden="true">🧮</span><span class="glbl">Confusion Matrix<br>Drone / Bird / BG</span></div><div class="gal-ov" aria-hidden="true">Normalized Confusion Matrix<br>3-Class Discrimination</div></div>
+    <div class="gal-item" data-cat="conf" role="listitem" tabindex="0" aria-label="NRSC 2026 Poster presentation"><div class="gal-ph"><span class="gico" aria-hidden="true">📜</span><span class="glbl">NRSC 2026 Poster<br>Team Presentation</span></div><div class="gal-ov" aria-hidden="true">Conference Poster<br>NRSC 2026</div></div>
+    <div class="gal-item" data-cat="vid" role="listitem" tabindex="0" aria-label="Live system demo real-time tracking video"><div class="gal-ph"><span class="gico" aria-hidden="true">▶️</span><span class="glbl">Live System Demo<br>Real-time Tracking HUD</span></div><div class="gal-ov" aria-hidden="true">Demo Video<br>Real-time Drone Tracking</div></div>
+    <div class="gal-item" data-cat="conf" role="listitem" tabindex="0" aria-label="Team photo at NRSC award ceremony"><div class="gal-ph"><span class="gico" aria-hidden="true">📸</span><span class="glbl">Team Photo<br>NRSC Award Ceremony</span></div><div class="gal-ov" aria-hidden="true">Team Horus<br>NRSC 2026 Ceremony</div></div>
+    <div class="gal-item" data-cat="hw" role="listitem" tabindex="0" aria-label="Raspberry Pi 5 compute node"><div class="gal-ph"><span class="gico" aria-hidden="true">🖥️</span><span class="glbl">Raspberry Pi 5<br>Compute Node</span></div><div class="gal-ov" aria-hidden="true">Raspberry Pi 5<br>BCM2712 SoC · 2.4GHz</div></div>
+  </div>
+</div><!-- /page-gallery -->
+
+
+<!-- ══════════════════════════════════════════════════
+     PAGE: LIVE SIMULATION
+══════════════════════════════════════════════════ -->
+<div id="page-sim" class="page">
+  <div class="page-banner">
+    <div class="page-banner-inner">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">Interactive Demo</div>
+      <h1 class="sec-h light">Live System Simulation</h1>
+      <div class="sec-rule"></div>
+      <p class="sec-lead light">Visualisation of the C-UAS pipeline architecture. Toggle AUTO / MANUAL mode, simulate detection events, and observe the data flow — mirroring the actual system behaviour described in the published research.</p>
+    </div>
+  </div>
+
+  <!-- SIMULATION NOTICE -->
+  <div style="background:rgba(200,169,66,.06);border-bottom:1px solid rgba(200,169,66,.18);padding:.6rem 4%;text-align:center;">
+    <span style="font-family:var(--font-mono);font-size:.6rem;color:var(--hue-gold);letter-spacing:.15em;">
+      ⚠ SOFTWARE DEMONSTRATION — This visualisation illustrates the designed system architecture. Hardware field trials are planned for Phase II.
+    </span>
+  </div>
+
+  <div class="sim-layout" style="grid-template-columns:1.3fr 1fr;gap:1.8rem;">
+    <!-- LEFT: Canvas-based optical feed simulation -->
+    <div>
+      <h2 class="sim-h">📷 Optical Feed — PTZ Camera Simulation</h2>
+      <div style="background:var(--hue-navy-deep);border:1px solid rgba(200,169,66,.25);border-radius:var(--radius-md);overflow:hidden;">
+        <div style="background:rgba(200,169,66,.08);border-bottom:1px solid rgba(200,169,66,.2);padding:.5rem 1rem;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:var(--font-mono);font-size:.58rem;color:var(--hue-gold);letter-spacing:.18em;">▸ HIKVISION DS-2DE4225IW · 25× ZOOM · DARKFIGHTER</span>
+          <span style="font-family:var(--font-mono);font-size:.52rem;color:rgba(255,255,255,.3);" id="camZoom">ZOOM: 12×</span>
+        </div>
+        <div style="position:relative;background:#000;line-height:0;">
+          <canvas id="simCanvas" width="640" height="360" style="width:100%;display:block;"></canvas>
+          <!-- Overlay HUD labels -->
+          <div style="position:absolute;top:8px;left:10px;font-family:var(--font-mono);font-size:.52rem;color:rgba(200,169,66,.7);letter-spacing:.1em;" id="simTopLeft">REC ● 30 FPS</div>
+          <div style="position:absolute;top:8px;right:10px;font-family:var(--font-mono);font-size:.52rem;color:rgba(200,169,66,.7);" id="simTopRight">YOLOv8n INT8</div>
+          <div style="position:absolute;bottom:8px;left:10px;font-family:var(--font-mono);font-size:.52rem;color:rgba(255,255,255,.4);" id="simBotLeft">SECTOR: NE-4 · BRG: 047°</div>
+          <div style="position:absolute;bottom:8px;right:10px;font-family:var(--font-mono);font-size:.52rem;" id="simStatus" style="color:var(--hud-grn);">● PATROL</div>
+        </div>
+        <!-- Latency / inference strip -->
+        <div style="padding:.6rem 1rem;display:flex;gap:1.5rem;border-top:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.2);">
+          <div style="font-family:var(--font-mono);font-size:.54rem;">
+            <span style="color:rgba(255,255,255,.3);">INFERENCE </span><span style="color:var(--hud-grn);" id="infMs">-- ms</span>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:.54rem;">
+            <span style="color:rgba(255,255,255,.3);">CONF </span><span style="color:var(--hue-gold);" id="confDisp">--</span>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:.54rem;">
+            <span style="color:rgba(255,255,255,.3);">CLASS </span><span style="color:var(--hud-red);" id="classDisp">--</span>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:.54rem;">
+            <span style="color:rgba(255,255,255,.3);">KALMAN </span><span style="color:var(--hue-gold);" id="kalmanDisp">IDLE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pipeline flow indicator -->
+      <div style="margin-top:.9rem;background:var(--hue-navy-deep);border:1px solid rgba(200,169,66,.15);border-radius:var(--radius-sm);padding:.7rem 1rem;">
+        <div style="font-family:var(--font-mono);font-size:.54rem;color:rgba(200,169,66,.6);letter-spacing:.15em;margin-bottom:.6rem;">// PIPELINE DATA FLOW</div>
+        <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;" id="pipelineFlow">
+          <div class="pipe-step" id="ps0">📷 RTSP</div>
+          <span style="color:rgba(200,169,66,.3);font-size:.7rem;">→</span>
+          <div class="pipe-step" id="ps1">⚡ GSTREAM</div>
+          <span style="color:rgba(200,169,66,.3);font-size:.7rem;">→</span>
+          <div class="pipe-step" id="ps2">🧠 YOLOv8n</div>
+          <span style="color:rgba(200,169,66,.3);font-size:.7rem;">→</span>
+          <div class="pipe-step" id="ps3">📊 KALMAN</div>
+          <span style="color:rgba(200,169,66,.3);font-size:.7rem;">→</span>
+          <div class="pipe-step" id="ps4">🎯 ISAPI/PID</div>
+          <span style="color:rgba(200,169,66,.3);font-size:.7rem;">→</span>
+          <div class="pipe-step" id="ps5">📲 TELEGRAM</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Dashboard + Telegram -->
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <h2 class="sim-h">⚙️ C-UAS Control Dashboard</h2>
+      <div class="dash-panel" role="region" aria-label="System control dashboard">
+        <div class="dp-hdr">
+          <span class="dp-title">▸ Horus C-UAS · Control Panel</span>
+          <span class="dp-clock" id="dClock" aria-live="polite">--:--:--</span>
+        </div>
+        <div class="dp-body">
+          <div class="mode-row">
+            <span class="mode-lbl on-auto" id="mlAuto">AUTO</span>
+            <label class="toggle" aria-label="Toggle between AUTO and MANUAL mode">
+              <input type="checkbox" id="modeToggle" role="switch" aria-checked="false">
+              <div class="toggle-track" aria-hidden="true"></div>
+              <div class="toggle-thumb" aria-hidden="true"></div>
+            </label>
+            <span class="mode-lbl" id="mlManual">MANUAL</span>
+          </div>
+          <p class="mode-desc" id="modeDesc" aria-live="polite">Autonomous tracking and automated engagement active.</p>
+
+          <div class="dp-row"><span class="dp-k">SYSTEM STATUS</span><span class="dp-v" id="dSys">STANDBY</span></div>
+          <div class="dp-row"><span class="dp-k">TARGET CLASS</span><span class="dp-v gold" id="dTgt">NONE</span></div>
+          <div class="dp-row"><span class="dp-k">CONFIDENCE</span><span class="dp-v" id="dConf">--</span></div>
+          <div class="dp-row"><span class="dp-k">BOUNDING BOX</span><span class="dp-v" id="dBbox">-- px</span></div>
+          <div class="dp-row"><span class="dp-k">LOOP LATENCY</span><span class="dp-v" id="dLat">-- ms</span></div>
+          <div class="dp-sep"></div>
+          <div class="pbar-wrap">
+            <div class="pbar-top"><span>AI INFERENCE</span><span id="aiPct">0%</span></div>
+            <div class="pbar"><div class="pfill grn" id="aiBar" style="width:0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>
+          </div>
+          <div class="pbar-wrap">
+            <div class="pbar-top"><span>TRACKING LOCK</span><span id="lkPct">0%</span></div>
+            <div class="pbar"><div class="pfill gld" id="lkBar" style="width:0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>
+          </div>
+          <div class="dp-sep"></div>
+          <div class="dp-row"><span class="dp-k">RF JAMMER</span><span class="dp-v amb">OFFLINE (Phase II)</span></div>
+          <div class="dp-row"><span class="dp-k">RF ANALYZER</span><span class="dp-v amb">HW READY · DRIVER DEV.</span></div>
+        </div>
+      </div>
+
+      <!-- Telegram -->
+      <div>
+        <div class="sim-h" style="font-size:.85rem;">📲 Telegram Alert Channel</div>
+        <div class="tg-widget" role="region" aria-label="Simulated Telegram alert channel">
+          <div class="tg-top">
+            <div class="tg-av" aria-hidden="true">🦅</div>
+            <div class="tg-info"><h3 style="font-size:.8rem;font-weight:700;color:var(--white);font-family:var(--font-body);">C-UAS Alert Bot</h3><span>@HorusCUAS_Bot · Online</span></div>
+          </div>
+          <div class="tg-msgs" id="tgBox" aria-live="polite" aria-label="Alert messages">
+            <div class="tmsg i">✅ System initialized. C-UAS platform online.<br>Mode: AUTO-SURVEILLANCE · 4G Connected<br>YOLOv8n INT8 loaded. Ready for patrol.<div class="tmsg-ts">System boot</div></div>
+          </div>
+          <div class="tg-btns" role="group" aria-label="Simulation controls">
+            <button class="tbtn r" onclick="sim('intrusion')" aria-label="Simulate drone intrusion">⚠️ Simulate Intrusion</button>
+            <button class="tbtn gd" onclick="sim('lock')" aria-label="Simulate target lock">🎯 Target Lock</button>
+            <button class="tbtn g" onclick="sim('clear')" aria-label="Simulate area clear">✅ Area Clear</button>
+            <button class="tbtn b" onclick="sim('status')" aria-label="Request status report">📊 Status Report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-sim -->
+
+
+<!-- ══════════════════════════════════════════════════
+     PAGE: CONTACT
+══════════════════════════════════════════════════ -->
+<div id="page-contact" class="page">
+  <div class="page-banner">
+    <div class="page-banner-inner">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">Get in Touch</div>
+      <h1 class="sec-h light">Contact &amp; Location</h1>
+      <div class="sec-rule"></div>
+      <p class="sec-lead light">Faculty of Engineering — Horus University Egypt, New Damietta. For academic enquiries, collaboration proposals, and research correspondence.</p>
+    </div>
+  </div>
+
+  <div class="contact-layout">
+    <div>
+      <div class="contact-card">
+        <div class="cc-hdr"><span aria-hidden="true">📍</span> <h4>Faculty Address &amp; Institution</h4></div>
+        <div class="cc-body">
+          <div class="c-row"><div class="c-ico" aria-hidden="true">🏛️</div><div><div class="c-lbl">Institution</div><div class="c-val">Horus University Egypt (HUE)</div></div></div>
+          <div class="c-row"><div class="c-ico" aria-hidden="true">🎓</div><div><div class="c-lbl">Faculty &amp; Department</div><div class="c-val">Faculty of Engineering<br>Dept. of Communications &amp; Electronics Engineering</div></div></div>
+          <div class="c-row"><div class="c-ico" aria-hidden="true">📮</div><div><div class="c-lbl">Address</div><div class="c-val">International Coastal Road, New Damietta<br>Damietta Governorate, 8027101 — Egypt</div></div></div>
+          <div class="c-row"><div class="c-ico" aria-hidden="true">📞</div><div><div class="c-lbl">Telephone</div><div class="c-val"><a href="tel:+201144455582">+201144455582</a></div></div></div>
+          <div class="c-row"><div class="c-ico" aria-hidden="true">🌐</div><div><div class="c-lbl">Faculty Website</div><div class="c-val"><a href="https://eng.horus.edu.eg" target="_blank" rel="noopener">eng.horus.edu.eg</a></div></div></div>
+          <div class="c-row"><div class="c-ico" aria-hidden="true">✉️</div><div><div class="c-lbl">Email</div><div class="c-val"><a href="mailto:Admin@horus.edu.eg">Admin@horus.edu.eg</a><br><a href="mailto:info@horus.edu.eg">info@horus.edu.eg</a></div></div></div>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="cc-hdr"><span aria-hidden="true">👨‍🔬</span> <h4>Research Team Contact</h4></div>
+        <div class="cc-body">
+          <div class="c-row"><div class="c-ico" aria-hidden="true">🧑‍💻</div><div><div class="c-lbl">Lead Researcher</div><div class="c-val">Islam Emad Ahmed Ismail<br>ORCID: <a href="https://orcid.org/0009-0002-2829-4912" target="_blank" rel="noopener">0009-0002-2829-4912</a><br><a href="https://islam-8.github.io/portfolio/" target="_blank" rel="noopener">Portfolio ↗</a> · <a href="https://github.com/islam-8" target="_blank" rel="noopener">GitHub ↗</a></div></div></div>
+          <div class="c-row"><div class="c-ico" aria-hidden="true">👨‍🏫</div><div><div class="c-lbl">Principal Supervisor</div><div class="c-val">Prof. Dr. Amr Hussein Hussein Abdullah<br>ORCID: <a href="https://orcid.org/0000-0002-9685-2528" target="_blank" rel="noopener">0000-0002-9685-2528</a></div></div></div>
+          <div class="c-row"><div class="c-ico" aria-hidden="true">📄</div><div><div class="c-lbl">Published Article</div><div class="c-val"><a href="https://huje.journals.ekb.eg/article_508720.html" target="_blank" rel="noopener">huje.journals.ekb.eg — Article 508720</a></div></div></div>
+          <div style="margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--off-white);">
+            <div class="c-lbl" style="margin-bottom:.6rem;">Official Social Channels</div>
+            <div class="social-btns">
+              <a href="https://www.facebook.com/hue.eg/" target="_blank" rel="noopener" class="soc-btn" aria-label="HUE Facebook page">📘 Facebook</a>
+              <a href="https://twitter.com/HUE_eg" target="_blank" rel="noopener" class="soc-btn" aria-label="HUE Twitter account">𝕏 Twitter</a>
+              <a href="https://github.com/islam-8" target="_blank" rel="noopener" class="soc-btn" aria-label="Islam Emad GitHub">⌥ GitHub</a>
+              <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener" class="soc-btn" aria-label="Faculty website">🌐 Faculty Site</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-box" role="img" aria-label="Map placeholder for Horus University Egypt, New Damietta">
+        <div class="map-ico" aria-hidden="true">🗺️</div>
+        <div class="map-lbl">Campus Location · Google Maps</div>
+        <div class="map-addr">Horus University Egypt<br>International Coastal Road, New Damietta<br>Damietta Governorate, Egypt</div>
+        <button class="map-btn" onclick="window.open('https://maps.google.com/?q=Horus+University+New+Damietta+Egypt','_blank')" aria-label="Open Horus University location in Google Maps">Open in Google Maps ↗</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="contact-form-wrap">
+        <div class="form-title" id="form-heading">Send an Enquiry</div>
+        <form id="contactForm" onsubmit="submitForm(event)" novalidate aria-labelledby="form-heading">
+          <div class="form-row">
+            <div class="form-grp">
+              <label for="cf-name">Full Name *</label>
+              <input type="text" id="cf-name" name="name" placeholder="Your full name" required autocomplete="name">
+            </div>
+            <div class="form-grp">
+              <label for="cf-org">Institution</label>
+              <input type="text" id="cf-org" name="organization" placeholder="University / Company" autocomplete="organization">
+            </div>
+          </div>
+          <div class="form-grp">
+            <label for="cf-email">Email Address *</label>
+            <input type="email" id="cf-email" name="email" placeholder="your@email.com" required autocomplete="email">
+          </div>
+          <div class="form-grp">
+            <label for="cf-subject">Subject *</label>
+            <select id="cf-subject" name="subject" required>
+              <option value="">— Select subject —</option>
+              <option>Research Collaboration</option>
+              <option>Academic Enquiry</option>
+              <option>Industry / Commercial Partnership</option>
+              <option>Media / Press Request</option>
+              <option>Conference / Presentation Invitation</option>
+              <option>General Enquiry</option>
+            </select>
+          </div>
+          <div class="form-grp">
+            <label for="cf-msg">Message *</label>
+            <textarea id="cf-msg" name="message" placeholder="Your message or enquiry…" required></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Message</button>
+          <p class="form-note">This form is for academic and professional correspondence. Your message will be directed to the relevant team member. We aim to respond within 3–5 working days.</p>
+        </form>
+      </div>
+
+      <div style="margin-top:1.4rem;background:var(--white);border:1px solid var(--light-line);border-radius:var(--radius-sm);padding:1.4rem;box-shadow:var(--sh-card);">
+        <div class="eyebrow" style="margin-bottom:.9rem;">Institutional Accreditation</div>
+        <div class="acc-grid">
+          <div class="acc-item"><div class="code">NAQAAE</div><div class="name">National Authority for Quality Assurance</div></div>
+          <div class="acc-item"><div class="code">ISO 21001</div><div class="name">Educational Organization QMS</div></div>
+          <div class="acc-item"><div class="code">EGAC</div><div class="name">Egyptian Accreditation Council</div></div>
+          <div class="acc-item"><div class="code">ASRT</div><div class="name">Academy of Scientific Research &amp; Tech.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /page-contact -->
+
+</main><!-- /main -->
+
+<!-- ══════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════ -->
+<footer role="contentinfo">
+  <div class="foot-grid">
+    <div>
+      <div class="foot-brand-name">Advanced C-UAS <span>System</span></div>
+      <div class="foot-brand-sub">
+        Graduation Project 2026 · Horus University Egypt<br>
+        Faculty of Engineering · Dept. Communications &amp; Electronics<br>
+        New Damietta · Arab Republic of Egypt
+      </div>
+    </div>
+    <nav aria-label="Footer navigation">
+      <div class="foot-col-h">Navigation</div>
+      <ul class="foot-links">
+        <li><button onclick="showPage('home')">System Overview</button></li>
+        <li><button onclick="showPage('arch')">Architecture &amp; Pipeline</button></li>
+        <li><button onclick="showPage('research')">Research &amp; Publications</button></li>
+        <li><button onclick="showPage('team')">Research Team</button></li>
+        <li><button onclick="showPage('gallery')">Media Gallery</button></li>
+        <li><button onclick="showPage('sim')">Live Demo</button></li>
+        <li><button onclick="showPage('contact')">Contact &amp; Location</button></li>
+      </ul>
+    </nav>
+    <div>
+      <div class="foot-col-h">Research Output</div>
+      <ul class="foot-links">
+        <li><a href="https://huje.journals.ekb.eg/article_508720.html" target="_blank" rel="noopener">Published Article — HUJE ↗</a></li>
+        <li><a href="Manuscript.pdf" download>Download Paper — Manuscript.pdf ↓</a></li>
+        <li><a href="Book.pdf" download>Project Book — Book.pdf ↓</a></li>
+        <li><a href="https://github.com/islam-8" target="_blank" rel="noopener">Source Code — GitHub ↗</a></li>
+        <li><a href="https://islam-8.github.io/portfolio/" target="_blank" rel="noopener">Lead Researcher Portfolio ↗</a></li>
+        <li><button onclick="showPage('research')">NRSC 2026 — Best Poster</button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div class="foot-disc" role="note">
+      <strong>AI Usage Disclosure:</strong> Generative AI tools were utilized strictly for linguistic proofreading and formatting purposes in the preparation of documentation associated with this research project. All scientific content, system design, experimental methodology, results, and conclusions represent the original intellectual work of the listed authors and supervisory committee.<br>
+      <strong>Regulatory Note:</strong> The RF neutralization module is theoretical and requires NTRA authorization under Egyptian Law No. 214 of 2017 before operational deployment.
+    </div>
+    <div class="foot-copy">
+      © 2026 Horus University Egypt<br>
+      Faculty of Engineering<br>
+      <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener">eng.horus.edu.eg</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast notification -->
+<div id="form-toast" role="status" aria-live="polite">✅ Message sent. We will respond within 3–5 working days.</div>
+
+
+<!-- ══════════════════════════════════════════════════
+     JAVASCRIPT — HASH ROUTING + ALL LOGIC
+══════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ── PAGES ── */
+var PAGES = ['home','arch','research','team','gallery','sim','contact'];
+
+/* ── HASH ROUTING ── */
+function showPage(id){
+  if(!PAGES.includes(id)) id = 'home';
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-tab').forEach(function(a){a.classList.remove('active');});
+  var pg = document.getElementById('page-'+id);
+  if(pg) pg.classList.add('active');
+  var nt = document.getElementById('ntab-'+id);
+  if(nt) nt.classList.add('active');
+  window.location.hash = id;
+  window.scrollTo({top:0,behavior:'smooth'});
+  closeMob();
+  // Update mobBtn aria-expanded
+  var mb = document.getElementById('mobBtn');
+  if(mb) mb.setAttribute('aria-expanded','false');
+}
+
+/* Handle initial hash & browser back/forward */
+function hashRoute(){
+  var h = (window.location.hash||'').replace('#','');
+  showPage(PAGES.includes(h) ? h : 'home');
+}
+window.addEventListener('hashchange', hashRoute);
+window.addEventListener('DOMContentLoaded', function(){
+  var h = (window.location.hash||'').replace('#','');
+  if(h && PAGES.includes(h)) showPage(h);
+});
+
+/* ── MOBILE MENU ── */
+function openMob(){
+  var t = document.getElementById('navTabs');
+  var c = document.getElementById('navClose');
+  var mb = document.getElementById('mobBtn');
+  t.classList.add('open');
+  if(c) c.style.display='flex';
+  if(mb) mb.setAttribute('aria-expanded','true');
+}
+function closeMob(){
+  var t = document.getElementById('navTabs');
+  var c = document.getElementById('navClose');
+  t.classList.remove('open');
+  if(c) c.style.display='none';
+}
+
+/* ── CLOCK ── */
+function tick(){
+  var ts = new Date().toLocaleTimeString('en-GB');
+  ['hudClock','dClock'].forEach(function(id){
+    var e = document.getElementById(id);
+    if(e) e.textContent = ts;
+  });
+}
+setInterval(tick,1000);tick();
+
+/* ── HUD confidence animation ── */
+var confVal = 88;
+setInterval(function(){
+  confVal = Math.min(99.9,Math.max(70,confVal+(Math.random()*4-2)));
+  var e = document.getElementById('hudConf');
+  if(e) e.textContent='CONF: '+confVal.toFixed(1)+'%';
+},1200);
+
+/* ── GALLERY FILTER ── */
+function filterGal(cat, btn){
+  document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  document.querySelectorAll('.gal-item').forEach(function(i){
+    i.style.display = (cat==='all'||i.dataset.cat===cat) ? 'flex' : 'none';
+  });
+}
+
+/* ── MODE TOGGLE ── */
+var mt = document.getElementById('modeToggle');
+if(mt){
+  mt.addEventListener('change',function(){
+    var isM = this.checked;
+    var lA = document.getElementById('mlAuto');
+    var lM = document.getElementById('mlManual');
+    var md = document.getElementById('modeDesc');
+    if(lA) lA.className='mode-lbl'+(isM?'':' on-auto');
+    if(lM) lM.className='mode-lbl'+(isM?' on-manual':'');
+    if(md) md.textContent = isM ? 'MANUAL override active. Operator controls PTZ and engagement directly.' : 'Autonomous tracking and automated engagement active.';
+    this.setAttribute('aria-checked', isM ? 'true':'false');
+    addMsg(isM?'l':'i', isM ? '⚠️ MANUAL OVERRIDE activated.\nAutonomous engagement suspended.\nOperator authorisation required for all countermeasures.' : '✅ Reverted to AUTONOMOUS mode.\nFull automation engaged. YOLOv8n inference pipeline active.');
+  });
+}
+
+/* ── SIMULATION MESSAGES ── */
+var simMsgs = {
+  intrusion:[
+    {t:'a',m:'🚨 AIRSPACE BREACH DETECTED\n\nClass I UAS signature — Sector NE-4\nFreq: 2.4 GHz control link detected\nBearing: 047° · Initiating slew-to-cue…'},
+    {t:'l',m:'🎯 VISUAL ACQUISITION\n\nYOLOv8n: DRONE class detected\nConf: 0.93 · BBox: [521,192,89,74]px\nKalman filter initialised · PTZ slewing…'},
+    {t:'a',m:'🔴 TARGET LOCKED\n\nKalman state: [312,184,+2.1,-0.8]\nBBox stable · PID engaged\nAwaiting operator: ENGAGE or MONITOR?'}
+  ],
+  lock:[{t:'l',m:'🎯 PRECISION LOCK CONFIRMED\n\nCentroid: [356, 221]px · Size: 88×72px\nVelocity: [+2.3, -0.8] px/s\nTracking stable · Kalman RMSE: ~12px'}],
+  clear:[{t:'i',m:'✅ AREA CLEAR\n\nNo UAS class detected in frame.\nAll pipeline stages nominal.\nResuming autonomous patrol sweep…'}],
+  status:[{t:'i',m:'📊 PIPELINE STATUS\n\nGStreamer: ✓ RTSP active\nYOLOv8n INT8: ✓ loaded\nKalman Filter: ✓ initialized\nISAPI/PID: ✓ standby\nTelegram Bot: ✓ connected (4G)\nAll layers nominal.'}]
+};
+var dashD = {
+  intrusion:{s:'SCANNING',sc:'dp-v',t:'UAS DETECTED',c:'0.93',b:'[521,192,89,74]px',l:'~139 ms',ai:'93%',lk:'72%'},
+  lock:{s:'LOCKED',sc:'dp-v red',t:'DRONE CLASS I',c:'0.95',b:'[356,221,88,72]px',l:'~137 ms',ai:'95%',lk:'98%'},
+  clear:{s:'PATROL',sc:'dp-v',t:'NONE',c:'--',b:'--',l:'-- ms',ai:'0%',lk:'0%'},
+  status:{s:'ONLINE',sc:'dp-v',t:'MONITORING',c:'0.88',b:'[312,184,80,65]px',l:'~139 ms',ai:'88%',lk:'85%'}
+};
+function setDP(k,v){var e=document.getElementById(k);if(e)e.textContent=v;}
+function updDash(k){
+  var d=dashD[k];if(!d)return;
+  var sys=document.getElementById('dSys');
+  if(sys){sys.textContent=d.s;sys.className=d.sc||'dp-v';}
+  setDP('dTgt',d.t);setDP('dConf',d.c);setDP('dBbox',d.b);setDP('dLat',d.l);
+  var aiB=document.getElementById('aiBar');var aiP=document.getElementById('aiPct');
+  var lkB=document.getElementById('lkBar');var lkP=document.getElementById('lkPct');
+  var pct=parseInt(d.ai);
+  if(aiB){aiB.style.width=d.ai;aiB.setAttribute('aria-valuenow',pct);}
+  if(aiP)aiP.textContent=d.ai;
+  if(lkB){lkB.style.width=d.lk;lkB.setAttribute('aria-valuenow',parseInt(d.lk));}
+  if(lkP)lkP.textContent=d.lk;
+  /* update canvas state */
+  if(k==='intrusion') canvasState='detect';
+  else if(k==='lock') canvasState='locked';
+  else if(k==='clear') canvasState='patrol';
+  else canvasState='monitor';
+  pipelineAnimate(k);
+}
+function addMsg(type,text){
+  var b=document.getElementById('tgBox');if(!b)return;
+  var m=document.createElement('div');
+  m.className='tmsg '+type;
+  var ts=new Date().toLocaleTimeString('en-GB');
+  m.innerHTML=text.replace(/\n/g,'<br>')+'<div class="tmsg-ts">'+ts+'</div>';
+  b.appendChild(m);b.scrollTop=b.scrollHeight;
+}
+function sim(type){
+  var ms=simMsgs[type];if(!ms)return;
+  updDash(type);
+  ms.forEach(function(m,i){setTimeout(function(){addMsg(m.t,m.m);},i*1400);});
+}
+
+/* ── PIPELINE STEP ANIMATION ── */
+function pipelineAnimate(type){
+  var steps=['ps0','ps1','ps2','ps3','ps4','ps5'];
+  var counts={intrusion:4,lock:5,clear:3,status:3};
+  var count=counts[type]||3;
+  steps.forEach(function(id){
+    var e=document.getElementById(id);if(e){e.classList.remove('active','done');}
+  });
+  steps.slice(0,count).forEach(function(id,i){
+    setTimeout(function(){
+      var e=document.getElementById(id);if(!e)return;
+      /* mark previous as done */
+      if(i>0){var prev=document.getElementById(steps[i-1]);if(prev){prev.classList.remove('active');prev.classList.add('done');}}
+      e.classList.add('active');
+      /* final step: mark done after delay */
+      if(i===count-1){setTimeout(function(){e.classList.remove('active');e.classList.add('done');},600);}
+    },i*350);
+  });
+}
+
+/* ══════════════════════════════════════════
+   CANVAS SIMULATION ENGINE
+══════════════════════════════════════════ */
+var canvasState = 'patrol'; /* patrol | detect | locked | monitor */
+var drone = { x: 320, y: 180, vx: 0.6, vy: -0.4, w: 20, h: 14 };
+var bbox  = { x: 0, y: 0, w: 0, h: 0, alpha: 0, conf: 0 };
+var ptz   = { panAngle: 0, scanDir: 1 };
+var frame = 0;
+var confSmooth = 0;
+var bboxSmooth = {x:320,y:180};
+
+function initCanvas(){
+  var canvas = document.getElementById('simCanvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  drawFrame(ctx, canvas.width, canvas.height);
+}
+
+function drawFrame(ctx, W, H){
+  frame++;
+
+  /* ── background: simulated sky/urban scene ── */
+  ctx.clearRect(0,0,W,H);
+  /* sky gradient */
+  var sky = ctx.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0,'#0a1628');
+  sky.addColorStop(0.6,'#111e35');
+  sky.addColorStop(1,'#1a2a48');
+  ctx.fillStyle=sky;
+  ctx.fillRect(0,0,W,H);
+
+  /* subtle grid overlay */
+  ctx.strokeStyle='rgba(200,169,66,.04)';
+  ctx.lineWidth=1;
+  for(var gx=0;gx<W;gx+=40){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+  for(var gy=0;gy<H;gy+=40){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+
+  /* horizon line */
+  ctx.strokeStyle='rgba(200,169,66,.06)';
+  ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,H*0.65);ctx.lineTo(W,H*0.65);ctx.stroke();
+
+  /* simplified city silhouette */
+  ctx.fillStyle='rgba(13,27,62,.7)';
+  var bldgs=[[0,20],[60,35],[110,15],[180,45],[240,25],[320,50],[400,20],[470,40],[540,18],[600,30],[640,0]];
+  ctx.beginPath();ctx.moveTo(0,H);
+  bldgs.forEach(function(b){ctx.lineTo(b[0],H*0.65-b[1]);});
+  ctx.lineTo(W,H);ctx.closePath();ctx.fill();
+
+  /* ── PTZ scan indicator ── */
+  ptz.panAngle += 0.008 * ptz.scanDir;
+  if(ptz.panAngle > 0.4 || ptz.panAngle < -0.4) ptz.scanDir *= -1;
+  var scanX = W/2 + ptz.panAngle * W * 0.8;
+  ctx.strokeStyle='rgba(200,169,66,.12)';
+  ctx.lineWidth=1;
+  ctx.setLineDash([4,8]);
+  ctx.beginPath();ctx.moveTo(scanX,0);ctx.lineTo(scanX,H);ctx.stroke();
+  ctx.setLineDash([]);
+
+  /* crosshair */
+  ctx.strokeStyle='rgba(200,169,66,.15)';
+  ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(W/2,0);ctx.lineTo(W/2,H);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();
+
+  /* corner brackets */
+  var bsz=20, boff=10;
+  ctx.strokeStyle='rgba(200,169,66,.35)';ctx.lineWidth=1.5;
+  [[boff,boff,1,1],[W-boff,boff,-1,1],[boff,H-boff,1,-1],[W-boff,H-boff,-1,-1]].forEach(function(c){
+    ctx.beginPath();ctx.moveTo(c[0]+c[2]*bsz,c[1]);ctx.lineTo(c[0],c[1]);ctx.lineTo(c[0],c[1]+c[3]*bsz);ctx.stroke();
+  });
+
+  /* ── drone movement ── */
+  if(canvasState==='patrol'||canvasState==='monitor'){
+    drone.x += drone.vx;
+    drone.y += drone.vy;
+    if(drone.x<20||drone.x>W-20) drone.vx*=-1;
+    if(drone.y<30||drone.y>H*0.6) drone.vy*=-1;
+    /* add slight noise */
+    drone.x += (Math.random()-0.5)*0.4;
+    drone.y += (Math.random()-0.5)*0.4;
+    bbox.alpha = Math.max(0, bbox.alpha - 0.03);
+    confSmooth = Math.max(0, confSmooth - 0.02);
+  } else if(canvasState==='detect'){
+    drone.x += drone.vx*0.5;
+    drone.y += drone.vy*0.5;
+    if(drone.x<20||drone.x>W-20) drone.vx*=-1;
+    if(drone.y<30||drone.y>H*0.6) drone.vy*=-1;
+    bbox.alpha = Math.min(1, bbox.alpha + 0.05);
+    confSmooth = Math.min(0.93, confSmooth + 0.04);
+    bbox.x=drone.x-36; bbox.y=drone.y-28; bbox.w=72; bbox.h=56;
+    bboxSmooth.x += (drone.x - bboxSmooth.x)*0.2;
+    bboxSmooth.y += (drone.y - bboxSmooth.y)*0.2;
+  } else if(canvasState==='locked'){
+    /* drone slows, PTZ "locks on" */
+    drone.x += drone.vx*0.3;
+    drone.y += drone.vy*0.3;
+    drone.vx *= 0.998; drone.vy *= 0.998;
+    if(drone.x<20||drone.x>W-20) drone.vx*=-1;
+    if(drone.y<30||drone.y>H*0.6) drone.vy*=-1;
+    bbox.alpha = Math.min(1, bbox.alpha + 0.08);
+    confSmooth = Math.min(0.97, confSmooth + 0.03);
+    bboxSmooth.x += (drone.x - bboxSmooth.x)*0.35;
+    bboxSmooth.y += (drone.y - bboxSmooth.y)*0.35;
+    bbox.x=bboxSmooth.x-40; bbox.y=bboxSmooth.y-32; bbox.w=80; bbox.h=64;
+  }
+
+  /* ── draw drone body ── */
+  var da = 0.7 + Math.sin(frame*0.08)*0.15;
+  ctx.save();
+  ctx.translate(drone.x, drone.y);
+  /* body */
+  ctx.fillStyle='rgba(180,180,200,'+da+')';
+  ctx.beginPath();ctx.ellipse(0,0,drone.w*0.5,drone.h*0.35,0,0,Math.PI*2);ctx.fill();
+  /* arms */
+  ctx.strokeStyle='rgba(160,160,180,'+da+')';ctx.lineWidth=1.5;
+  [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(function(arm){
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(arm[0]*drone.w*0.8,arm[1]*drone.h*0.9);ctx.stroke();
+    /* rotors */
+    ctx.fillStyle='rgba(200,200,220,'+(da*0.8)+')';
+    ctx.beginPath();ctx.ellipse(arm[0]*drone.w*0.8,arm[1]*drone.h*0.9,5,2,frame*0.3,0,Math.PI*2);ctx.fill();
+  });
+  /* nav light blink */
+  if(Math.floor(frame/15)%2===0){
+    ctx.fillStyle='rgba(255,80,80,0.9)';
+    ctx.beginPath();ctx.arc(0,drone.h*0.35,2.5,0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+
+  /* ── bounding box + label ── */
+  if(bbox.alpha > 0.01){
+    var a = bbox.alpha;
+    /* outer glow */
+    ctx.strokeStyle='rgba(231,76,60,'+a*0.3+')';
+    ctx.lineWidth=6;
+    ctx.strokeRect(bbox.x-3,bbox.y-3,bbox.w+6,bbox.h+6);
+    /* main bbox */
+    ctx.strokeStyle='rgba(231,76,60,'+a+')';
+    ctx.lineWidth=1.5;
+    ctx.setLineDash([]);
+    ctx.strokeRect(bbox.x,bbox.y,bbox.w,bbox.h);
+    /* corner accents */
+    var cs=10;
+    ctx.strokeStyle='rgba(200,169,66,'+a+')';ctx.lineWidth=2;
+    [[bbox.x,bbox.y,1,1],[bbox.x+bbox.w,bbox.y,-1,1],[bbox.x,bbox.y+bbox.h,1,-1],[bbox.x+bbox.w,bbox.y+bbox.h,-1,-1]].forEach(function(c){
+      ctx.beginPath();ctx.moveTo(c[0]+c[2]*cs,c[1]);ctx.lineTo(c[0],c[1]);ctx.lineTo(c[0],c[1]+c[3]*cs);ctx.stroke();
+    });
+    /* centroid cross */
+    var cx=bbox.x+bbox.w/2, cy=bbox.y+bbox.h/2;
+    ctx.strokeStyle='rgba(231,76,60,'+a+')';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(cx-6,cy);ctx.lineTo(cx+6,cy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx,cy-6);ctx.lineTo(cx,cy+6);ctx.stroke();
+    /* label */
+    var lblState = canvasState==='locked'?'DRONE · LOCKED':'DRONE · DETECT';
+    var lblConf  = (confSmooth*100).toFixed(0)+'%';
+    ctx.fillStyle='rgba(231,76,60,'+a+')';
+    ctx.fillRect(bbox.x,bbox.y-18,bbox.w,17);
+    ctx.fillStyle='rgba(255,255,255,'+a+')';
+    ctx.font='bold 9px "Roboto Mono",monospace';
+    ctx.textAlign='left';
+    ctx.fillText(lblState+'  '+lblConf, bbox.x+4, bbox.y-5);
+    /* Kalman predicted position (locked state) */
+    if(canvasState==='locked'){
+      var kpx = drone.x + drone.vx*8;
+      var kpy = drone.y + drone.vy*8;
+      ctx.strokeStyle='rgba(200,169,66,'+a*0.5+')';
+      ctx.lineWidth=1;ctx.setLineDash([3,5]);
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(kpx,kpy);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.strokeStyle='rgba(200,169,66,'+a+')';ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(kpx,kpy,4,0,Math.PI*2);ctx.stroke();
+    }
+  }
+
+  /* ── HUD overlays ── */
+  /* top-left: REC indicator */
+  if(Math.floor(frame/30)%2===0){
+    ctx.fillStyle='rgba(231,76,60,0.9)';
+    ctx.beginPath();ctx.arc(18,16,4,0,Math.PI*2);ctx.fill();
+  }
+  /* mode badge */
+  var modeText = canvasState==='locked'?'● LOCKED' : canvasState==='detect'?'● DETECT' : '● PATROL';
+  var modeCol  = canvasState==='locked'?'rgba(231,76,60,.9)':canvasState==='detect'?'rgba(243,156,18,.9)':'rgba(46,204,113,.9)';
+  ctx.fillStyle=modeCol;
+  ctx.font='bold 9px "Roboto Mono",monospace';
+  ctx.textAlign='right';
+  ctx.fillText(modeText, W-10, H-10);
+
+  /* ── update external UI ── */
+  var infEl=document.getElementById('infMs');
+  var confEl=document.getElementById('confDisp');
+  var classEl=document.getElementById('classDisp');
+  var kalEl=document.getElementById('kalmanDisp');
+  if(infEl) infEl.textContent=(28+Math.round(Math.random()*6))+'ms';
+  if(confEl) confEl.textContent = confSmooth>0.01 ? confSmooth.toFixed(2) : '--';
+  if(classEl) classEl.textContent = canvasState==='patrol'||canvasState==='monitor' ? '--' : 'DRONE';
+  if(kalEl) kalEl.textContent = canvasState==='locked' ? 'TRACKING' : canvasState==='detect' ? 'INIT' : 'IDLE';
+
+  requestAnimationFrame(function(){
+    var c2=document.getElementById('simCanvas');
+    if(c2&&document.getElementById('page-sim').classList.contains('active')){
+      drawFrame(c2.getContext('2d'),c2.width,c2.height);
+    }
+  });
+}
+
+/* Start canvas when sim page is shown */
+var origShowPage = showPage;
+showPage = function(id){
+  origShowPage(id);
+  if(id==='sim'){
+    setTimeout(initCanvas, 80);
+  }
+};
+/* Also init if already on sim page */
+if(document.getElementById('page-sim') && document.getElementById('page-sim').classList.contains('active')){
+  initCanvas();
+}
+
+/* ── CONTACT FORM ── */
+function submitForm(e){
+  e.preventDefault();
+  var n=document.getElementById('cf-name');
+  var em=document.getElementById('cf-email');
+  var s=document.getElementById('cf-subject');
+  var ms=document.getElementById('cf-msg');
+  if(!n.value||!em.value||!s.value||!ms.value){
+    alert('Please fill in all required fields.');return;
+  }
+  var t=document.getElementById('form-toast');
+  t.classList.add('show');
+  document.getElementById('contactForm').reset();
+  setTimeout(function(){t.classList.remove('show');},5000);
+}
+
+/* ── LANGUAGE TOGGLE ── */
+var isArabic = false;
+
+var TRANSLATIONS = {
+  /* ── nav tabs ── */
+  'ntab-home':     {en:'Overview',      ar:'نظرة عامة'},
+  'ntab-arch':     {en:'Architecture',  ar:'المعمارية'},
+  'ntab-research': {en:'Research',      ar:'الأبحاث'},
+  'ntab-team':     {en:'Team',          ar:'الفريق'},
+  'ntab-gallery':  {en:'Gallery',       ar:'المعرض'},
+  'ntab-sim':      {en:'Live Demo',     ar:'عرض مباشر'},
+  'ntab-contact':  {en:'Contact',       ar:'تواصل معنا'},
+  /* ── university header ── */
+  'uniName':   {en:'Horus University Egypt',       ar:'جامعة حورس مصر'},
+  'uniFaculty':{en:'Faculty of Engineering',        ar:'كلية الهندسة'},
+  'uniDept':   {en:'Department of Communications & Electronics Engineering · New Damietta, Egypt',
+                ar:'قسم هندسة الاتصالات والإلكترونيات · دمياط الجديدة، مصر'},
+  /* ── hero ── */
+  'hero-title':    {en:'Advanced System<br>for Drone <span class="accent">Detection,</span><br>Tracking &amp; Neutralization',
+                    ar:'نظام متقدم<br>للكشف عن الطائرات <span class="accent">المسيّرة</span><br>وتتبعها وتحييدها'},
+  /* ── problem section ── */
+  'problem-heading':{en:'The Granularity Gap', ar:'فجوة الدقة (Granularity Gap)'},
+  /* ── conops ── */
+  'conops-heading': {en:'System Workflow',     ar:'مسار عمل النظام'},
+  /* ── achievements ── */
+  'ach-heading':    {en:'Key Achievements',    ar:'الإنجازات الرئيسية'},
+  /* ── arch page ── */
+  'arch-heading':   {en:'Architecture &amp; Data Flow',ar:'المعمارية وتدفق البيانات'},
+  /* ── research page ── */
+  'research-heading':{en:'Research &amp; Publications', ar:'الأبحاث والمنشورات'},
+  /* ── team page ── */
+  'sup-heading':    {en:'Supervisory Committee',ar:'لجنة الإشراف'},
+  'team-heading':   {en:'Team Horus — Class of 2026', ar:'فريق حورس — دفعة 2026'},
+  /* ── contact page ── */
+  'form-heading':   {en:'Send an Enquiry',     ar:'أرسل استفساراً'},
+};
+
+function toggleLang(){
+  isArabic = !isArabic;
+  var html = document.getElementById('htmlRoot');
+  html.setAttribute('lang',  isArabic ? 'ar' : 'en');
+  html.setAttribute('dir',   isArabic ? 'rtl' : 'ltr');
+  document.getElementById('langLabel').textContent = isArabic ? 'English' : 'العربية';
+  Object.keys(TRANSLATIONS).forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var val = isArabic ? TRANSLATIONS[id].ar : TRANSLATIONS[id].en;
+    if(val.indexOf('<')!==-1) el.innerHTML = val;
+    else el.textContent = val;
+  });
+}
+
+/* ── KEYBOARD NAV for gallery items ── */
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&e.target.classList.contains('gal-item')){
+    var ov=e.target.querySelector('.gal-ov');
+    if(ov) ov.style.opacity=(ov.style.opacity==='1')?'0':'1';
+  }
+});
+</script>
+</body>
+</html>
