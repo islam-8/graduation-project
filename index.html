@@ -1168,7 +1168,6 @@ footer{
   .foot-bottom{flex-direction:column;}
   .foot-copy{text-align:left;}
   .pipe-nodes{flex-direction:column;align-items:stretch;}
-}
 
 /* Pipeline step indicators - outside media query */
 .pipe-step{
@@ -1228,8 +1227,8 @@ footer{
 /* RTL mobile fixes */
 [dir="rtl"] .nav-inner{gap:.5rem;}
 [dir="rtl"] .info-bar-left{gap:1rem;}
-@media(max-width:768px){
-  [dir="rtl"] .nav-tabs.open{text-align:right;}
+[dir="rtl"] @media(max-width:768px){
+  .nav-tabs.open{text-align:right;}
 }
 
 /* Prevent overflow on all screen sizes */
@@ -1301,232 +1300,6 @@ canvas{max-width:100%;}
 [dir="rtl"] .acc-item { text-align: right; }
 [dir="rtl"] .acc-item .name, [dir="rtl"] .acc-item .code { text-align: right; }
 [dir="rtl"] .dp-k, [dir="rtl"] .dp-v { font-size: .64rem; }
-
-/* ══════════════════════════════════════════
-   HERO SLIDER (replaces old .hero)
-══════════════════════════════════════════ */
-.hero-slider{
-  position:relative;width:100%;
-  height:calc(100vh - 130px);min-height:500px;max-height:820px;
-  overflow:hidden;background:var(--hue-navy-deep);
-}
-.slider-track{
-  display:flex;height:100%;
-  transition:transform .7s cubic-bezier(.77,0,.175,1);
-}
-.slide{
-  min-width:100%;height:100%;position:relative;overflow:hidden;flex-shrink:0;
-}
-.slide-bg{
-  position:absolute;inset:0;
-  background-size:cover;background-position:center;
-  transform:scale(1.08);
-  transition:transform 8s ease-out;
-  filter:brightness(.38);
-}
-.slide.active .slide-bg{transform:scale(1);}
-/* slide 1 – tactical grid bg */
-.slide-bg-1{background:linear-gradient(135deg,#071229 0%,#0d1b3e 40%,#162248 100%);}
-/* slide 2 – darker overlay variant */
-.slide-bg-2{background:linear-gradient(135deg,#050f1f 0%,#0d1b3e 60%,#1a2a4a 100%);}
-/* slide 3 */
-.slide-bg-3{background:linear-gradient(135deg,#071229 0%,#0f1e3c 50%,#162248 100%);}
-
-/* tactical grid overlay on each slide */
-.slide-grid{
-  position:absolute;inset:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(200,169,66,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(200,169,66,.03) 1px,transparent 1px);
-  background-size:60px 60px;
-}
-/* radial glow */
-.slide-glow{
-  position:absolute;
-  width:600px;height:600px;border-radius:50%;
-  background:radial-gradient(circle,rgba(200,169,66,.09) 0%,transparent 65%);
-  pointer-events:none;
-}
-
-.slide-content{
-  position:absolute;inset:0;z-index:2;
-  display:flex;align-items:center;
-  padding:0 7%;max-width:1440px;margin:0 auto;left:0;right:0;
-}
-/* Slide content columns */
-.slide-col-left{flex:1;max-width:680px;}
-.slide-col-right{width:420px;flex-shrink:0;margin-left:4rem;}
-
-/* Corner brackets */
-.slide-corner{position:absolute;width:32px;height:32px;pointer-events:none;}
-.slide-corner::before,.slide-corner::after{content:'';position:absolute;background:var(--hue-gold);opacity:.3;}
-.slide-corner::before{width:100%;height:1.5px;top:0;left:0;}
-.slide-corner::after{width:1.5px;height:100%;top:0;left:0;}
-.sc-tl{top:16px;left:16px;}
-.sc-tr{top:16px;right:16px;transform:scaleX(-1);}
-.sc-bl{bottom:16px;left:16px;transform:scaleY(-1);}
-.sc-br{bottom:16px;right:16px;transform:scale(-1);}
-
-/* Scan line */
-.slide-scan{
-  position:absolute;left:0;right:0;height:1px;top:0;
-  background:linear-gradient(90deg,transparent 0%,rgba(200,169,66,.35) 50%,transparent 100%);
-  animation:scanSlide 6s linear infinite;pointer-events:none;
-}
-@keyframes scanSlide{0%{top:0}100%{top:100%}}
-@media(prefers-reduced-motion:reduce){.slide-scan{animation:none;}}
-
-/* Fade-in for slide content */
-.slide .slide-col-left > *{
-  opacity:0;transform:translateY(18px);
-  transition:opacity .6s ease,transform .6s ease;
-}
-.slide.active .slide-col-left > *{opacity:1;transform:translateY(0);}
-.slide.active .slide-col-left > *:nth-child(1){transition-delay:.1s;}
-.slide.active .slide-col-left > *:nth-child(2){transition-delay:.22s;}
-.slide.active .slide-col-left > *:nth-child(3){transition-delay:.34s;}
-.slide.active .slide-col-left > *:nth-child(4){transition-delay:.46s;}
-.slide.active .slide-col-left > *:nth-child(5){transition-delay:.58s;}
-
-/* ARROWS */
-.slider-arrow{
-  position:absolute;top:50%;transform:translateY(-50%);
-  z-index:10;width:52px;height:52px;
-  background:rgba(13,27,62,.65);
-  border:1.5px solid rgba(200,169,66,.3);
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all .2s;
-  color:rgba(200,169,66,.8);font-size:1.2rem;
-  backdrop-filter:blur(4px);
-}
-.slider-arrow:hover{
-  background:var(--hue-gold);color:var(--hue-navy-deep);
-  border-color:var(--hue-gold);box-shadow:0 0 20px rgba(200,169,66,.35);
-}
-.slider-arrow.prev{left:1.5rem;}
-.slider-arrow.next{right:1.5rem;}
-[dir="rtl"] .slider-arrow.prev{right:1.5rem;left:auto;}
-[dir="rtl"] .slider-arrow.next{left:1.5rem;right:auto;}
-
-/* DOTS */
-.slider-dots{
-  position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);
-  display:flex;gap:.5rem;z-index:10;
-}
-.sdot{
-  width:28px;height:3px;border-radius:2px;
-  background:rgba(200,169,66,.3);cursor:pointer;
-  transition:all .3s;
-}
-.sdot.active{background:var(--hue-gold);width:44px;}
-
-/* PROGRESS BAR */
-.slider-progress{
-  position:absolute;bottom:0;left:0;
-  height:2px;background:var(--hue-gold);
-  transition:width 0s linear;z-index:10;
-}
-
-/* ── Sponsors Section (replaces partners-ribbon) ── */
-.sponsors-sec{
-  background:var(--white);
-  border-bottom:2px solid var(--light-line);
-  padding:2.5rem 4%;
-}
-.sponsors-inner{max-width:1200px;margin:0 auto;}
-.sponsors-hdr{
-  display:flex;align-items:center;gap:1.2rem;
-  margin-bottom:1.8rem;
-}
-.sponsors-title{
-  font-family:var(--font-display);font-size:1.35rem;font-weight:700;
-  color:var(--hue-navy);white-space:nowrap;
-}
-.sponsors-rule{flex:1;height:1px;background:var(--light-line);}
-.sponsors-label{
-  font-family:var(--font-mono);font-size:.58rem;
-  letter-spacing:.2em;color:var(--text-4);text-transform:uppercase;
-  white-space:nowrap;
-}
-.sponsors-grid{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:1rem;
-}
-.sponsor-card{
-  display:flex;flex-direction:column;align-items:center;
-  gap:.65rem;padding:1.2rem .8rem;
-  border:1px solid var(--light-line);border-radius:var(--radius-sm);
-  background:var(--cream);
-  transition:var(--trans);text-align:center;
-}
-.sponsor-card:hover{
-  border-color:var(--hue-gold-brd);
-  background:var(--white);
-  box-shadow:var(--sh-card);
-  transform:translateY(-2px);
-}
-.sponsor-logo-wrap{
-  width:72px;height:52px;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
-.sponsor-logo-wrap img{
-  max-width:100%;max-height:100%;
-  object-fit:contain;
-}
-.sponsor-logo-text{
-  font-family:var(--font-body);font-size:.72rem;font-weight:800;
-  color:var(--hue-navy);letter-spacing:.04em;
-}
-.sponsor-name{
-  font-size:.72rem;font-weight:700;
-  color:var(--hue-navy);line-height:1.2;
-}
-.sponsor-type{
-  font-family:var(--font-mono);font-size:.55rem;
-  color:var(--text-3);letter-spacing:.06em;
-  text-transform:uppercase;margin-top:.08rem;
-}
-.sponsor-badge{
-  display:inline-block;
-  font-family:var(--font-mono);font-size:.5rem;
-  padding:.1rem .4rem;border-radius:2px;
-  background:rgba(200,169,66,.1);
-  border:1px solid rgba(200,169,66,.25);
-  color:#8b6f1e;letter-spacing:.06em;margin-top:.1rem;
-}
-@media(max-width:900px){.sponsors-grid{grid-template-columns:repeat(3,1fr);}}
-@media(max-width:540px){.sponsors-grid{grid-template-columns:repeat(2,1fr);}}
-
-/* ── RTL slider ── */
-[dir="rtl"] .slide-col-right{margin-left:0;margin-right:4rem;}
-[dir="rtl"] .slide-content{flex-direction:row-reverse;}
-@media(max-width:1024px){
-  .slide-col-right{display:none;}
-  .slide-content{justify-content:center;}
-  .slide-col-left{max-width:700px;}
-}
-@media(max-width:600px){
-  .hero-slider{height:70vw;min-height:380px;}
-  .slide-content{padding:0 5%;align-items:flex-end;padding-bottom:3.5rem;}
-}
-
-
-/* ── Pipeline Stage Rows (sim page) ── */
-.pipe-stage-row{
-  display:flex;align-items:center;gap:.8rem;
-  padding-bottom:.65rem;border-bottom:1px solid rgba(255,255,255,.05);
-}
-.psr-icon{font-size:1.1rem;flex-shrink:0;width:24px;text-align:center;}
-.psr-bar{flex:1;min-width:0;}
-.psr-label{font-family:var(--font-mono);font-size:.6rem;color:var(--hue-gold);font-weight:600;letter-spacing:.08em;margin-bottom:.22rem;}
-.psr-fill-wrap{height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;margin-bottom:.2rem;}
-.psr-fill{height:100%;border-radius:2px;}
-.psr-meta{font-family:var(--font-mono);font-size:.5rem;color:rgba(255,255,255,.25);line-height:1.4;}
-.psr-time{font-family:var(--font-display);font-size:.9rem;font-weight:700;color:var(--hud-grn);flex-shrink:0;min-width:44px;text-align:right;}
-
 </style>
 </head>
 <body>
@@ -1535,7 +1308,7 @@ canvas{max-width:100%;}
 <!-- ══════════════════════════
      TOP INFO BAR
 ══════════════════════════ -->
-<div class="info-bar" role="banner" dir="ltr" style="direction:ltr!important;">
+<div class="info-bar" role="banner">
   <div class="info-bar-left">
     <div class="info-item">📍 <span>New Damietta, Egypt</span></div>
     <div class="info-item">📞 <a href="tel:+201559933466">+201559933466</a></div>
@@ -1605,282 +1378,106 @@ canvas{max-width:100%;}
 ══════════════════════════════════════════════════ -->
 <div id="page-home" class="page active" role="main">
 
-  <!-- ══════════════════════════
-       HERO SLIDER
-  ══════════════════════════ -->
-  <div class="hero-slider" id="heroSlider" aria-label="Project highlights carousel">
-    <div class="slider-track" id="sliderTrack">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-bg-radial" aria-hidden="true"></div>
+    <div class="hero-scan" aria-hidden="true"></div>
+    <div class="hero-corner hc-tl" aria-hidden="true"></div>
+    <div class="hero-corner hc-tr" aria-hidden="true"></div>
+    <div class="hero-corner hc-bl" aria-hidden="true"></div>
+    <div class="hero-corner hc-br" aria-hidden="true"></div>
 
-      <!-- ── SLIDE 1: System Overview ── -->
-      <div class="slide active" id="slide-0">
-        <div class="slide-bg slide-bg-1" role="presentation">
-          <!-- dark tactical gradient bg -->
-          <div class="slide-grid"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-kicker" aria-label="Project tag">Graduation Project 2026 · HUE · ECE Dept.</div>
+        <h1 class="hero-title" id="hero-title">
+          Advanced System<br>
+          for Drone <span class="accent">Detection,</span><br>
+          Tracking &amp; Neutralization
+        </h1>
+        <p class="hero-sub" id="hero-sub-txt">
+          Bridging the Granularity Gap between conventional radar and
+          autonomous micro-UAVs through edge-native AI, optical tracking,
+          and multi-spectral RF fusion — engineered at Horus University Egypt.
+        </p>
+        <div class="hero-stats" role="list" aria-label="Academic achievements">
+          <div class="hstat" role="listitem"><span class="hstat-val" style="font-size:1.1rem;">HUJE</span><span class="hstat-lbl">Peer-Reviewed Publication</span></div>
+          <div class="hstat" role="listitem"><span class="hstat-val">5<sup style="font-size:.5em">th</sup></span><span class="hstat-lbl">NRSC 2026 Best Poster</span></div>
+          <div class="hstat" role="listitem"><span class="hstat-val" style="font-size:1.1rem;">ASRT</span><span class="hstat-lbl">+ ISF Dual Funding</span></div>
+          <div class="hstat" role="listitem"><span class="hstat-val">50</span><span class="hstat-lbl">Studies Reviewed</span></div>
         </div>
-        <div class="slide-glow" style="top:-80px;right:5%;"></div>
-        <div class="slide-scan" aria-hidden="true"></div>
-        <div class="slide-corner sc-tl" aria-hidden="true"></div>
-        <div class="slide-corner sc-tr" aria-hidden="true"></div>
-        <div class="slide-corner sc-bl" aria-hidden="true"></div>
-        <div class="slide-corner sc-br" aria-hidden="true"></div>
-
-        <div class="slide-content">
-          <div class="slide-col-left">
-            <div class="hero-kicker" id="sl1-kicker">Graduation Project 2026 · HUE · ECE Dept.</div>
-            <h1 class="hero-title" id="hero-title">
-              <span id="sl1-title">Advanced System<br>for Drone <span class="accent">Detection,</span><br>Tracking &amp; Neutralization</span>
-            </h1>
-            <p class="hero-sub" id="sl1-sub">
-              Bridging the Granularity Gap between conventional radar and
-              autonomous micro-UAVs through edge-native AI, optical tracking,
-              and multi-spectral RF fusion — engineered at Horus University Egypt.
-            </p>
-            <div class="hero-stats" role="list" aria-label="Key metrics">
-              <div class="hstat" role="listitem"><span class="hstat-val" style="font-size:1.1rem;">HUJE</span><span class="hstat-lbl" id="sl1-s1-lbl">Peer-Reviewed Publication</span></div>
-              <div class="hstat" role="listitem"><span class="hstat-val">5<sup style="font-size:.5em">th</sup></span><span class="hstat-lbl" id="sl1-s2-lbl">NRSC 2026 Best Poster</span></div>
-              <div class="hstat" role="listitem"><span class="hstat-val" style="font-size:1.1rem;">ASRT</span><span class="hstat-lbl" id="sl1-s3-lbl">+ ISF Dual Funding</span></div>
-              <div class="hstat" role="listitem"><span class="hstat-val">50</span><span class="hstat-lbl" id="sl1-s4-lbl">Studies Reviewed</span></div>
-            </div>
-            <div class="hero-btns">
-              <button class="btn-gold" onclick="showPage('arch')" id="sl1-btn1">Explore Architecture</button>
-              <button class="btn-outline" style="color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.2);" onclick="showPage('research')" id="sl1-btn2">↗ Publications</button>
-            </div>
-          </div>
-
-          <div class="slide-col-right">
-            <div class="hero-hud" aria-label="System status panel" role="complementary">
-              <div class="hud-top">
-                <span class="hud-top-lbl">▸ C-UAS Control Panel</span>
-                <span class="hud-clock" id="hudClock" aria-live="polite">--:--:--</span>
-              </div>
-              <div class="hud-body">
-                <div class="hud-vis" aria-hidden="true">
-                  <div class="hud-cross-h"></div>
-                  <div class="hud-cross-v"></div>
-                  <div class="hud-target"></div>
-                  <div class="hud-conf" id="hudConf">CONF: --</div>
-                </div>
-                <div class="hud-row"><span class="hud-k">SYSTEM STATUS</span><span class="hud-v">PATROL MODE</span></div>
-                <div class="hud-row"><span class="hud-k">AI MODEL</span><span class="hud-v gold">YOLOv8n INT8</span></div>
-                <div class="hud-row"><span class="hud-k">INFERENCE</span><span class="hud-v">30 FPS · 31ms</span></div>
-                <div class="hud-row"><span class="hud-k">PTZ STATUS</span><span class="hud-v">SCANNING</span></div>
-                <div class="hud-row"><span class="hud-k">RF ANALYZER</span><span class="hud-v amb">HW READY</span></div>
-                <div class="hud-row"><span class="hud-k">TRACKING</span><span class="hud-v gold">KALMAN ACTIVE</span></div>
-              </div>
-            </div>
-          </div>
+        <div class="hero-btns">
+          <button class="btn-gold" onclick="showPage('arch')">Explore Architecture</button>
+          <button class="btn-outline" style="color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.2);" onclick="showPage('sim')">▶ Live Demo</button>
         </div>
-      </div><!-- /slide-1 -->
-
-      <!-- ── SLIDE 2: Research Achievements ── -->
-      <div class="slide" id="slide-1">
-        <div class="slide-bg slide-bg-2" role="presentation">
-          <div class="slide-grid"></div>
-        </div>
-        <div class="slide-glow" style="bottom:-100px;left:10%;"></div>
-        <div class="slide-scan" aria-hidden="true"></div>
-        <div class="slide-corner sc-tl" aria-hidden="true"></div>
-        <div class="slide-corner sc-tr" aria-hidden="true"></div>
-        <div class="slide-corner sc-bl" aria-hidden="true"></div>
-        <div class="slide-corner sc-br" aria-hidden="true"></div>
-
-        <div class="slide-content">
-          <div class="slide-col-left">
-            <div class="hero-kicker" id="sl2-kicker">Academic Achievement · NRSC 2026</div>
-            <h2 class="hero-title" id="sl2-title">
-              <span id="sl2-t">5<sup style="font-size:.45em;vertical-align:super;">th</sup> Place</span><br>
-              <span class="accent" id="sl2-t2">Best Poster Award</span><br>
-              <span id="sl2-t3">National Radio Science Conference</span>
-            </h2>
-            <p class="hero-sub" id="sl2-sub">
-              Competing nationally among Egypt's leading engineering faculties and research centers.
-              First multi-spectral C-UAS systematic review published from HUE — indexed on EKB Portal (ISSN: 3062-4991).
-            </p>
-            <div class="hero-stats" role="list">
-              <div class="hstat" role="listitem"><span class="hstat-val">88.8<sup style="font-size:.45em">%</sup></span><span class="hstat-lbl" id="sl2-s1">mAP@50 Accuracy</span></div>
-              <div class="hstat" role="listitem"><span class="hstat-val">139<sup style="font-size:.45em">ms</sup></span><span class="hstat-lbl" id="sl2-s2">Total Loop Latency</span></div>
-              <div class="hstat" role="listitem"><span class="hstat-val">30</span><span class="hstat-lbl" id="sl2-s3">FPS Real-Time</span></div>
-              <div class="hstat" role="listitem"><span class="hstat-val">94<sup style="font-size:.45em">%</sup></span><span class="hstat-lbl" id="sl2-s4">Detection Probability</span></div>
-            </div>
-            <div class="hero-btns">
-              <button class="btn-gold" onclick="showPage('research')" id="sl2-btn1">View Publications</button>
-              <button class="btn-outline" style="color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.2);" onclick="showPage('team')" id="sl2-btn2">Meet the Team</button>
-            </div>
-          </div>
-
-          <div class="slide-col-right">
-            <div class="hero-hud" aria-label="Research metrics panel">
-              <div class="hud-top">
-                <span class="hud-top-lbl">▸ Research Metrics</span>
-                <span class="hud-clock">HUJE · 2026</span>
-              </div>
-              <div class="hud-body">
-                <div class="hud-row"><span class="hud-k">JOURNAL</span><span class="hud-v gold">HUJE · EKB</span></div>
-                <div class="hud-row"><span class="hud-k">ISSN</span><span class="hud-v">3062-4991</span></div>
-                <div class="hud-row"><span class="hud-k">REVIEW METHOD</span><span class="hud-v">PRISMA</span></div>
-                <div class="hud-row"><span class="hud-k">STUDIES COVERED</span><span class="hud-v">50 Papers</span></div>
-                <div class="hud-row"><span class="hud-k">FUNDING</span><span class="hud-v gold">ASRT + ISF</span></div>
-                <div class="hud-row"><span class="hud-k">AWARD</span><span class="hud-v">NRSC 2026 — 5th</span></div>
-                <div class="hud-row"><span class="hud-k">ORCID</span><span class="hud-v" style="font-size:.5rem;">0009-0002-2829-4912</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div><!-- /slide-2 -->
-
-      <!-- ── SLIDE 3: System Architecture ── -->
-      <div class="slide" id="slide-2">
-        <div class="slide-bg slide-bg-3" role="presentation">
-          <div class="slide-grid"></div>
-        </div>
-        <div class="slide-glow" style="top:10%;right:20%;"></div>
-        <div class="slide-scan" aria-hidden="true"></div>
-        <div class="slide-corner sc-tl" aria-hidden="true"></div>
-        <div class="slide-corner sc-tr" aria-hidden="true"></div>
-        <div class="slide-corner sc-bl" aria-hidden="true"></div>
-        <div class="slide-corner sc-br" aria-hidden="true"></div>
-
-        <div class="slide-content">
-          <div class="slide-col-left">
-            <div class="hero-kicker" id="sl3-kicker">System Architecture · 5-Layer Stack</div>
-            <h2 class="hero-title" id="sl3-title">
-              <span id="sl3-t">Edge AI on</span><br>
-              <span class="accent" id="sl3-t2">Raspberry Pi 5</span><br>
-              <span id="sl3-t3">COTS · $80 Platform</span>
-            </h2>
-            <p class="hero-sub" id="sl3-sub">
-              YOLOv8n INT8 quantized model — 4× memory reduction, 30 FPS real-time inference.
-              Discrete Kalman Filter, direct ISAPI PTZ actuation, encrypted 4G Telegram telemetry.
-            </p>
-            <div class="hero-stats" role="list">
-              <div class="hstat" role="listitem"><span class="hstat-val">42<sup style="font-size:.45em">ms</sup></span><span class="hstat-lbl" id="sl3-s1">Acquisition</span></div>
-              <div class="hstat" role="listitem"><span class="hstat-val">31<sup style="font-size:.45em">ms</sup></span><span class="hstat-lbl" id="sl3-s2">AI Inference</span></div>
-              <div class="hstat" role="listitem"><span class="hstat-val">66<sup style="font-size:.45em">ms</sup></span><span class="hstat-lbl" id="sl3-s3">PTZ Actuation</span></div>
-              <div class="hstat" role="listitem"><span class="hstat-val">INT8</span><span class="hstat-lbl" id="sl3-s4">Quantized Model</span></div>
-            </div>
-            <div class="hero-btns">
-              <button class="btn-gold" onclick="showPage('arch')" id="sl3-btn1">Full Architecture</button>
-              <button class="btn-outline" style="color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.2);" onclick="showPage('sim')" id="sl3-btn2">▶ Live Demo</button>
-            </div>
-          </div>
-
-          <div class="slide-col-right">
-            <div class="hero-hud" aria-label="Pipeline latency panel">
-              <div class="hud-top">
-                <span class="hud-top-lbl">▸ Pipeline Latency</span>
-                <span class="hud-clock">139ms TOTAL</span>
-              </div>
-              <div class="hud-body">
-                <div class="hud-row"><span class="hud-k">CAMERA</span><span class="hud-v">RTSP / H.265</span></div>
-                <div class="hud-row"><span class="hud-k">GSTREAMER</span><span class="hud-v">42ms · Zero-Copy</span></div>
-                <div class="hud-row"><span class="hud-k">YOLOv8n INT8</span><span class="hud-v">31ms · 30 FPS</span></div>
-                <div class="hud-row"><span class="hud-k">KALMAN FILTER</span><span class="hud-v gold">State [x,y,vx,vy]</span></div>
-                <div class="hud-row"><span class="hud-k">ISAPI / PID</span><span class="hud-v">66ms · τ&lt;10ms</span></div>
-                <div class="hud-row"><span class="hud-k">TELEGRAM 4G</span><span class="hud-v">1.2s · Encrypted</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div><!-- /slide-3 -->
-
-    </div><!-- /slider-track -->
-
-    <!-- Arrows -->
-    <button class="slider-arrow prev" id="slPrev" onclick="sliderMove(-1)" aria-label="Previous slide">&#8592;</button>
-    <button class="slider-arrow next" id="slNext" onclick="sliderMove(1)" aria-label="Next slide">&#8594;</button>
-
-    <!-- Dots -->
-    <div class="slider-dots" role="tablist" aria-label="Slide indicators">
-      <button class="sdot active" id="sdot-0" onclick="sliderGo(0)" role="tab" aria-selected="true" aria-label="Slide 1"></button>
-      <button class="sdot" id="sdot-1" onclick="sliderGo(1)" role="tab" aria-selected="false" aria-label="Slide 2"></button>
-      <button class="sdot" id="sdot-2" onclick="sliderGo(2)" role="tab" aria-selected="false" aria-label="Slide 3"></button>
-    </div>
-
-    <!-- Progress bar -->
-    <div class="slider-progress" id="sliderProgress"></div>
-  </div><!-- /hero-slider -->
-
-  <!-- ══════════════════════════
-       SPONSORS & PARTNERS
-  ══════════════════════════ -->
-  <section class="sponsors-sec" aria-labelledby="sponsors-heading">
-    <div class="sponsors-inner">
-      <div class="sponsors-hdr">
-        <h2 class="sponsors-title" id="sponsors-heading"><span id="sp-title-en">Sponsors &amp; Endorsing Institutions</span></h2>
-        <div class="sponsors-rule"></div>
-        <div class="sponsors-label" id="sp-label">Funded · Endorsed · Accredited</div>
       </div>
-      <div class="sponsors-grid">
 
-        <div class="sponsor-card">
-          <div class="sponsor-logo-wrap">
-            <span class="sponsor-logo-text">HUE</span>
-          </div>
-          <div>
-            <div class="sponsor-name" id="sp1-name">Horus University Egypt</div>
-            <div class="sponsor-type" id="sp1-type">Academic Institution</div>
-            <div class="sponsor-badge" id="sp1-badge">Host University</div>
-          </div>
+      <div class="hero-hud" aria-label="System status panel" role="complementary">
+        <div class="hud-top">
+          <span class="hud-top-lbl">▸ C-UAS Control Panel</span>
+          <span class="hud-clock" id="hudClock" aria-live="polite" aria-label="Current time">--:--:--</span>
         </div>
-
-        <div class="sponsor-card" style="border-color:rgba(181,0,25,.15);">
-          <div class="sponsor-logo-wrap">
-            <img src="assets/asrt.jpg" alt="ASRT" style="mix-blend-mode:multiply;">
+        <div class="hud-body">
+          <div class="hud-vis" aria-hidden="true">
+            <div class="hud-cross-h"></div>
+            <div class="hud-cross-v"></div>
+            <div class="hud-target"></div>
+            <div class="hud-conf" id="hudConf">CONF: --</div>
           </div>
-          <div>
-            <div class="sponsor-name" id="sp2-name">ASRT Badayty</div>
-            <div class="sponsor-type" id="sp2-type">Research Funding</div>
-            <div class="sponsor-badge" style="background:rgba(181,0,25,.08);border-color:rgba(181,0,25,.25);color:#a0001a;" id="sp2-badge">بدايتي Initiative</div>
-          </div>
+          <div class="hud-row"><span class="hud-k">SYSTEM STATUS</span><span class="hud-v">PATROL MODE</span></div>
+          <div class="hud-row"><span class="hud-k">AI MODEL</span><span class="hud-v gold">YOLOv8n INT8</span></div>
+          <div class="hud-row"><span class="hud-k">INFERENCE</span><span class="hud-v">30 FPS · 31ms</span></div>
+          <div class="hud-row"><span class="hud-k">PTZ STATUS</span><span class="hud-v">SCANNING</span></div>
+          <div class="hud-row"><span class="hud-k">RF ANALYZER</span><span class="hud-v amb">HW READY</span></div>
+          <div class="hud-row"><span class="hud-k">TELEMETRY</span><span class="hud-v">4G · 1.2s DELAY</span></div>
+          <div class="hud-row"><span class="hud-k">TRACKING</span><span class="hud-v gold">KALMAN ACTIVE</span></div>
         </div>
-
-        <div class="sponsor-card" style="border-color:rgba(0,106,62,.15);">
-          <div class="sponsor-logo-wrap">
-            <img src="assets/isf.png" alt="ISF" style="mix-blend-mode:multiply;">
-          </div>
-          <div>
-            <div class="sponsor-name" id="sp3-name">Innovators Support Fund</div>
-            <div class="sponsor-type" id="sp3-type">Min. Higher Education</div>
-            <div class="sponsor-badge" style="background:rgba(0,106,62,.08);border-color:rgba(0,106,62,.25);color:#005c36;" id="sp3-badge">رعاية المبتكرين</div>
-          </div>
-        </div>
-
-        <div class="sponsor-card" style="border-color:rgba(74,74,106,.15);">
-          <div class="sponsor-logo-wrap">
-            <img src="assets/naqaae.webp" alt="NAQAAE" style="mix-blend-mode:multiply;">
-          </div>
-          <div>
-            <div class="sponsor-name" id="sp4-name">NAQAAE</div>
-            <div class="sponsor-type" id="sp4-type">Quality Assurance</div>
-            <div class="sponsor-badge" id="sp4-badge">Accreditation</div>
-          </div>
-        </div>
-
-        <div class="sponsor-card" style="border-color:rgba(0,80,128,.15);">
-          <div class="sponsor-logo-wrap">
-            <img src="assets/egac.jpeg" alt="EGAC" style="mix-blend-mode:multiply;">
-          </div>
-          <div>
-            <div class="sponsor-name" id="sp5-name">EGAC</div>
-            <div class="sponsor-type" id="sp5-type">Engineering Accreditation</div>
-            <div class="sponsor-badge" id="sp5-badge">Certified</div>
-          </div>
-        </div>
-
-        <div class="sponsor-card" style="border-color:rgba(200,169,66,.3);background:rgba(200,169,66,.04);">
-          <div class="sponsor-logo-wrap">
-            <img src="assets/ursi.webp" alt="URSI" style="mix-blend-mode:multiply;">
-          </div>
-          <div>
-            <div class="sponsor-name" id="sp6-name">NRSC 2026</div>
-            <div class="sponsor-type" id="sp6-type">Radio Science Conference</div>
-            <div class="sponsor-badge" id="sp6-badge">🏆 5th Best Poster</div>
-          </div>
-        </div>
-
       </div>
     </div>
   </section>
+
+  <!-- PARTNERS RIBBON -->
+  <div class="partners-ribbon" role="complementary" aria-label="Endorsing institutions">
+    <div class="pr-lbl">Endorsed By</div>
+    <div class="pr-items">
+      <div class="pr-badge"><div class="pr-badge-ico" style="background:#0d1b3e;font-size:.55rem" aria-hidden="true">HUE</div><div><div class="pr-badge-name">Horus University</div><div class="pr-badge-type">Academic Institution</div></div></div>
+      
+      <div class="pr-badge" style="border-color:rgba(181,0,25,.3);background:rgba(181,0,25,.04);">
+        <div style="width:50px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <img src="assets/asrt.jpg" alt="ASRT" style="max-height:100%; max-width:100%; object-fit:contain; mix-blend-mode: multiply;">
+        </div>
+        <div><div class="pr-badge-name">ASRT Badayty</div><div class="pr-badge-type">Research Funding</div></div>
+      </div>
+      
+      <div class="pr-badge" style="border-color:rgba(0,106,62,.3);background:rgba(0,106,62,.04);">
+        <div style="width:50px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <img src="assets/isf.png" alt="ISF" style="max-height:100%; max-width:100%; object-fit:contain; mix-blend-mode: multiply;">
+        </div>
+        <div><div class="pr-badge-name">Innovators Support Fund</div><div class="pr-badge-type">Min. Higher Education</div></div>
+      </div>
+
+      <div class="pr-badge" style="border-color:rgba(74,74,106,.3);background:rgba(74,74,106,.04);">
+        <div style="width:50px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <img src="assets/naqaae.webp" alt="NAQAAE" style="max-height:100%; max-width:100%; object-fit:contain; mix-blend-mode: multiply;">
+        </div>
+        <div><div class="pr-badge-name">NAQAAE</div><div class="pr-badge-type">Accreditation Body</div></div>
+      </div>
+
+      <div class="pr-badge" style="border-color:rgba(0,80,128,.3);background:rgba(0,80,128,.04);">
+        <div style="width:50px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <img src="assets/egac.jpeg" alt="EGAC" style="max-height:100%; max-width:100%; object-fit:contain; mix-blend-mode: multiply;">
+        </div>
+        <div><div class="pr-badge-name">EGAC</div><div class="pr-badge-type">Engineering Accreditation</div></div>
+      </div>
+      
+      <div class="pr-badge" style="border-color:rgba(200,169,66,.4);background:rgba(200,169,66,.06);">
+        <div style="width:50px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <img src="assets/ursi.webp" alt="URSI" style="max-height:100%; max-width:100%; object-fit:contain; mix-blend-mode: multiply;">
+        </div>
+        <div><div class="pr-badge-name">NRSC 2026</div><div class="pr-badge-type">5th Best Poster Award</div></div>
+      </div>
+    </div>
+  </div>
 
   <!-- PROBLEM -->
   <section class="problem-sec" aria-labelledby="problem-heading">
@@ -1890,8 +1487,8 @@ canvas{max-width:100%;}
           <div class="eyebrow" style="color:var(--hue-gold-lt)">Core Research Problem</div>
           <h2 class="sec-h light" id="problem-heading">The Granularity Gap</h2>
           <div class="sec-rule"></div>
-          <p class="sec-lead light" style="margin-bottom:1rem;" id="prob-lead1">Conventional air-defense was engineered for supersonic missiles with RCS &gt; 5m². Today's micro-drones operate at σ &lt; 0.01m² — collapsing radar detection probability from ~80% down to barely 12% and vanishing into Doppler notch filters when hovering.</p>
-          <p class="sec-lead light" id="prob-lead2">This project bridges that gap through optical-primary detection with 25× zoom and a YOLOv8n INT8 edge AI pipeline running on commercial off-the-shelf hardware at a fraction of the cost of conventional C-UAS solutions.</p>
+          <p class="sec-lead light" style="margin-bottom:1rem;">Conventional air-defense was engineered for supersonic missiles with RCS &gt; 5m². Today's micro-drones operate at σ &lt; 0.01m² — collapsing radar detection probability from ~80% down to barely 12% and vanishing into Doppler notch filters when hovering.</p>
+          <p class="sec-lead light">This project bridges that gap through optical-primary detection with 25× zoom and a YOLOv8n INT8 edge AI pipeline running on commercial off-the-shelf hardware at a fraction of the cost of conventional C-UAS solutions.</p>
         </div>
         <div class="problem-vis" aria-label="Detection probability chart">
           <div class="vis-lbl">// Detection Probability · Class I UAS (σ &lt; 0.01 m²)</div>
@@ -2550,96 +2147,43 @@ canvas{max-width:100%;}
     </span>
   </div>
 
-  <div class="sim-layout" style="grid-template-columns:1fr 1fr;gap:1.8rem;">
-    <!-- LEFT: Pipeline Architecture Visual (replaces canvas) -->
+  <div class="sim-layout" style="grid-template-columns:1.3fr 1fr;gap:1.8rem;">
+    <!-- LEFT: Canvas-based optical feed simulation -->
     <div>
-      <h2 class="sim-h" id="sim-h-pipeline">📡 Detection Pipeline — Architecture Overview</h2>
-
-      <!-- 5-Stage Pipeline -->
-      <div style="background:var(--hue-navy-deep);border:1px solid rgba(200,169,66,.25);border-radius:var(--radius-md);overflow:hidden;margin-bottom:1rem;">
-        <div style="background:rgba(200,169,66,.08);border-bottom:1px solid rgba(200,169,66,.2);padding:.55rem 1rem;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-family:var(--font-mono);font-size:.58rem;color:var(--hue-gold);letter-spacing:.15em;" id="sim-pipe-title">▸ 5-LAYER CYBER-PHYSICAL PIPELINE</span>
-          <span style="font-family:var(--font-mono);font-size:.52rem;color:rgba(255,255,255,.3);" id="simTopRight">YOLOv8n INT8 · 30 FPS</span>
+      <h2 class="sim-h">📷 Optical Feed — PTZ Camera Simulation</h2>
+      <div style="background:var(--hue-navy-deep);border:1px solid rgba(200,169,66,.25);border-radius:var(--radius-md);overflow:hidden;">
+        <div style="background:rgba(200,169,66,.08);border-bottom:1px solid rgba(200,169,66,.2);padding:.5rem 1rem;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:var(--font-mono);font-size:.58rem;color:var(--hue-gold);letter-spacing:.18em;">▸ HIKVISION DS-2DE4225IW · 25× ZOOM · DARKFIGHTER</span>
+          <span style="font-family:var(--font-mono);font-size:.52rem;color:rgba(255,255,255,.3);" id="camZoom">ZOOM: 12×</span>
         </div>
-        <div style="padding:1.2rem 1rem;">
-          <!-- Stage rows -->
-          <div style="display:flex;flex-direction:column;gap:.7rem;" id="pipeStages">
-
-            <div class="pipe-stage-row" id="psr-0">
-              <div class="psr-icon">📷</div>
-              <div class="psr-bar">
-                <div class="psr-label" id="psr0-lbl">Acquisition</div>
-                <div class="psr-fill-wrap"><div class="psr-fill" style="width:30%;background:rgba(46,204,113,.4);"></div></div>
-                <div class="psr-meta">GStreamer · RTSP/H.265 · Zero-Copy DMA</div>
-              </div>
-              <div class="psr-time" id="psr0-time">42 ms</div>
-            </div>
-
-            <div class="pipe-stage-row" id="psr-1">
-              <div class="psr-icon">🧠</div>
-              <div class="psr-bar">
-                <div class="psr-label" id="psr1-lbl">AI Inference</div>
-                <div class="psr-fill-wrap"><div class="psr-fill" style="width:22%;background:rgba(200,169,66,.5);"></div></div>
-                <div class="psr-meta">YOLOv8n INT8 · mAP@50: 88.8% · NPU Accel.</div>
-              </div>
-              <div class="psr-time" id="psr1-time">31 ms</div>
-            </div>
-
-            <div class="pipe-stage-row" id="psr-2">
-              <div class="psr-icon">📊</div>
-              <div class="psr-bar">
-                <div class="psr-label" id="psr2-lbl">State Estimation</div>
-                <div class="psr-fill-wrap"><div class="psr-fill" style="width:5%;background:rgba(200,169,66,.3);"></div></div>
-                <div class="psr-meta">Kalman Filter · State [x,y,vx,vy] · Occlusion</div>
-              </div>
-              <div class="psr-time" id="psr2-time">&lt;1 ms</div>
-            </div>
-
-            <div class="pipe-stage-row" id="psr-3">
-              <div class="psr-icon">🎯</div>
-              <div class="psr-bar">
-                <div class="psr-label" id="psr3-lbl">PTZ Actuation</div>
-                <div class="psr-fill-wrap"><div class="psr-fill" style="width:47%;background:rgba(231,76,60,.35);"></div></div>
-                <div class="psr-meta">ISAPI Direct Inject · PID Controller · τ&lt;10ms</div>
-              </div>
-              <div class="psr-time" id="psr3-time">66 ms</div>
-            </div>
-
-            <div class="pipe-stage-row" id="psr-4" style="border-bottom:none;">
-              <div class="psr-icon">📲</div>
-              <div class="psr-bar">
-                <div class="psr-label" id="psr4-lbl">Telemetry</div>
-                <div class="psr-fill-wrap"><div class="psr-fill" style="width:86%;background:rgba(29,111,164,.5);"></div></div>
-                <div class="psr-meta">Telegram Bot API · 4G LTE · Encrypted · ARM/DISARM</div>
-              </div>
-              <div class="psr-time" id="psr4-time">1.2 s</div>
-            </div>
-
-          </div>
-          <!-- Total -->
-          <div style="margin-top:.9rem;padding-top:.75rem;border-top:1px solid rgba(200,169,66,.15);display:flex;justify-content:space-between;align-items:center;">
-            <span style="font-family:var(--font-mono);font-size:.55rem;color:rgba(255,255,255,.3);letter-spacing:.1em;" id="psr-total-lbl">TOTAL LOOP LATENCY (optical→alert)</span>
-            <span style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--hue-gold);">139 ms</span>
-          </div>
+        <div style="position:relative;background:#000;line-height:0;">
+          <canvas id="simCanvas" width="640" height="360" style="width:100%;display:block;"></canvas>
+          <!-- Overlay HUD labels -->
+          <div style="position:absolute;top:8px;left:10px;font-family:var(--font-mono);font-size:.52rem;color:rgba(200,169,66,.7);letter-spacing:.1em;" id="simTopLeft">REC ● 30 FPS</div>
+          <div style="position:absolute;top:8px;right:10px;font-family:var(--font-mono);font-size:.52rem;color:rgba(200,169,66,.7);" id="simTopRight">YOLOv8n INT8</div>
+          <div style="position:absolute;bottom:8px;left:10px;font-family:var(--font-mono);font-size:.52rem;color:rgba(255,255,255,.4);" id="simBotLeft">SECTOR: NE-4 · BRG: 047°</div>
+          <div style="position:absolute;bottom:8px;right:10px;font-family:var(--font-mono);font-size:.52rem;" id="simStatus" style="color:var(--hud-grn);">● PATROL</div>
         </div>
-      </div>
-
-      <!-- Hardware Specs Quick Panel -->
-      <div style="background:var(--hue-navy-deep);border:1px solid rgba(200,169,66,.2);border-radius:var(--radius-sm);padding:.9rem 1rem;margin-bottom:1rem;">
-        <div style="font-family:var(--font-mono);font-size:.54rem;color:rgba(200,169,66,.6);letter-spacing:.15em;margin-bottom:.7rem;" id="hw-panel-title">// HARDWARE CONFIGURATION</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem .8rem;">
-          <div class="dp-row"><span class="dp-k" id="hw-compute-lbl">COMPUTE</span><span class="dp-v gold">Raspberry Pi 5 · 8GB</span></div>
-          <div class="dp-row"><span class="dp-k" id="hw-model-lbl">AI MODEL</span><span class="dp-v">YOLOv8n INT8</span></div>
-          <div class="dp-row"><span class="dp-k" id="hw-camera-lbl">CAMERA</span><span class="dp-v">Hikvision 25× PTZ</span></div>
-          <div class="dp-row"><span class="dp-k" id="hw-rf-lbl">RF SENSOR</span><span class="dp-v amb">SA-6G · Driver Dev.</span></div>
-          <div class="dp-row"><span class="dp-k" id="hw-conn-lbl">CONNECTIVITY</span><span class="dp-v">4G LTE · WiFi</span></div>
-          <div class="dp-row"><span class="dp-k" id="hw-cost-lbl">PLATFORM COST</span><span class="dp-v">~$80 COTS</span></div>
+        <!-- Latency / inference strip -->
+        <div style="padding:.6rem 1rem;display:flex;gap:1.5rem;border-top:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.2);">
+          <div style="font-family:var(--font-mono);font-size:.54rem;">
+            <span style="color:rgba(255,255,255,.3);">INFERENCE </span><span style="color:var(--hud-grn);" id="infMs">-- ms</span>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:.54rem;">
+            <span style="color:rgba(255,255,255,.3);">CONF </span><span style="color:var(--hue-gold);" id="confDisp">--</span>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:.54rem;">
+            <span style="color:rgba(255,255,255,.3);">CLASS </span><span style="color:var(--hud-red);" id="classDisp">--</span>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:.54rem;">
+            <span style="color:rgba(255,255,255,.3);">KALMAN </span><span style="color:var(--hue-gold);" id="kalmanDisp">IDLE</span>
+          </div>
         </div>
       </div>
 
       <!-- Pipeline flow indicator -->
-      <div style="background:var(--hue-navy-deep);border:1px solid rgba(200,169,66,.15);border-radius:var(--radius-sm);padding:.7rem 1rem;">
-        <div style="font-family:var(--font-mono);font-size:.54rem;color:rgba(200,169,66,.6);letter-spacing:.15em;margin-bottom:.6rem;" id="pipeline-flow-lbl">// PIPELINE DATA FLOW</div>
+      <div style="margin-top:.9rem;background:var(--hue-navy-deep);border:1px solid rgba(200,169,66,.15);border-radius:var(--radius-sm);padding:.7rem 1rem;">
+        <div style="font-family:var(--font-mono);font-size:.54rem;color:rgba(200,169,66,.6);letter-spacing:.15em;margin-bottom:.6rem;">// PIPELINE DATA FLOW</div>
         <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;" id="pipelineFlow">
           <div class="pipe-step" id="ps0">📷 RTSP</div>
           <span style="color:rgba(200,169,66,.3);font-size:.7rem;">→</span>
@@ -2656,7 +2200,6 @@ canvas{max-width:100%;}
       </div>
     </div>
 
-    <!-- RIGHT: Dashboard + Telegram -->
     <!-- RIGHT: Dashboard + Telegram -->
     <div style="display:flex;flex-direction:column;gap:1rem;">
       <h2 class="sim-h">⚙️ C-UAS Control Dashboard</h2>
@@ -3008,7 +2551,11 @@ function updDash(k){
   if(aiP)aiP.textContent=d.ai;
   if(lkB){lkB.style.width=d.lk;lkB.setAttribute('aria-valuenow',parseInt(d.lk));}
   if(lkP)lkP.textContent=d.lk;
-  /* canvas removed */
+  /* update canvas state */
+  if(k==='intrusion') canvasState='detect';
+  else if(k==='lock') canvasState='locked';
+  else if(k==='clear') canvasState='patrol';
+  else canvasState='monitor';
   pipelineAnimate(k);
 }
 function addMsg(type,text){
@@ -3045,6 +2592,224 @@ function pipelineAnimate(type){
   });
 }
 
+/* ══════════════════════════════════════════
+   CANVAS SIMULATION ENGINE
+══════════════════════════════════════════ */
+var canvasState = 'patrol'; /* patrol | detect | locked | monitor */
+var drone = { x: 320, y: 180, vx: 0.6, vy: -0.4, w: 20, h: 14 };
+var bbox  = { x: 0, y: 0, w: 0, h: 0, alpha: 0, conf: 0 };
+var ptz   = { panAngle: 0, scanDir: 1 };
+var frame = 0;
+var confSmooth = 0;
+var bboxSmooth = {x:320,y:180};
+
+function initCanvas(){
+  var canvas = document.getElementById('simCanvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  drawFrame(ctx, canvas.width, canvas.height);
+}
+
+function drawFrame(ctx, W, H){
+  frame++;
+
+  /* ── background: simulated sky/urban scene ── */
+  ctx.clearRect(0,0,W,H);
+  /* sky gradient */
+  var sky = ctx.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0,'#0a1628');
+  sky.addColorStop(0.6,'#111e35');
+  sky.addColorStop(1,'#1a2a48');
+  ctx.fillStyle=sky;
+  ctx.fillRect(0,0,W,H);
+
+  /* subtle grid overlay */
+  ctx.strokeStyle='rgba(200,169,66,.04)';
+  ctx.lineWidth=1;
+  for(var gx=0;gx<W;gx+=40){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+  for(var gy=0;gy<H;gy+=40){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+
+  /* horizon line */
+  ctx.strokeStyle='rgba(200,169,66,.06)';
+  ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,H*0.65);ctx.lineTo(W,H*0.65);ctx.stroke();
+
+  /* simplified city silhouette */
+  ctx.fillStyle='rgba(13,27,62,.7)';
+  var bldgs=[[0,20],[60,35],[110,15],[180,45],[240,25],[320,50],[400,20],[470,40],[540,18],[600,30],[640,0]];
+  ctx.beginPath();ctx.moveTo(0,H);
+  bldgs.forEach(function(b){ctx.lineTo(b[0],H*0.65-b[1]);});
+  ctx.lineTo(W,H);ctx.closePath();ctx.fill();
+
+  /* ── PTZ scan indicator ── */
+  ptz.panAngle += 0.008 * ptz.scanDir;
+  if(ptz.panAngle > 0.4 || ptz.panAngle < -0.4) ptz.scanDir *= -1;
+  var scanX = W/2 + ptz.panAngle * W * 0.8;
+  ctx.strokeStyle='rgba(200,169,66,.12)';
+  ctx.lineWidth=1;
+  ctx.setLineDash([4,8]);
+  ctx.beginPath();ctx.moveTo(scanX,0);ctx.lineTo(scanX,H);ctx.stroke();
+  ctx.setLineDash([]);
+
+  /* crosshair */
+  ctx.strokeStyle='rgba(200,169,66,.15)';
+  ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(W/2,0);ctx.lineTo(W/2,H);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();
+
+  /* corner brackets */
+  var bsz=20, boff=10;
+  ctx.strokeStyle='rgba(200,169,66,.35)';ctx.lineWidth=1.5;
+  [[boff,boff,1,1],[W-boff,boff,-1,1],[boff,H-boff,1,-1],[W-boff,H-boff,-1,-1]].forEach(function(c){
+    ctx.beginPath();ctx.moveTo(c[0]+c[2]*bsz,c[1]);ctx.lineTo(c[0],c[1]);ctx.lineTo(c[0],c[1]+c[3]*bsz);ctx.stroke();
+  });
+
+  /* ── drone movement ── */
+  if(canvasState==='patrol'||canvasState==='monitor'){
+    drone.x += drone.vx;
+    drone.y += drone.vy;
+    if(drone.x<20||drone.x>W-20) drone.vx*=-1;
+    if(drone.y<30||drone.y>H*0.6) drone.vy*=-1;
+    /* add slight noise */
+    drone.x += (Math.random()-0.5)*0.4;
+    drone.y += (Math.random()-0.5)*0.4;
+    bbox.alpha = Math.max(0, bbox.alpha - 0.03);
+    confSmooth = Math.max(0, confSmooth - 0.02);
+  } else if(canvasState==='detect'){
+    drone.x += drone.vx*0.5;
+    drone.y += drone.vy*0.5;
+    if(drone.x<20||drone.x>W-20) drone.vx*=-1;
+    if(drone.y<30||drone.y>H*0.6) drone.vy*=-1;
+    bbox.alpha = Math.min(1, bbox.alpha + 0.05);
+    confSmooth = Math.min(0.93, confSmooth + 0.04);
+    bbox.x=drone.x-36; bbox.y=drone.y-28; bbox.w=72; bbox.h=56;
+    bboxSmooth.x += (drone.x - bboxSmooth.x)*0.2;
+    bboxSmooth.y += (drone.y - bboxSmooth.y)*0.2;
+  } else if(canvasState==='locked'){
+    /* drone slows, PTZ "locks on" */
+    drone.x += drone.vx*0.3;
+    drone.y += drone.vy*0.3;
+    drone.vx *= 0.998; drone.vy *= 0.998;
+    if(drone.x<20||drone.x>W-20) drone.vx*=-1;
+    if(drone.y<30||drone.y>H*0.6) drone.vy*=-1;
+    bbox.alpha = Math.min(1, bbox.alpha + 0.08);
+    confSmooth = Math.min(0.97, confSmooth + 0.03);
+    bboxSmooth.x += (drone.x - bboxSmooth.x)*0.35;
+    bboxSmooth.y += (drone.y - bboxSmooth.y)*0.35;
+    bbox.x=bboxSmooth.x-40; bbox.y=bboxSmooth.y-32; bbox.w=80; bbox.h=64;
+  }
+
+  /* ── draw drone body ── */
+  var da = 0.7 + Math.sin(frame*0.08)*0.15;
+  ctx.save();
+  ctx.translate(drone.x, drone.y);
+  /* body */
+  ctx.fillStyle='rgba(180,180,200,'+da+')';
+  ctx.beginPath();ctx.ellipse(0,0,drone.w*0.5,drone.h*0.35,0,0,Math.PI*2);ctx.fill();
+  /* arms */
+  ctx.strokeStyle='rgba(160,160,180,'+da+')';ctx.lineWidth=1.5;
+  [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(function(arm){
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(arm[0]*drone.w*0.8,arm[1]*drone.h*0.9);ctx.stroke();
+    /* rotors */
+    ctx.fillStyle='rgba(200,200,220,'+(da*0.8)+')';
+    ctx.beginPath();ctx.ellipse(arm[0]*drone.w*0.8,arm[1]*drone.h*0.9,5,2,frame*0.3,0,Math.PI*2);ctx.fill();
+  });
+  /* nav light blink */
+  if(Math.floor(frame/15)%2===0){
+    ctx.fillStyle='rgba(255,80,80,0.9)';
+    ctx.beginPath();ctx.arc(0,drone.h*0.35,2.5,0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+
+  /* ── bounding box + label ── */
+  if(bbox.alpha > 0.01){
+    var a = bbox.alpha;
+    /* outer glow */
+    ctx.strokeStyle='rgba(231,76,60,'+a*0.3+')';
+    ctx.lineWidth=6;
+    ctx.strokeRect(bbox.x-3,bbox.y-3,bbox.w+6,bbox.h+6);
+    /* main bbox */
+    ctx.strokeStyle='rgba(231,76,60,'+a+')';
+    ctx.lineWidth=1.5;
+    ctx.setLineDash([]);
+    ctx.strokeRect(bbox.x,bbox.y,bbox.w,bbox.h);
+    /* corner accents */
+    var cs=10;
+    ctx.strokeStyle='rgba(200,169,66,'+a+')';ctx.lineWidth=2;
+    [[bbox.x,bbox.y,1,1],[bbox.x+bbox.w,bbox.y,-1,1],[bbox.x,bbox.y+bbox.h,1,-1],[bbox.x+bbox.w,bbox.y+bbox.h,-1,-1]].forEach(function(c){
+      ctx.beginPath();ctx.moveTo(c[0]+c[2]*cs,c[1]);ctx.lineTo(c[0],c[1]);ctx.lineTo(c[0],c[1]+c[3]*cs);ctx.stroke();
+    });
+    /* centroid cross */
+    var cx=bbox.x+bbox.w/2, cy=bbox.y+bbox.h/2;
+    ctx.strokeStyle='rgba(231,76,60,'+a+')';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(cx-6,cy);ctx.lineTo(cx+6,cy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx,cy-6);ctx.lineTo(cx,cy+6);ctx.stroke();
+    /* label */
+    var lblState = canvasState==='locked'?'DRONE · LOCKED':'DRONE · DETECT';
+    var lblConf  = (confSmooth*100).toFixed(0)+'%';
+    ctx.fillStyle='rgba(231,76,60,'+a+')';
+    ctx.fillRect(bbox.x,bbox.y-18,bbox.w,17);
+    ctx.fillStyle='rgba(255,255,255,'+a+')';
+    ctx.font='bold 9px "Roboto Mono",monospace';
+    ctx.textAlign='left';
+    ctx.fillText(lblState+'  '+lblConf, bbox.x+4, bbox.y-5);
+    /* Kalman predicted position (locked state) */
+    if(canvasState==='locked'){
+      var kpx = drone.x + drone.vx*8;
+      var kpy = drone.y + drone.vy*8;
+      ctx.strokeStyle='rgba(200,169,66,'+a*0.5+')';
+      ctx.lineWidth=1;ctx.setLineDash([3,5]);
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(kpx,kpy);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.strokeStyle='rgba(200,169,66,'+a+')';ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(kpx,kpy,4,0,Math.PI*2);ctx.stroke();
+    }
+  }
+
+  /* ── HUD overlays ── */
+  /* top-left: REC indicator */
+  if(Math.floor(frame/30)%2===0){
+    ctx.fillStyle='rgba(231,76,60,0.9)';
+    ctx.beginPath();ctx.arc(18,16,4,0,Math.PI*2);ctx.fill();
+  }
+  /* mode badge */
+  var modeText = canvasState==='locked'?'● LOCKED' : canvasState==='detect'?'● DETECT' : '● PATROL';
+  var modeCol  = canvasState==='locked'?'rgba(231,76,60,.9)':canvasState==='detect'?'rgba(243,156,18,.9)':'rgba(46,204,113,.9)';
+  ctx.fillStyle=modeCol;
+  ctx.font='bold 9px "Roboto Mono",monospace';
+  ctx.textAlign='right';
+  ctx.fillText(modeText, W-10, H-10);
+
+  /* ── update external UI ── */
+  var infEl=document.getElementById('infMs');
+  var confEl=document.getElementById('confDisp');
+  var classEl=document.getElementById('classDisp');
+  var kalEl=document.getElementById('kalmanDisp');
+  if(infEl) infEl.textContent=(28+Math.round(Math.random()*6))+'ms';
+  if(confEl) confEl.textContent = confSmooth>0.01 ? confSmooth.toFixed(2) : '--';
+  if(classEl) classEl.textContent = canvasState==='patrol'||canvasState==='monitor' ? '--' : 'DRONE';
+  if(kalEl) kalEl.textContent = canvasState==='locked' ? 'TRACKING' : canvasState==='detect' ? 'INIT' : 'IDLE';
+
+  requestAnimationFrame(function(){
+    var c2=document.getElementById('simCanvas');
+    if(c2&&document.getElementById('page-sim').classList.contains('active')){
+      drawFrame(c2.getContext('2d'),c2.width,c2.height);
+    }
+  });
+}
+
+/* Start canvas when sim page is shown */
+var origShowPage = showPage;
+showPage = function(id){
+  origShowPage(id);
+  if(id==='sim'){
+    setTimeout(initCanvas, 80);
+  }
+};
+/* Also init if already on sim page */
+if(document.getElementById('page-sim') && document.getElementById('page-sim').classList.contains('active')){
+  initCanvas();
+}
 
 /* ── CONTACT FORM TO TELEGRAM (Modernized & Upgraded) ── */
 async function submitForm(e) {
@@ -3122,207 +2887,124 @@ async function submitForm(e) {
 var isArabic = false;
 
 var TRANSLATIONS = {
-  /* NAV */
-  'ntab-home':     {en:'Overview',      ar:'الرئيسية'},
+  /* ── nav tabs ── */
+  'ntab-home':     {en:'Overview',      ar:'نظرة عامة'},
   'ntab-arch':     {en:'Architecture',  ar:'المعمارية'},
   'ntab-research': {en:'Research',      ar:'الأبحاث'},
   'ntab-team':     {en:'Team',          ar:'الفريق'},
   'ntab-gallery':  {en:'Gallery',       ar:'المعرض'},
   'ntab-sim':      {en:'Live Demo',     ar:'عرض مباشر'},
   'ntab-contact':  {en:'Contact',       ar:'تواصل معنا'},
-  /* UNIVERSITY HEADER */
+  /* ── university header ── */
   'uniFaculty':{en:'Faculty of Engineering', ar:'كلية الهندسة'},
   'uniDept':   {en:'Department of Communications & Electronics Engineering · New Damietta, Egypt',
                 ar:'قسم هندسة الاتصالات والإلكترونيات · دمياط الجديدة، مصر'},
-  /* ── SLIDER SLIDE 1 ── */
-  'sl1-kicker':{en:'Graduation Project 2026 · HUE · ECE Dept.', ar:'مشروع تخرج 2026 · جامعة حورس · قسم الاتصالات'},
-  'sl1-title': {en:'Advanced System<br>for Drone <span class="accent">Detection,</span><br>Tracking &amp; Neutralization',
-                ar:'نظام متقدم<br>للكشف عن <span class="accent">الطائرات المسيّرة،</span><br>تتبعها وتحييدها'},
-  'sl1-sub':   {en:'Bridging the Granularity Gap between conventional radar and autonomous micro-UAVs through edge-native AI, optical tracking, and multi-spectral RF fusion — engineered at Horus University Egypt.',
-                ar:'سد فجوة الدقة بين الرادار التقليدي والطائرات المسيّرة الدقيقة عبر الذكاء الاصطناعي على الحافة والتتبع البصري ودمج RF متعدد الأطياف — مُطوَّر في جامعة حورس مصر.'},
-  'sl1-s1-lbl':{en:'Peer-Reviewed Publication', ar:'منشور محكَّم'},
-  'sl1-s2-lbl':{en:'NRSC 2026 Best Poster',     ar:'أفضل ملصق NRSC 2026'},
-  'sl1-s3-lbl':{en:'+ ISF Dual Funding',         ar:'تمويل مزدوج ASRT + ISF'},
-  'sl1-s4-lbl':{en:'Studies Reviewed',            ar:'دراسة مراجَعة'},
-  'sl1-btn1':  {en:'Explore Architecture', ar:'استكشاف المعمارية'},
-  'sl1-btn2':  {en:'↗ Publications',       ar:'↗ المنشورات'},
-  /* ── SLIDER SLIDE 2 ── */
-  'sl2-kicker':{en:'Academic Achievement · NRSC 2026', ar:'إنجاز أكاديمي · NRSC 2026'},
-  'sl2-t':     {en:'5<sup style="font-size:.45em;vertical-align:super;">th</sup> Place',
-                ar:'المركز الخامس'},
-  'sl2-t2':    {en:'Best Poster Award', ar:'جائزة أفضل ملصق'},
-  'sl2-t3':    {en:'National Radio Science Conference', ar:'المؤتمر الوطني لعلوم الراديو'},
-  'sl2-sub':   {en:'Competing nationally among Egypt\'s leading engineering faculties and research centers. First multi-spectral C-UAS systematic review published from HUE — indexed on EKB Portal (ISSN: 3062-4991).',
-                ar:'المنافسة على المستوى الوطني بين أبرز كليات الهندسة ومراكز البحث في مصر. أول مراجعة منهجية متعددة الأطياف لـ C-UAS تصدر من HUE — مفهرسة في بوابة EKB (ISSN: 3062-4991).'},
-  'sl2-s1':    {en:'mAP@50 Accuracy',  ar:'دقة mAP@50'},
-  'sl2-s2':    {en:'Total Loop Latency',ar:'زمن الحلقة الكلي'},
-  'sl2-s3':    {en:'FPS Real-Time',    ar:'إطار/ثانية لحظي'},
-  'sl2-s4':    {en:'Detection Probability', ar:'احتمالية الكشف'},
-  'sl2-btn1':  {en:'View Publications', ar:'عرض المنشورات'},
-  'sl2-btn2':  {en:'Meet the Team',     ar:'تعرف على الفريق'},
-  /* ── SLIDER SLIDE 3 ── */
-  'sl3-kicker':{en:'System Architecture · 5-Layer Stack', ar:'معمارية النظام · 5 طبقات'},
-  'sl3-t':     {en:'Edge AI on',     ar:'ذكاء اصطناعي على'},
-  'sl3-t2':    {en:'Raspberry Pi 5', ar:'Raspberry Pi 5'},
-  'sl3-t3':    {en:'COTS · $80 Platform', ar:'منصة COTS · 80$'},
-  'sl3-sub':   {en:'YOLOv8n INT8 quantized model — 4× memory reduction, 30 FPS real-time inference. Discrete Kalman Filter, direct ISAPI PTZ actuation, encrypted 4G Telegram telemetry.',
-                ar:'نموذج YOLOv8n INT8 المكمَّم — تخفيض الذاكرة 4×، استدلال لحظي 30 إطار/ثانية. فلتر كالمان، تشغيل PTZ مباشر عبر ISAPI، وتلغرام مشفر عبر 4G.'},
-  'sl3-s1':    {en:'Acquisition',    ar:'الاستحواذ'},
-  'sl3-s2':    {en:'AI Inference',   ar:'استدلال الذكاء الاصطناعي'},
-  'sl3-s3':    {en:'PTZ Actuation',  ar:'تحريك الكاميرا'},
-  'sl3-s4':    {en:'Quantized Model',ar:'نموذج مكمَّم'},
-  'sl3-btn1':  {en:'Full Architecture', ar:'المعمارية الكاملة'},
-  'sl3-btn2':  {en:'▶ Live Demo',       ar:'▶ عرض مباشر'},
-  /* ── SPONSORS ── */
-  'sponsors-heading': {en:'Sponsors & Endorsing Institutions', ar:'الرعاة والمؤسسات الداعمة'},
-  'sp-title-en':      {en:'Sponsors &amp; Endorsing Institutions', ar:'الرعاة والمؤسسات الداعمة'},
-  'sp-label':         {en:'Funded · Endorsed · Accredited', ar:'ممول · مُعتمَد · مُرخَّص'},
-  'sp1-name':{en:'Horus University Egypt', ar:'جامعة حورس مصر'},
-  'sp1-type':{en:'Academic Institution',   ar:'مؤسسة أكاديمية'},
-  'sp1-badge':{en:'Host University',       ar:'الجامعة المضيفة'},
-  'sp2-name':{en:'ASRT Badayty',           ar:'ASRT بدايتي'},
-  'sp2-type':{en:'Research Funding',       ar:'تمويل بحثي'},
-  'sp2-badge':{en:'بدايتي Initiative',     ar:'مبادرة بدايتي'},
-  'sp3-name':{en:'Innovators Support Fund',ar:'صندوق رعاية المبتكرين'},
-  'sp3-type':{en:'Min. Higher Education',  ar:'وزارة التعليم العالي'},
-  'sp3-badge':{en:'رعاية المبتكرين',       ar:'رعاية المبتكرين'},
-  'sp4-name':{en:'NAQAAE',                 ar:'هيئة ضمان جودة التعليم'},
-  'sp4-type':{en:'Quality Assurance',      ar:'ضمان الجودة'},
-  'sp4-badge':{en:'Accreditation',         ar:'الاعتماد'},
-  'sp5-name':{en:'EGAC',                   ar:'مجلس الاعتماد المصري'},
-  'sp5-type':{en:'Engineering Accreditation', ar:'اعتماد هندسي'},
-  'sp5-badge':{en:'Certified',             ar:'معتمد'},
-  'sp6-name':{en:'NRSC 2026',              ar:'NRSC 2026'},
-  'sp6-type':{en:'Radio Science Conference',ar:'مؤتمر علوم الراديو'},
-  'sp6-badge':{en:'🏆 5th Best Poster',    ar:'🏆 المركز الخامس أفضل ملصق'},
-  /* ── HOME PAGE ── */
+  /* ── hero ── */
+  'hero-title':    {en:'Advanced System<br>for Drone <span class="accent">Detection,</span><br>Tracking &amp; Neutralization',
+                    ar:'نظام متقدم<br>للكشف عن الطائرات <span class="accent">المسيّرة</span><br>وتتبعها وتحييدها'},
+  'hero-sub-txt':  {en:'Bridging the Granularity Gap between conventional radar and autonomous micro-UAVs through edge-native AI, optical tracking, and multi-spectral RF fusion — engineered at Horus University Egypt.',
+                    ar:'سد فجوة الدقة بين الرادار التقليدي والطائرات المسيّرة الدقيقة من خلال الذكاء الاصطناعي على الحافة، والتتبع البصري، ودمج RF متعدد الأطياف — مُطوَّر في جامعة حورس مصر.'},
+  /* ── problem section ── */
   'problem-heading':{en:'The Granularity Gap', ar:'فجوة الدقة'},
+  /* ── conops ── */
   'conops-heading': {en:'System Workflow',     ar:'مسار عمل النظام'},
+  /* ── achievements ── */
   'ach-heading':    {en:'Key Achievements',    ar:'الإنجازات الرئيسية'},
-  /* ── ARCH PAGE ── */
-  'arch-heading':   {en:'Architecture &amp; Data Flow', ar:'المعمارية وتدفق البيانات'},
-  /* ── RESEARCH PAGE ── */
+  /* ── arch page ── */
+  'arch-heading':   {en:'Architecture &amp; Data Flow',ar:'المعمارية وتدفق البيانات'},
+  /* ── research page ── */
   'research-heading':{en:'Research &amp; Publications', ar:'الأبحاث والمنشورات'},
-  'research-lead':   {en:'Peer-reviewed publication, competitive awards, and externally funded innovation — the academic footprint of this work extends well beyond the graduation project itself.',
-                      ar:'نشر علمي محكَّم، وجوائز تنافسية، وابتكار ممول خارجياً — البصمة الأكاديمية لهذا العمل تتخطى حدود مشروع التخرج.'},
-  /* ── TEAM PAGE ── */
-  'sup-heading':  {en:'Supervisory Committee',       ar:'لجنة الإشراف'},
-  'team-heading': {en:'Team Horus — Class of 2026',  ar:'فريق حورس — دفعة 2026'},
-  /* ── GALLERY PAGE ── */
+  'research-lead':  {en:'Peer-reviewed publication, competitive awards, and externally funded innovation — the academic footprint of this work extends well beyond the graduation project itself.',
+                     ar:'نشر علمي محكَّم، وجوائز تنافسية، وابتكار ممول خارجياً — البصمة الأكاديمية لهذا العمل تتخطى حدود مشروع التخرج.'},
+  /* ── team page ── */
+  'sup-heading':    {en:'Supervisory Committee',ar:'لجنة الإشراف'},
+  'team-heading':   {en:'Team Horus — Class of 2026', ar:'فريق حورس — دفعة 2026'},
+  /* ── sim page ── */
+  'sim-heading':    {en:'Live System Simulation', ar:'محاكاة النظام المباشرة'},
+  'sim-lead':       {en:'Visualisation of the C-UAS pipeline architecture. Toggle AUTO / MANUAL mode, simulate detection events, and observe the data flow — mirroring the actual system behaviour described in the published research.',
+                     ar:'تصوير لمعمارية خط أنابيب نظام C-UAS. بدّل بين وضع AUTO / MANUAL، وقم بمحاكاة أحداث الكشف، وراقب تدفق البيانات.'},
+  /* ── contact page ── */
+  'form-heading':   {en:'Send an Enquiry',     ar:'أرسل استفساراً'},
+  'contact-lead':   {en:'Faculty of Engineering — Horus University Egypt, New Damietta. For academic enquiries, collaboration proposals, and research correspondence.',
+                     ar:'كلية الهندسة — جامعة حورس مصر، دمياط الجديدة. للاستفسارات الأكاديمية، ومقترحات التعاون، والمراسلات البحثية.'},
+  /* ── gallery page ── */
   'gallery-heading':{en:'Project Media Gallery', ar:'معرض وسائط المشروع'},
-  /* ── SIM PAGE ── */
-  'sim-heading':  {en:'Live System Simulation', ar:'محاكاة النظام'},
-  'sim-lead':     {en:'Visualisation of the C-UAS pipeline architecture. Toggle AUTO / MANUAL mode, simulate detection events, and observe the data flow — mirroring the actual system behaviour described in the published research.',
-                   ar:'تصوير معماري لنظام C-UAS. بدّل بين وضعَي AUTO / MANUAL وشاهد تدفق البيانات — يعكس سلوك النظام الحقيقي الموصوف في البحث المنشور.'},
-  'sim-h-pipeline':{en:'📡 Detection Pipeline — Architecture Overview', ar:'📡 خط أنابيب الكشف — نظرة معمارية'},
-  'sim-pipe-title':{en:'▸ 5-LAYER CYBER-PHYSICAL PIPELINE', ar:'▸ خط أنابيب سيبراني-فيزيائي 5 طبقات'},
-  'hw-panel-title':{en:'// HARDWARE CONFIGURATION', ar:'// تكوين العتاد'},
-  'hw-compute-lbl':{en:'COMPUTE',     ar:'المعالج'},
-  'hw-model-lbl':  {en:'AI MODEL',    ar:'نموذج الذكاء'},
-  'hw-camera-lbl': {en:'CAMERA',      ar:'الكاميرا'},
-  'hw-rf-lbl':     {en:'RF SENSOR',   ar:'مستشعر RF'},
-  'hw-conn-lbl':   {en:'CONNECTIVITY',ar:'الاتصال'},
-  'hw-cost-lbl':   {en:'PLATFORM COST',ar:'تكلفة المنصة'},
-  'psr-total-lbl': {en:'TOTAL LOOP LATENCY (optical→alert)', ar:'إجمالي زمن الحلقة (بصري→تنبيه)'},
-  'pipeline-flow-lbl':{en:'// PIPELINE DATA FLOW', ar:'// تدفق بيانات الأنابيب'},
-  'psr0-lbl':  {en:'Acquisition',     ar:'الاستحواذ'},
-  'psr1-lbl':  {en:'AI Inference',    ar:'استدلال الذكاء'},
-  'psr2-lbl':  {en:'State Estimation',ar:'تقدير الحالة'},
-  'psr3-lbl':  {en:'PTZ Actuation',   ar:'تحريك الكاميرا'},
-  'psr4-lbl':  {en:'Telemetry',       ar:'القياس عن بُعد'},
-  'psr0-time': {en:'42 ms',  ar:'42 مللي'},
-  'psr1-time': {en:'31 ms',  ar:'31 مللي'},
-  'psr2-time': {en:'<1 ms',  ar:'< 1 مللي'},
-  'psr3-time': {en:'66 ms',  ar:'66 مللي'},
-  'psr4-time': {en:'1.2 s',  ar:'1.2 ث'},
-  /* ── CONTACT PAGE ── */
-  'form-heading':  {en:'Send an Enquiry',     ar:'أرسل استفساراً'},
-  'contact-lead':  {en:'Faculty of Engineering — Horus University Egypt, New Damietta. For academic enquiries, collaboration proposals, and research correspondence.',
-                    ar:'كلية الهندسة — جامعة حورس مصر، دمياط الجديدة. للاستفسارات الأكاديمية ومقترحات التعاون والمراسلات البحثية.'},
-  'prob-lead1': {en:'Conventional air-defense was engineered for supersonic missiles with RCS > 5m². Today\'s micro-drones operate at σ < 0.01m² — collapsing radar detection probability from ~80% down to barely 12% and vanishing into Doppler notch filters when hovering.',
-                ar:'صُمِّمت منظومات الدفاع الجوي التقليدية للصواريخ الأسرع من الصوت ذات RCS > 5م². أما الطائرات المسيّرة الدقيقة اليوم فتعمل عند σ < 0.01م² مما يُسقط احتمالية كشف الرادار من ~80% إلى 12% فحسب.'},
-  'prob-lead2': {en:'This project bridges that gap through optical-primary detection with 25× zoom and a YOLOv8n INT8 edge AI pipeline running on commercial off-the-shelf hardware at a fraction of the cost of conventional C-UAS solutions.',
-                ar:'يسد هذا المشروع تلك الفجوة عبر كشف بصري أولي بتكبير 25× وخط أنابيب YOLOv8n INT8 على عتاد تجاري جاهز بتكلفة جزئية مقارنةً بحلول C-UAS التقليدية.'},
+  /* ── footer ── */
+  'foot-brand-name-txt':{en:'Advanced C-UAS System', ar:'نظام C-UAS المتقدم'},
 };
 
 function toggleLang(){
   isArabic = !isArabic;
   var rootEl = document.getElementById('htmlRoot');
-  rootEl.setAttribute('lang', isArabic ? 'ar' : 'en');
-  rootEl.setAttribute('dir',  isArabic ? 'rtl' : 'ltr');
+  rootEl.setAttribute('lang',  isArabic ? 'ar' : 'en');
+  rootEl.setAttribute('dir',   isArabic ? 'rtl' : 'ltr');
   document.getElementById('langLabel').textContent = isArabic ? 'English' : 'العربية';
 
-  /* Apply all translations */
   Object.keys(TRANSLATIONS).forEach(function(id){
     var el = document.getElementById(id);
     if(!el) return;
     var val = isArabic ? TRANSLATIONS[id].ar : TRANSLATIONS[id].en;
     if(typeof val !== 'string') return;
-    if(val.indexOf('<') !== -1) el.innerHTML = val;
+    if(val.indexOf('<')!==-1) el.innerHTML = val;
     else el.textContent = val;
   });
 
-  /* nav-cta */
+  /* translate nav-cta */
   var cta = document.querySelector('.nav-cta');
   if(cta) cta.textContent = isArabic ? 'المنشورات ↗' : 'Publications ↗';
 
-  /* sponsors section heading (nested span) */
-  var spH = document.getElementById('sponsors-heading');
-  if(spH) spH.innerHTML = isArabic ? 'الرعاة والمؤسسات الداعمة' : 'Sponsors &amp; Endorsing Institutions';
-
-  /* filter buttons */
+  /* translate filter buttons */
   var filterMap = {
-    'all':   isArabic ? 'الكل'        : 'All',
-    'hw':    isArabic ? 'الأجهزة'     : 'Hardware',
-    'field': isArabic ? 'التجارب'     : 'Field Trials',
-    'sw':    isArabic ? 'البرمجيات'   : 'Software / AI',
-    'conf':  isArabic ? 'المؤتمرات'   : 'Conference',
-    'vid':   isArabic ? 'الفيديو'     : 'Video'
+    'all':   isArabic ? 'الكل'       : 'All',
+    'hw':    isArabic ? 'الأجهزة'    : 'Hardware',
+    'field': isArabic ? 'التجارب'    : 'Field Trials',
+    'sw':    isArabic ? 'البرمجيات'  : 'Software / AI',
+    'conf':  isArabic ? 'المؤتمرات'  : 'Conference',
+    'vid':   isArabic ? 'الفيديو'    : 'Video'
   };
   document.querySelectorAll('.fbtn').forEach(function(b){
-    var fn = b.getAttribute('onclick') || '';
+    var fn = b.getAttribute('onclick')||'';
     var m = fn.match(/filterGal\('([^']+)'/);
     if(m && filterMap[m[1]]) b.textContent = filterMap[m[1]];
   });
 
-  /* form labels */
+  /* translate form labels */
   var formLabels = [
-    ['cf-name',    isArabic ? 'الاسم الكامل *'       : 'Full Name *'],
-    ['cf-org',     isArabic ? 'المؤسسة'               : 'Institution'],
-    ['cf-email',   isArabic ? 'البريد الإلكتروني *'   : 'Email Address *'],
-    ['cf-subject', isArabic ? 'الموضوع *'              : 'Subject *'],
-    ['cf-msg',     isArabic ? 'الرسالة *'              : 'Message *']
+    ['cf-name',    isArabic?'الاسم الكامل *'      :'Full Name *'],
+    ['cf-org',     isArabic?'المؤسسة'              :'Institution'],
+    ['cf-email',   isArabic?'البريد الإلكتروني *'  :'Email Address *'],
+    ['cf-subject', isArabic?'الموضوع *'             :'Subject *'],
+    ['cf-msg',     isArabic?'الرسالة *'             :'Message *']
   ];
   formLabels.forEach(function(pair){
-    var lbl = document.querySelector('label[for="' + pair[0] + '"]');
+    var lbl = document.querySelector('label[for="'+pair[0]+'"]');
     if(lbl) lbl.textContent = pair[1];
   });
 
+  /* translate form submit button */
   var subBtn = document.querySelector('.form-submit');
   if(subBtn) subBtn.textContent = isArabic ? 'إرسال الرسالة' : 'Send Message';
 
+  /* translate map button */
   var mapBtn = document.querySelector('.map-btn');
   if(mapBtn) mapBtn.textContent = isArabic ? 'فتح في خرائط جوجل ↗' : 'Open in Google Maps ↗';
 
-  /* layout RTL fixes */
+  /* translate hero buttons */
+  var heroBtns = document.querySelectorAll('.hero-btns .btn-gold, .hero-btns .btn-outline');
+  if(heroBtns[0]) heroBtns[0].textContent = isArabic ? 'استكشاف المعمارية' : 'Explore Architecture';
+  if(heroBtns[1]) heroBtns[1].textContent = isArabic ? '▶ عرض مباشر' : '▶ Live Demo';
+
+  /* RTL-aware layout fixes */
   if(isArabic){
-    document.querySelectorAll('.sec-lead,.sec-h,.card p,.ach-card p,.fund-card p,.mem-name,.mem-role,.sup-name,.sup-rank,.sup-dept').forEach(function(el){ el.style.textAlign='right'; });
-    document.querySelectorAll('.eyebrow').forEach(function(el){ el.style.justifyContent='flex-end'; });
-    /* Keep info-bar always LTR */
-    var ib = document.querySelector('.info-bar');
-    if(ib){ ib.setAttribute('dir','ltr'); ib.style.direction='ltr'; }
-    /* Slider arrows flip in RTL */
-    var prev = document.getElementById('slPrev');
-    var next = document.getElementById('slNext');
-    if(prev) prev.innerHTML = '&#8594;';
-    if(next) next.innerHTML = '&#8592;';
+    document.querySelectorAll('.sec-lead,.sec-h,.eyebrow,.card p,.ach-card p,.fund-card p,.mem-name,.mem-role,.sup-name,.sup-rank,.sup-dept').forEach(function(el){
+      el.style.textAlign = 'right';
+    });
+    document.querySelectorAll('.eyebrow').forEach(function(el){el.style.justifyContent='flex-end';});
   } else {
-    document.querySelectorAll('.sec-lead,.sec-h,.card p,.ach-card p,.fund-card p,.mem-name,.mem-role,.sup-name,.sup-rank,.sup-dept').forEach(function(el){ el.style.textAlign=''; });
-    document.querySelectorAll('.eyebrow').forEach(function(el){ el.style.justifyContent=''; });
-    var prev = document.getElementById('slPrev');
-    var next = document.getElementById('slNext');
-    if(prev) prev.innerHTML = '&#8592;';
-    if(next) next.innerHTML = '&#8594;';
+    document.querySelectorAll('.sec-lead,.sec-h,.eyebrow,.card p,.ach-card p,.fund-card p,.mem-name,.mem-role,.sup-name,.sup-rank,.sup-dept').forEach(function(el){
+      el.style.textAlign = '';
+    });
+    document.querySelectorAll('.eyebrow').forEach(function(el){el.style.justifyContent='';});
   }
 }
 
@@ -3333,105 +3015,6 @@ document.addEventListener('keydown',function(e){
     if(ov) ov.style.opacity=(ov.style.opacity==='1')?'0':'1';
   }
 });
-
-/* ══════════════════════════════════════════
-   HERO SLIDER ENGINE
-══════════════════════════════════════════ */
-var sliderCurrent = 0;
-var sliderTotal = 3;
-var sliderTimer = null;
-var sliderInterval = 6000; // 6s per slide
-var sliderProgressStart = null;
-var sliderProgressRaf = null;
-
-function sliderGo(idx){
-  // deactivate old
-  var oldSlide = document.getElementById('slide-' + sliderCurrent);
-  var oldDot   = document.getElementById('sdot-' + sliderCurrent);
-  if(oldSlide){ oldSlide.classList.remove('active'); }
-  if(oldDot){   oldDot.classList.remove('active'); oldDot.setAttribute('aria-selected','false'); }
-
-  sliderCurrent = ((idx % sliderTotal) + sliderTotal) % sliderTotal;
-
-  // activate new
-  var newSlide = document.getElementById('slide-' + sliderCurrent);
-  var newDot   = document.getElementById('sdot-' + sliderCurrent);
-  var track    = document.getElementById('sliderTrack');
-  if(track) track.style.transform = 'translateX(-' + (sliderCurrent * 100) + '%)';
-  if(newSlide){ newSlide.classList.add('active'); }
-  if(newDot){   newDot.classList.add('active'); newDot.setAttribute('aria-selected','true'); }
-
-  // reset auto timer
-  clearTimeout(sliderTimer);
-  sliderTimer = setTimeout(function(){ sliderGo(sliderCurrent + 1); }, sliderInterval);
-
-  // progress bar animation
-  resetProgress();
-}
-
-function sliderMove(dir){
-  // Flip direction in RTL
-  var rootEl = document.getElementById('htmlRoot');
-  var isRtl = rootEl && rootEl.getAttribute('dir') === 'rtl';
-  sliderGo(sliderCurrent + (isRtl ? -dir : dir));
-}
-
-function resetProgress(){
-  var bar = document.getElementById('sliderProgress');
-  if(!bar) return;
-  if(sliderProgressRaf) cancelAnimationFrame(sliderProgressRaf);
-  bar.style.transition = 'none';
-  bar.style.width = '0%';
-  sliderProgressStart = null;
-  sliderProgressRaf = requestAnimationFrame(function(ts){
-    sliderProgressStart = ts;
-    animateProgress(ts);
-  });
-}
-
-function animateProgress(ts){
-  var bar = document.getElementById('sliderProgress');
-  if(!bar) return;
-  var elapsed = ts - (sliderProgressStart || ts);
-  var pct = Math.min(100, (elapsed / sliderInterval) * 100);
-  bar.style.width = pct + '%';
-  if(pct < 100){
-    sliderProgressRaf = requestAnimationFrame(animateProgress);
-  }
-}
-
-// Pause on hover
-var hs = document.getElementById('heroSlider');
-if(hs){
-  hs.addEventListener('mouseenter', function(){
-    clearTimeout(sliderTimer);
-    if(sliderProgressRaf) cancelAnimationFrame(sliderProgressRaf);
-  });
-  hs.addEventListener('mouseleave', function(){
-    sliderTimer = setTimeout(function(){ sliderGo(sliderCurrent + 1); }, sliderInterval);
-    resetProgress();
-  });
-  // Touch/swipe support
-  var touchStartX = 0;
-  hs.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; }, {passive:true});
-  hs.addEventListener('touchend', function(e){
-    var dx = e.changedTouches[0].clientX - touchStartX;
-    if(Math.abs(dx) > 50) sliderMove(dx < 0 ? 1 : -1);
-  }, {passive:true});
-}
-
-// Keyboard arrow navigation on slider
-document.addEventListener('keydown', function(e){
-  var page = document.getElementById('page-home');
-  if(!page || !page.classList.contains('active')) return;
-  if(e.key === 'ArrowLeft')  sliderMove(-1);
-  if(e.key === 'ArrowRight') sliderMove(1);
-});
-
-// Start auto-advance
-sliderTimer = setTimeout(function(){ sliderGo(1); }, sliderInterval);
-resetProgress();
-
 </script>
 </body>
 </html>
