@@ -1227,8 +1227,8 @@ footer{
 /* RTL mobile fixes */
 [dir="rtl"] .nav-inner{gap:.5rem;}
 [dir="rtl"] .info-bar-left{gap:1rem;}
-[dir="rtl"] @media(max-width:768px){
-  .nav-tabs.open{text-align:right;}
+@media(max-width:768px){
+  [dir="rtl"] .nav-tabs.open{text-align:right;}
 }
 
 /* Prevent overflow on all screen sizes */
@@ -3237,7 +3237,7 @@ var TRANSLATIONS = {
   /* ── CONTACT PAGE ── */
   'form-heading':  {en:'Send an Enquiry',     ar:'أرسل استفساراً'},
   'contact-lead':  {en:'Faculty of Engineering — Horus University Egypt, New Damietta. For academic enquiries, collaboration proposals, and research correspondence.',
-                    ar:'كلية الهندسة — جامعة حورس مصر، دمياط الجديدة. للاستفسارات الأكاديمية ومقترحات التعاون والمراسلات البحثية.'},,
+                    ar:'كلية الهندسة — جامعة حورس مصر، دمياط الجديدة. للاستفسارات الأكاديمية ومقترحات التعاون والمراسلات البحثية.'},
   'prob-lead1': {en:'Conventional air-defense was engineered for supersonic missiles with RCS > 5m². Today\'s micro-drones operate at σ < 0.01m² — collapsing radar detection probability from ~80% down to barely 12% and vanishing into Doppler notch filters when hovering.',
                 ar:'صُمِّمت منظومات الدفاع الجوي التقليدية للصواريخ الأسرع من الصوت ذات RCS > 5م². أما الطائرات المسيّرة الدقيقة اليوم فتعمل عند σ < 0.01م² مما يُسقط احتمالية كشف الرادار من ~80% إلى 12% فحسب.'},
   'prob-lead2': {en:'This project bridges that gap through optical-primary detection with 25× zoom and a YOLOv8n INT8 edge AI pipeline running on commercial off-the-shelf hardware at a fraction of the cost of conventional C-UAS solutions.',
