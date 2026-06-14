@@ -139,12 +139,12 @@ img{display:block;max-width:100%;}
 .lang-btn .ar-lbl { font-family: var(--font-arabic); font-size: .7rem; }
 
 /* ══════════════════════════════════════════
-   TOP INFO BAR
+   BOTTOM INFO BAR (moved from top)
 ══════════════════════════════════════════ */
 .info-bar{
   background:var(--hue-navy-deep);
-  border-bottom:1px solid rgba(200,169,66,.18);
-  padding:.38rem 4%;
+  border-top:1px solid rgba(200,169,66,.15);
+  padding:.45rem 4%;
   display:flex;align-items:center;justify-content:space-between;
   font-size:.68rem;font-family:var(--font-body);
   color:rgba(255,255,255,.5);
@@ -177,9 +177,7 @@ img{display:block;max-width:100%;}
 .uni-logos{display:flex;align-items:center;gap:2.5rem;}
 .logo-box{
   height:58px;display:flex;align-items:center;justify-content:center;
-  border:1.5px dashed rgba(200,169,66,.35);border-radius:3px;
   padding:.3rem .8rem;min-width:80px;
-  background:rgba(200,169,66,.04);
 }
 .logo-box img{height:100%;width:auto;object-fit:contain;}
 .logo-divider{width:1px;height:44px;background:var(--light-line);}
@@ -1107,9 +1105,9 @@ nav{
   font-family:var(--font-mono);font-size:.7rem;color:var(--hue-gold);
   box-shadow:var(--sh-gold);
   transform:translateY(120%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);
-  display:flex;align-items:center;gap:.55rem;
+  display:flex;align-items:center;gap:.55rem;pointer-events:none;
 }
-#form-toast.show{transform:translateY(0);}
+#form-toast.show{transform:translateY(0);pointer-events:auto;}
 .acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
 .acc-item{
   background:var(--cream);border:1px solid var(--light-line);
@@ -1185,7 +1183,7 @@ footer{
   }
   .nav-tab{height:auto;padding:.85rem .5rem;font-size:.85rem;width:100%;border-bottom:1px solid rgba(200,169,66,.1) !important;border-left:none;}
   .nav-close{display:flex;position:fixed;top:1rem;right:1.5rem;z-index:2001;font-size:1.5rem;color:var(--white);cursor:pointer;}
-  .info-bar,.uni-accred{display:none;}
+  .uni-accred{display:none;}
   .uni-logos{gap:1rem;}
   .arch-hw{grid-template-columns:1fr;}
   .sup-grid,.mem-grid,.ach-grid,.fund-grid,.dl-grid,.gal-grid,.form-row{grid-template-columns:1fr;}
@@ -1195,6 +1193,9 @@ footer{
   .foot-bottom{flex-direction:column;}
   .foot-copy{text-align:left;}
   .pipe-nodes{flex-direction:column;align-items:stretch;}
+  .info-bar{flex-direction:column;gap:.4rem;text-align:center;}
+  .info-bar-left{justify-content:center;gap:.8rem;}
+  .info-bar-right{justify-content:center;}
 
 /* Pipeline step indicators - outside media query */
 .pipe-step{
@@ -1333,28 +1334,6 @@ canvas{max-width:100%;}
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- ══════════════════════════
-     TOP INFO BAR
-══════════════════════════ -->
-<div class="info-bar" role="banner">
-  <div class="info-bar-left">
-    <div class="info-item">📍 <span>New Damietta, Egypt</span></div>
-    <div class="info-item">📞 <a href="tel:+201559933466">+201559933466</a></div>
-    <div class="info-item">✉️ <a href="mailto:eesllm@icloud.com">eesllm@icloud.com</a></div>
-  </div>
-  <div class="info-bar-right">
-    <a href="https://www.facebook.com/hue.eg/" target="_blank" rel="noopener" class="social-ico" aria-label="Facebook page of Horus University Egypt">f</a>
-    <a href="https://twitter.com/HUE_eg" target="_blank" rel="noopener" class="social-ico" aria-label="Twitter / X account of HUE">𝕏</a>
-    <a href="https://github.com/islam-8" target="_blank" rel="noopener" class="social-ico" aria-label="GitHub — Islam Emad">⌥</a>
-    <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener" class="social-ico" aria-label="Faculty of Engineering website">🌐</a>
-    <span style="width:1px;height:16px;background:rgba(255,255,255,.1);"></span>
-    <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:.58rem;color:rgba(200,169,66,.7);letter-spacing:.12em;">eng.horus.edu.eg</a>
-    <button class="lang-btn" id="langToggle" onclick="toggleLang()" aria-label="Switch language / تبديل اللغة">
-      <span class="ar-lbl" id="langLabel">العربية</span>
-    </button>
-  </div>
-</div>
-
-<!-- ══════════════════════════
      UNIVERSITY HEADER
 ══════════════════════════ -->
 <div class="uni-header">
@@ -1362,13 +1341,16 @@ canvas{max-width:100%;}
     <div class="logo-box" aria-label="Horus University Egypt logo">
       <img src="assets/logos/hue.jpeg" alt="HUE Logo">
     </div>
-
   </div>
   <div class="uni-center">
     <div class="uni-faculty" id="uniFaculty">Faculty of Engineering</div>
-    <div class="uni-dept" id="uniDept">Department of Communications &amp; Electronics Engineering · New Damietta, Egypt</div>
+    <div class="uni-dept" id="uniDept">Department of Communications &amp; Electronics Engineering</div>
   </div>
-
+  <div class="uni-logos">
+    <div class="logo-box" aria-label="Faculty of Engineering logo">
+      <img src="assets/logos/eng.png" alt="Faculty of Engineering Logo" onerror="this.style.display='none';this.parentElement.style.display='none'">
+    </div>
+  </div>
 </div>
 
 <!-- ══════════════════════════
@@ -1390,6 +1372,9 @@ canvas{max-width:100%;}
       <button class="nav-tab"       id="ntab-contact"  onclick="showPage('contact')"  role="menuitem">Contact</button>
     </div>
     <div class="nav-right-cluster">
+      <button class="lang-btn" id="langToggle" onclick="toggleLang()" aria-label="Switch language / تبديل اللغة">
+        <span class="ar-lbl" id="langLabel">العربية</span>
+      </button>
       <button class="nav-cta" onclick="showPage('research')">Publications ↗</button>
       <button class="nav-mob" id="mobBtn" onclick="openMob()" aria-label="Open navigation menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -2753,6 +2738,24 @@ canvas{max-width:100%;}
   </div>
 </footer>
 
+<!-- ══════════════════════════
+     BOTTOM INFO BAR
+══════════════════════════ -->
+<div class="info-bar" role="contentinfo" aria-label="Contact information">
+  <div class="info-bar-left">
+    <div class="info-item">📍 <span>New Damietta, Egypt</span></div>
+    <div class="info-item">📞 <a href="tel:+201559933466">+201559933466</a></div>
+    <div class="info-item">✉️ <a href="mailto:eesllm@icloud.com">eesllm@icloud.com</a></div>
+    <div class="info-item">🌐 <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener">eng.horus.edu.eg</a></div>
+  </div>
+  <div class="info-bar-right">
+    <a href="https://www.facebook.com/hue.eg/" target="_blank" rel="noopener" class="social-ico" aria-label="Facebook page of Horus University Egypt">f</a>
+    <a href="https://twitter.com/HUE_eg" target="_blank" rel="noopener" class="social-ico" aria-label="Twitter / X account of HUE">𝕏</a>
+    <a href="https://github.com/islam-8" target="_blank" rel="noopener" class="social-ico" aria-label="GitHub — Islam Emad">⌥</a>
+    <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener" class="social-ico" aria-label="Faculty website">🌐</a>
+  </div>
+</div>
+
 <!-- Toast notification -->
 <div id="form-toast" role="status" aria-live="polite">✅ Message sent. We will respond within 3–5 working days.</div>
 
@@ -3229,8 +3232,8 @@ var TRANSLATIONS = {
   'ntab-contact':  {en:'Contact',       ar:'تواصل معنا'},
   /* ── university header ── */
   'uniFaculty':{en:'Faculty of Engineering', ar:'كلية الهندسة'},
-  'uniDept':   {en:'Department of Communications & Electronics Engineering · New Damietta, Egypt',
-                ar:'قسم هندسة الاتصالات والإلكترونيات · دمياط الجديدة، مصر'},
+  'uniDept':   {en:'Department of Communications & Electronics Engineering',
+                ar:'قسم هندسة الاتصالات والإلكترونيات'},
   /* ── hero ── */
   'hero-title':    {en:'Advanced System<br>for Drone <span class="accent">Detection,</span><br>Tracking &amp; Neutralization',
                     ar:'نظام متقدم<br>للكشف عن الطائرات <span class="accent">المسيّرة</span><br>وتتبعها وتحييدها'},
