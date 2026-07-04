@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Advanced C-UAS System — Drone Detection, Tracking & Neutralization | Horus University Egypt 2026</title>
+<meta name="description" content="Graduation project 2026 — Advanced System for Drone Detection, Tracking and Neutralization. Edge AI YOLOv8n, 88.8% mAP@50, 139ms latency. NRSC 2026 Best Poster. Horus University Egypt.">
+<meta name="keywords" content="C-UAS, drone detection, anti-drone, YOLOv8, Raspberry Pi 5, edge AI, Horus University Egypt, NRSC 2026">
+<meta name="author" content="Islam Emad Ismail · Team Horus 2026">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://islam-8.github.io/cuas/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="HUE C-UAS System — Drone Detection & Neutralization 2026">
+<meta property="og:description" content="NRSC 2026 Best Poster · 88.8% mAP@50 · 139ms latency · ASRT & ISF funded.">
+<meta property="og:image" content="https://islam-8.github.io/portfolio/assets/me.jpg">
+<meta property="og:url" content="https://islam-8.github.io/cuas/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@HUE_eg">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500&family=Noto+Kufi+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<!-- AOS CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+<!-- GLightbox CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+
+<!-- Main CSS -->
+<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<!-- Reading progress -->
+<div id="progress-bar" aria-hidden="true"></div>
+
+<!-- Skip link -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ══════════════════════════════════════
+     UNIVERSITY HEADER
+══════════════════════════════════════ -->
+<div class="uni-header">
+  <div class="uni-logos">
+    <div class="logo-box" aria-label="Horus University Egypt">
+      <img src="assets/logos/hue.jpeg" alt="HUE Logo" loading="eager">
+    </div>
+  </div>
+  <div class="uni-center">
+    <div class="uni-name">Horus University Egypt</div>
+    <div class="uni-faculty" id="uniFaculty">Faculty of Engineering</div>
+    <div class="uni-dept" id="uniDept">Department of Communications &amp; Electronics Engineering</div>
+  </div>
+  <div class="uni-logos">
+    <div class="logo-box" aria-label="Faculty of Engineering">
+      <img src="assets/logos/eng.jpeg" alt="Faculty of Engineering Logo" loading="eager" onerror="this.parentElement.style.display='none'">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════ -->
+<nav role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <button class="nav-logo" onclick="showPage('home')" aria-label="Go to homepage">
+      <img src="assets/logos/white_eye.png" alt="HUE C-UAS" class="nav-eye-img" aria-hidden="true">
+      <div class="nav-logo-txt">
+        <div class="l1">HUE C-UAS</div>
+        <div class="l2">Horus University · 2026</div>
+      </div>
+    </button>
+
+    <div class="nav-tabs" id="navTabs" role="menubar">
+      <button class="nav-close" id="navClose" onclick="closeMob()" style="display:none" aria-label="Close menu">✕</button>
+      <button class="nav-tab active" id="ntab-home"     onclick="showPage('home')"     role="menuitem">Overview</button>
+      <button class="nav-tab"        id="ntab-arch"     onclick="showPage('arch')"     role="menuitem">Architecture</button>
+      <button class="nav-tab"        id="ntab-research" onclick="showPage('research')" role="menuitem">Research</button>
+      <button class="nav-tab"        id="ntab-team"     onclick="showPage('team')"     role="menuitem">Team</button>
+      <button class="nav-tab"        id="ntab-gallery"  onclick="showPage('gallery')"  role="menuitem">Gallery</button>
+      <button class="nav-tab"        id="ntab-sim"      onclick="showPage('sim')"      role="menuitem">Live Demo</button>
+      <button class="nav-tab"        id="ntab-contact"  onclick="showPage('contact')"  role="menuitem">Contact</button>
+    </div>
+
+    <div class="nav-right-cluster">
+      <button class="lang-btn" onclick="toggleLang()" aria-label="Toggle language">
+        <span id="langLabel" class="ar-lbl">العربية</span>
+      </button>
+      <button class="nav-cta" onclick="showPage('research')">Publications ↗</button>
+      <button class="nav-mob" id="mobBtn" onclick="openMob()" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main id="main-content">
+
+<!-- ════════════════════════════════════════════════════════════
+     PAGE: HOME
+════════════════════════════════════════════════════════════ -->
+<div id="page-home" class="page active" role="main">
+
+  <!-- HERO with Swiper -->
+  <section class="hero" aria-labelledby="hero-title">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+
+    <div class="swiper hero-swiper">
+      <div class="swiper-wrapper">
+
+        <!-- SLIDE 1 — Main title -->
+        <div class="swiper-slide">
+          <div class="slide-content centered">
+            <div class="hero-kicker" style="justify-content:center">
+              <span class="dot" aria-hidden="true"></span>
+              Graduation Project 2026 · HUE · ECE Dept.
+            </div>
+            <h1 class="hero-title" id="hero-title">
+              Advanced System for Drone<br>
+              <span class="accent">Detection, Tracking &amp; Neutralization</span>
+            </h1>
+            <p class="hero-sub" style="margin:0 auto 2rem">
+              Bridging the Granularity Gap between conventional radar and autonomous micro-UAVs through edge-native AI, optical tracking, and multi-spectral RF fusion — engineered at Horus University Egypt.
+            </p>
+            <div class="hero-stats">
+              <div class="hstat">
+                <span class="hstat-val" data-counter data-target="88.8" data-suffix="%" data-dec="1">88.8%</span>
+                <span class="hstat-lbl">mAP@50</span>
+              </div>
+              <div class="hstat">
+                <span class="hstat-val" data-counter data-target="139" data-suffix="ms">139ms</span>
+                <span class="hstat-lbl">Loop Latency</span>
+              </div>
+              <div class="hstat">
+                <span class="hstat-val" data-counter data-target="50">50</span>
+                <span class="hstat-lbl">Studies Reviewed</span>
+              </div>
+              <div class="hstat">
+                <span class="hstat-val" style="font-size:1.3rem">5<sup style="font-size:.48em;vertical-align:super">th</sup></span>
+                <span class="hstat-lbl">NRSC 2026</span>
+              </div>
+            </div>
+            <div class="hero-btns" style="justify-content:center">
+              <button class="btn-gold" onclick="showPage('arch')">Explore Architecture</button>
+              <button class="btn-outline light" onclick="showPage('sim')">▶ Live Demo</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2 — NRSC Award -->
+        <div class="swiper-slide">
+          <div class="slide-content centered">
+            <div class="hero-kicker" style="justify-content:center">
+              <span class="dot" aria-hidden="true"></span>
+              🏆 Academic Achievement · NRSC 2026
+            </div>
+            <h2 class="hero-title">
+              <span style="font-size:.75em">5<sup style="font-size:.45em;vertical-align:super">th</sup> Place</span><br>
+              <span class="accent">Best Poster Award</span>
+            </h2>
+            <p class="hero-sub" style="margin:0 auto 2rem">
+              National Radio Science Conference 2026 — competing nationally against Egypt's leading engineering faculties and research centres.
+            </p>
+            <div class="hero-btns" style="justify-content:center">
+              <button class="btn-gold" onclick="showPage('research')">View Publications</button>
+              <button class="btn-outline light" onclick="openPdf('Manuscript.pdf','Bridging the Granularity Gap — HUJE 2026')">📄 Read Paper</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3 — Published Paper -->
+        <div class="swiper-slide">
+          <div class="slide-content centered">
+            <div class="hero-kicker" style="justify-content:center">
+              <span class="dot" aria-hidden="true"></span>
+              📄 Peer-Reviewed Publication · HUJE 2026
+            </div>
+            <h2 class="hero-title">Paper <span class="accent">Published</span></h2>
+            <p class="hero-sub" style="margin:0 auto 2rem">
+              "Bridging the Granularity Gap" — published in Horus University Journal of Engineering (ISSN 3062-4991), indexed on EKB Portal. First multi-spectral C-UAS systematic review from the department.
+            </p>
+            <div class="hero-btns" style="justify-content:center">
+              <button class="btn-gold" onclick="openPdf('Manuscript.pdf','Bridging the Granularity Gap — HUJE 2026')">📖 Read Online</button>
+              <button class="btn-outline light" onclick="showPage('research')">Research Page</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 4 — ITC Competition -->
+        <div class="swiper-slide">
+          <div class="slide-content centered">
+            <div class="hero-kicker" style="justify-content:center">
+              <span class="dot" aria-hidden="true"></span>
+              🛡️ ITC Competition · Anti-Drone Track
+            </div>
+            <h2 class="hero-title">Preliminary <span class="accent">Acceptance</span></h2>
+            <p class="hero-sub" style="margin:0 auto 2rem">
+              Officially accepted into Egypt's ITC Air Defence &amp; Anti-Drone Competition — a national technology challenge recognising cutting-edge C-UAS innovation.
+            </p>
+            <div class="hero-btns" style="justify-content:center">
+              <button class="btn-gold" onclick="showPage('research')">Our Research</button>
+              <button class="btn-outline light" onclick="showPage('team')">Meet the Team</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /swiper-wrapper -->
+      <div class="swiper-pagination" aria-hidden="true"></div>
+      <div class="swiper-button-prev" aria-label="Previous slide"></div>
+      <div class="swiper-button-next" aria-label="Next slide"></div>
+    </div>
+  </section>
+
+  <!-- PARTNERS RIBBON -->
+  <div class="partners-ribbon" role="complementary" aria-label="Endorsing institutions">
+    <div class="pr-lbl">Endorsed By</div>
+    <div class="pr-items">
+      <div class="pr-badge" data-aos="fade-up" data-aos-delay="0">
+        <div class="pr-badge-logo-wrap"><img src="assets/logos/hue.jpeg" alt="HUE" loading="lazy"></div>
+        <div><div class="pr-badge-name">Horus University Egypt</div><div class="pr-badge-type">Academic Institution</div></div>
+      </div>
+      <div class="pr-badge" data-aos="fade-up" data-aos-delay="60">
+        <div class="pr-badge-logo-wrap"><img src="assets/logos/asrt.jpg" alt="ASRT" loading="lazy"></div>
+        <div><div class="pr-badge-name">ASRT Badayty</div><div class="pr-badge-type">Research Funding</div></div>
+      </div>
+      <div class="pr-badge" data-aos="fade-up" data-aos-delay="120">
+        <div class="pr-badge-logo-wrap"><img src="assets/logos/isf.png" alt="ISF" loading="lazy"></div>
+        <div><div class="pr-badge-name">Innovators Support Fund</div><div class="pr-badge-type">Min. Higher Education</div></div>
+      </div>
+      <div class="pr-badge" data-aos="fade-up" data-aos-delay="180">
+        <div class="pr-badge-logo-wrap"><img src="assets/logos/ursi.webp" alt="URSI/NRSC" loading="lazy"></div>
+        <div><div class="pr-badge-name">NRSC 2026</div><div class="pr-badge-type">5th Best Poster Award</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEM / GRANULARITY GAP -->
+  <section class="problem-sec" aria-labelledby="problem-heading">
+    <div class="sec-wrap">
+      <div class="problem-grid">
+        <div data-aos="fade-right">
+          <div class="eyebrow" style="color:var(--gold-lt)">Core Research Problem</div>
+          <h2 class="sec-h light" id="problem-heading">The Granularity Gap</h2>
+          <div class="sec-rule"></div>
+          <p class="sec-lead light" style="margin-bottom:1rem">Conventional air-defense was engineered for supersonic missiles with RCS &gt; 5m². Today's micro-drones operate at σ &lt; 0.01m² — collapsing radar detection probability from ~80% down to barely 12% and vanishing into Doppler notch filters when hovering.</p>
+          <p class="sec-lead light">This project bridges that gap through optical-primary detection with 25× zoom and a YOLOv8n INT8 edge AI pipeline running on commercial off-the-shelf hardware at a fraction of the cost of conventional C-UAS solutions.</p>
+        </div>
+        <div data-aos="fade-left">
+          <div class="problem-vis" role="img" aria-label="Detection probability comparison chart">
+            <div class="vis-lbl">// Detection Probability · Class I UAS (σ &lt; 0.01 m²)</div>
+            <div class="bar-group">
+              <div class="bar-item"><div class="bar-val">12%</div><div class="bar-rect low"></div><div class="bar-lbl">Radar<br>Pd≈0.12</div></div>
+              <div class="bar-item"><div class="bar-val">55%</div><div class="bar-rect med"></div><div class="bar-lbl">Optical<br>Pd≈0.55</div></div>
+              <div class="bar-item"><div class="bar-val">94%</div><div class="bar-rect hi"></div><div class="bar-lbl">Proposed<br>Pd≈0.94</div></div>
+            </div>
+            <div class="vis-note">Urban environment · Range 800m · Optical-primary + RF Correlation (Phase II)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONOPS -->
+  <section class="conops-sec" aria-labelledby="conops-heading">
+    <div class="sec-wrap">
+      <div style="text-align:center;margin-bottom:2.5rem" data-aos="fade-up">
+        <div class="eyebrow" style="justify-content:center">Concept of Operations</div>
+        <h2 class="sec-h" id="conops-heading">System Workflow</h2>
+        <div class="sec-rule center"></div>
+      </div>
+      <div class="flow-track" role="list">
+        <div class="fstep" role="listitem" data-aos="fade-up" data-aos-delay="0">
+          <div class="fstep-node" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 48 48" fill="none"><path d="M24 24 Q12 12 8 4" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><path d="M24 24 Q32 8 40 4" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="24" r="4" fill="#c8a942" opacity=".7"/><path d="M24 28v16" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><path d="M14 40 Q24 36 34 40" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/></svg>
+            <span class="fstep-num">1</span>
+          </div>
+          <h4>Surveillance</h4>
+          <p>Autonomous PTZ scanning or RF-triggered Slew-to-Cue. Hikvision DarkFighter 25× zoom covers 360° continuously, day and night.</p>
+        </div>
+        <div class="fstep" role="listitem" data-aos="fade-up" data-aos-delay="80">
+          <div class="fstep-node" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="14" stroke="#c8a942" stroke-width="2"/><circle cx="18" cy="20" r="2" fill="#c8a942" opacity=".8"/><circle cx="30" cy="20" r="2" fill="#c8a942" opacity=".8"/><circle cx="24" cy="30" r="2" fill="#c8a942" opacity=".8"/><line x1="18" y1="20" x2="30" y2="20" stroke="#c8a942" stroke-width="1.2" opacity=".5"/><line x1="18" y1="20" x2="24" y2="30" stroke="#c8a942" stroke-width="1.2" opacity=".5"/><line x1="30" y1="20" x2="24" y2="30" stroke="#c8a942" stroke-width="1.2" opacity=".5"/></svg>
+            <span class="fstep-num">2</span>
+          </div>
+          <h4>AI Identification</h4>
+          <p>YOLOv8n INT8 on Raspberry Pi 5 processes 30 FPS in real time. Reliable Drone / Bird / Background discrimination — mAP@50: 0.888.</p>
+        </div>
+        <div class="fstep" role="listitem" data-aos="fade-up" data-aos-delay="160">
+          <div class="fstep-node" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="14" stroke="#c8a942" stroke-width="2"/><circle cx="24" cy="24" r="8" stroke="#c8a942" stroke-width="1.5" opacity=".5"/><circle cx="24" cy="24" r="3" fill="#c8a942" opacity=".9"/><line x1="24" y1="4" x2="24" y2="13" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><line x1="24" y1="35" x2="24" y2="44" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><line x1="4" y1="24" x2="13" y2="24" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><line x1="35" y1="24" x2="44" y2="24" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/></svg>
+            <span class="fstep-num">3</span>
+          </div>
+          <h4>Kinetic Lock</h4>
+          <p>Discrete Kalman Filter + PID controller maintains target centroid. Direct ISAPI injection achieves sub-10ms PTZ command latency.</p>
+        </div>
+        <div class="fstep" role="listitem" data-aos="fade-up" data-aos-delay="240">
+          <div class="fstep-node" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 48 48" fill="none"><rect x="14" y="6" width="20" height="36" rx="3" stroke="#c8a942" stroke-width="2"/><line x1="20" y1="38" x2="28" y2="38" stroke="#c8a942" stroke-width="2" stroke-linecap="round"/><path d="M32 14 Q38 14 38 20 Q38 26 32 26" stroke="#c8a942" stroke-width="1.8" stroke-linecap="round" fill="none" opacity=".7"/><circle cx="24" cy="20" r="4" stroke="#c8a942" stroke-width="1.5" fill="none"/></svg>
+            <span class="fstep-num">4</span>
+          </div>
+          <h4>Operator Alert</h4>
+          <p>Encrypted Telegram alerts with JPEG snapshots over 4G. Remote ARM / DISARM via bot commands. Mean alert delay: 1.2 seconds.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY ACHIEVEMENTS -->
+  <section style="background:var(--white)" aria-labelledby="ach-heading">
+    <div class="sec-wrap">
+      <div data-aos="fade-up">
+        <div class="eyebrow">Academic &amp; Engineering Achievements</div>
+        <h2 class="sec-h" id="ach-heading">Key Achievements</h2>
+        <div class="sec-rule"></div>
+      </div>
+      <div class="ach-grid">
+        <div class="ach-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="ach-ico" aria-hidden="true">📄</div>
+          <h4>Peer-Reviewed Publication</h4>
+          <p>"Bridging the Granularity Gap" — published in the Horus University Journal of Engineering (HUJE / ISSN 3062-4991). First multi-spectral C-UAS systematic review from the department, indexed on EKB Portal.</p>
+          <div style="margin-top:.9rem">
+            <button class="btn-navy" style="font-size:.66rem;padding:.42rem 1rem" onclick="openPdf('Manuscript.pdf','Bridging the Granularity Gap — HUJE 2026')">📖 Read Paper</button>
+          </div>
+        </div>
+        <div class="ach-card feature" data-aos="fade-up" data-aos-delay="60">
+          <div class="ach-num">5<sup style="font-size:.55em">th</sup></div>
+          <h4>NRSC 2026 — Best Poster</h4>
+          <p>National Radio Science Conference 2026 — Egypt's premier radio engineering forum. Competing nationally against leading university and research centre teams.</p>
+        </div>
+        <div class="ach-card" data-aos="fade-up" data-aos-delay="120">
+          <div class="ach-ico" aria-hidden="true">🏛️</div>
+          <h4>Dual External Funding</h4>
+          <p>Granted by ASRT's Badayty programme <em>and</em> the Ministry of Higher Education's Innovators Support Fund — rare dual institutional endorsement for student-led research.</p>
+        </div>
+        <div class="ach-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="ach-ico" aria-hidden="true">🤖</div>
+          <h4>Edge AI Proof of Concept</h4>
+          <p>Successfully deployed YOLOv8n INT8 on Raspberry Pi 5 — a validated software proof of concept demonstrating the full detection-to-alert pipeline on COTS hardware.</p>
+        </div>
+        <div class="ach-card feature" data-aos="fade-up" data-aos-delay="60">
+          <div class="ach-num">50</div>
+          <h4>Systematic Literature Review</h4>
+          <p>PRISMA-compliant review of 50 high-impact C-UAS studies (2018–2025). Defines the Granularity Gap, benchmarks edge AI deployments, and proposes a Cyber-Physical UTM framework.</p>
+        </div>
+        <div class="ach-card" data-aos="fade-up" data-aos-delay="120">
+          <div class="ach-ico" aria-hidden="true">🧩</div>
+          <h4>Full System Architecture</h4>
+          <p>Designed a complete 5-layer cyber-physical stack: optical acquisition → edge AI inference → Kalman tracking → ISAPI actuation → Telegram telemetry. All layers software-validated.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PAGE: ARCHITECTURE
+════════════════════════════════════════════════════════════ -->
+<div id="page-arch" class="page">
+  <div class="page-banner">
+    <div class="page-banner-inner">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">System Design</div>
+      <h1 class="sec-h light" id="arch-heading">Architecture &amp; Data Flow</h1>
+      <div class="sec-rule"></div>
+      <p class="sec-lead light">A five-layer cyber-physical stack running on Raspberry Pi 5 — from zero-copy hardware video decoding through INT8 edge AI inference to direct ISAPI PTZ actuation and encrypted remote telemetry.</p>
+    </div>
+  </div>
+  <div class="sec-wrap">
+    <div data-aos="fade-up"><div class="eyebrow">Hardware Layer</div><h2 class="sec-h">Component Suite</h2><div class="sec-rule"></div></div>
+    <div class="arch-hw">
+      <div class="hw-card" data-aos="fade-up" data-aos-delay="0"><div class="hw-hdr"><span class="h-ico">🖥️</span><div><h4>Compute Core</h4><span>Raspberry Pi 5</span></div></div><div class="hw-body"><table class="spec-table"><tr><td>SoC</td><td>BCM2712 Cortex-A76</td></tr><tr><td>Clock</td><td>2.4 GHz Quad-Core</td></tr><tr><td>RAM</td><td>8 GB LPDDR4X-4267</td></tr><tr><td>NPU</td><td>VideoCore VII</td></tr><tr><td>I/O</td><td>PCIe 2.0 × 1 · USB 3.0</td></tr><tr><td>Cost</td><td>~$80 COTS</td></tr></table></div></div>
+      <div class="hw-card" data-aos="fade-up" data-aos-delay="60"><div class="hw-hdr"><span class="h-ico">📷</span><div><h4>Optical Sensor</h4><span>Hikvision DS-2DE4225IW</span></div></div><div class="hw-body"><table class="spec-table"><tr><td>Zoom</td><td>25× Optical (4.8–120mm)</td></tr><tr><td>Sensor</td><td>1/2.8" DarkFighter CMOS</td></tr><tr><td>Min. Illum.</td><td>0.005 Lux (F1.6)</td></tr><tr><td>FoV</td><td>57.6° wide / 2.5° tele</td></tr><tr><td>Stream</td><td>RTSP / H.265</td></tr><tr><td>Control</td><td>Direct ISAPI injection</td></tr></table></div></div>
+      <div class="hw-card" data-aos="fade-up" data-aos-delay="120"><div class="hw-hdr"><span class="h-ico">📡</span><div><h4>RF Analyzer</h4><span>HTOOL SA-6G</span></div></div><div class="hw-body"><table class="spec-table"><tr><td>Range</td><td>35 MHz – 6.2 GHz</td></tr><tr><td>Dyn. Range</td><td>75 dB</td></tr><tr><td>Resolution</td><td>16-bit FFT</td></tr><tr><td>Interface</td><td>USB-C Serial</td></tr><tr><td>Status</td><td>HW mounted · Driver dev.</td></tr><tr><td>Phase</td><td>Phase II integration</td></tr></table></div></div>
+      <div class="hw-card" data-aos="fade-up" data-aos-delay="0"><div class="hw-hdr"><span class="h-ico">🔧</span><div><h4>Mechanical</h4><span>CAD + KINGJOY VT-2100L</span></div></div><div class="hw-body"><table class="spec-table"><tr><td>Bracket</td><td>SolidWorks L-Bracket</td></tr><tr><td>Tripod</td><td>KINGJOY VT-2100L</td></tr><tr><td>Max Payload</td><td>15 kg</td></tr><tr><td>System Wt.</td><td>4.3 kg</td></tr><tr><td>Safety Factor</td><td>3.48 ×</td></tr><tr><td>Thermal</td><td>Active PWM + 40mm cutout</td></tr></table></div></div>
+      <div class="hw-card" data-aos="fade-up" data-aos-delay="60"><div class="hw-hdr"><span class="h-ico">📻</span><div><h4>RF Neutralization</h4><span>Phase II — Theoretical</span></div></div><div class="hw-body"><table class="spec-table"><tr><td>Architecture</td><td>GaN SSPA Directional</td></tr><tr><td>Output Power</td><td>10 W</td></tr><tr><td>J/S Target</td><td>&gt; 20 dB threshold</td></tr><tr><td>Range</td><td>Up to 1.5 km</td></tr><tr><td>Frequencies</td><td>2.4 / 5.8 GHz + GNSS</td></tr><tr><td>Status</td><td>Theoretical · Reg. pending</td></tr></table></div></div>
+      <div class="hw-card" data-aos="fade-up" data-aos-delay="120"><div class="hw-hdr"><span class="h-ico">🔋</span><div><h4>Power System</h4><span>Dual-Mode Supply</span></div></div><div class="hw-body"><table class="spec-table"><tr><td>Primary</td><td>12V DC / PoE+ 802.3at</td></tr><tr><td>Backup</td><td>4S Li-Po (14.8V)</td></tr><tr><td>Idle Power</td><td>8.5 W</td></tr><tr><td>Peak Power</td><td>24.2 W</td></tr><tr><td>Protection</td><td>IP66 · TVS 4000V</td></tr><tr><td>Display</td><td>On-board HDMI Monitor</td></tr></table></div></div>
+    </div>
+  </div>
+
+  <div style="background:var(--off-white)">
+    <div class="sec-wrap">
+      <div data-aos="fade-up"><div class="eyebrow">Software Architecture</div><h2 class="sec-h">5-Layer Processing Stack</h2><div class="sec-rule"></div></div>
+      <div class="sw-stack">
+        <div class="sw-layer" data-aos="fade-right" data-aos-delay="0"><div class="sw-lbl">⚡ Acquisition</div><div class="sw-chips"><span class="chip navy">GStreamer</span><span class="chip">RTSP/H.265</span><span class="chip">DMA Buffers</span><span class="chip">Zero-Copy</span><span class="chip">v4l2h265dec</span></div><div class="sw-meta">VideoCore VII hardware decoder. Eliminates CPU copy overhead. Glass-to-buffer: <strong>42ms</strong>.</div></div>
+        <div class="sw-layer" data-aos="fade-right" data-aos-delay="60"><div class="sw-lbl">🧠 Perception</div><div class="sw-chips"><span class="chip navy">YOLOv8n INT8</span><span class="chip">NumPy SIMD</span><span class="chip">Post-Train Quant.</span><span class="chip gold">mAP@50: 0.888</span><span class="chip green">30 FPS</span></div><div class="sw-meta">4× memory reduction via INT8. Vectorized target selection O(N)→O(1). Inference: <strong>31ms</strong>.</div></div>
+        <div class="sw-layer" data-aos="fade-right" data-aos-delay="120"><div class="sw-lbl">📊 Estimation</div><div class="sw-chips"><span class="chip navy">Kalman Filter</span><span class="chip">State [x,y,vx,vy]</span><span class="chip">CV Motion Model</span><span class="chip">Occlusion Coasting</span></div><div class="sw-meta">Discrete Kalman Filter compensates PTZ lag and maintains track during temporary occlusions.</div></div>
+        <div class="sw-layer" data-aos="fade-right" data-aos-delay="180"><div class="sw-lbl">📡 Telemetry</div><div class="sw-chips"><span class="chip navy">Telegram Bot API</span><span class="chip">WebSockets 30Hz</span><span class="chip">Asyncio</span><span class="chip">4G LTE</span><span class="chip">ARM / DISARM</span></div><div class="sw-meta">Encrypted alerts with JPEG snapshots. Full-duplex remote command. Mean delay: <strong>1.2s</strong>.</div></div>
+        <div class="sw-layer" data-aos="fade-right" data-aos-delay="240"><div class="sw-lbl">🎯 Actuation</div><div class="sw-chips"><span class="chip navy">ISAPI Direct Injection</span><span class="chip">PID Controller</span><span class="chip">XML HTTP PUT</span><span class="chip green">τ_net &lt; 10ms</span><span class="chip">systemd Daemon</span></div><div class="sw-meta">Bypasses ONVIF overhead. Direct velocity vector injection. Always-on via systemd. <strong>66ms</strong> actuation.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-wrap">
+    <div data-aos="fade-up"><div class="eyebrow">End-to-End Pipeline</div><h2 class="sec-h">Data Flow Diagram</h2><div class="sec-rule"></div></div>
+    <div class="pipeline-diag" data-aos="zoom-in" role="img" aria-label="Pipeline: Camera→GStreamer→YOLOv8n→Kalman→PID→Telegram = 139ms">
+      <div class="pipe-nodes">
+        <div class="pnode"><span class="pnode-ico">📷</span><span class="pnode-name">CAMERA</span><span class="pnode-sub">RTSP/H.265<br>25× PTZ</span></div>
+        <div class="parr" aria-hidden="true"></div>
+        <div class="pnode"><span class="pnode-ico">⚡</span><span class="pnode-name">GSTREAMER</span><span class="pnode-sub">Zero-Copy<br>DMA Buffer</span></div>
+        <div class="parr" aria-hidden="true"></div>
+        <div class="pnode"><span class="pnode-ico">🧠</span><span class="pnode-name">YOLOv8n</span><span class="pnode-sub">INT8 Quant.<br>NPU Accel.</span></div>
+        <div class="parr" aria-hidden="true"></div>
+        <div class="pnode"><span class="pnode-ico">📊</span><span class="pnode-name">KALMAN</span><span class="pnode-sub">State Est.<br>Prediction</span></div>
+        <div class="parr" aria-hidden="true"></div>
+        <div class="pnode"><span class="pnode-ico">🎯</span><span class="pnode-name">PID CTRL</span><span class="pnode-sub">ISAPI PTZ<br>Injection</span></div>
+        <div class="parr" aria-hidden="true"></div>
+        <div class="pnode"><span class="pnode-ico">📲</span><span class="pnode-name">TELEGRAM</span><span class="pnode-sub">Alert+Cmd<br>4G / WiFi</span></div>
+      </div>
+      <div class="lat-strip">
+        <div class="lat-item"><span class="lat-val">42ms</span><span class="lat-lbl">Acquisition</span></div>
+        <div class="lat-sep">+</div>
+        <div class="lat-item"><span class="lat-val">31ms</span><span class="lat-lbl">Inference</span></div>
+        <div class="lat-sep">+</div>
+        <div class="lat-item"><span class="lat-val">66ms</span><span class="lat-lbl">Actuation</span></div>
+        <div class="lat-sep">=</div>
+        <div class="lat-item"><span class="lat-val" style="color:var(--gold)">139ms</span><span class="lat-lbl" style="color:rgba(200,169,66,.5)">Total Loop</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PAGE: RESEARCH
+════════════════════════════════════════════════════════════ -->
+<div id="page-research" class="page">
+  <div class="page-banner">
+    <div class="page-banner-inner">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">Academic Output</div>
+      <h1 class="sec-h light" id="research-heading">Research &amp; Publications</h1>
+      <div class="sec-rule"></div>
+      <p class="sec-lead light" id="research-lead">Peer-reviewed publication, competitive awards, and externally funded innovation — the academic footprint of this work extends well beyond the graduation project itself.</p>
+    </div>
+  </div>
+  <div class="sec-wrap">
+    <div class="award-strip" data-aos="fade-up" role="region" aria-label="Award">
+      <div class="award-ico">🏆</div>
+      <div class="award-txt">
+        <h3>5th Place — Best Poster Award · NRSC 2026</h3>
+        <p>National Radio Science Conference 2026 · Egypt's premier radio science forum. The team competed against leading Egyptian university and research centre teams.</p>
+      </div>
+    </div>
+
+    <!-- Main paper -->
+    <div class="paper-card" data-aos="fade-up">
+      <div class="paper-hdr">
+        <div class="paper-type">✓ Peer-Reviewed · Published 2026</div>
+        <h2 class="paper-title">Bridging the Granularity Gap: A Systematic Review of Multi-Spectral C-UAS Architectures</h2>
+      </div>
+      <div class="paper-body">
+        <p class="paper-meta">
+          <strong>Journal:</strong> Horus University Journal of Engineering (HUJE) · EKB Portal · ISSN: 3062-4991<br>
+          <strong>Authors:</strong> Amr Hussein Abdallah · Islam Emad Ismail* · Rawan Elbialy · Sagy Shawky · Abdelaziz Eltohami · Rafeek Marzouk · Islam Hesham · Rania Elabd · Mervat El-Seddek<br>
+          <strong>*Corresponding Author ORCID:</strong> <a href="https://orcid.org/0009-0002-2829-4912" target="_blank" rel="noopener">0009-0002-2829-4912</a>
+        </p>
+        <div class="paper-abstract">
+          Systematic review of 50 high-impact C-UAS studies (2018–2025) covering the architectural transition from single-sensor to multi-spectral fusion. Evaluates the Granularity Gap, benchmarks INT8 quantized Edge AI deployments, and proposes a Cyber-Physical framework integrated with UTM networks for scalable airspace security.
+        </div>
+        <div class="paper-hl">
+          <div class="phl">PRISMA Methodology</div><div class="phl">50 Primary Studies</div>
+          <div class="phl">Granularity Gap Analysis</div><div class="phl">YOLOv10 Benchmark</div>
+          <div class="phl">UTM Integration Framework</div><div class="phl">Edge AI Survey</div>
+        </div>
+        <div class="paper-actions">
+          <a href="https://huje.journals.ekb.eg/article_508720.html" target="_blank" rel="noopener" class="btn-navy">↗ View Online — HUJE</a>
+          <button class="btn-gold" onclick="openPdf('Manuscript.pdf','Bridging the Granularity Gap — HUJE 2026')">📖 Read in Browser</button>
+          <a href="Manuscript.pdf" download class="btn-outline">↓ Download PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conference paper -->
+    <div class="paper-card" data-aos="fade-up">
+      <div class="paper-hdr" style="background:var(--navy-soft)">
+        <div class="paper-type" style="background:rgba(200,169,66,.18)">🏆 NRSC 2026 — Poster Presentation</div>
+        <h2 class="paper-title">Advanced System for Drone Detection, Tracking and Neutralization: Field Validation Results</h2>
+      </div>
+      <div class="paper-body">
+        <p class="paper-meta">
+          <strong>Venue:</strong> National Radio Science Conference (NRSC) 2026 · Egypt<br>
+          <strong>Recognition:</strong> 5th Best Poster Award — Competing nationally among engineering faculties
+        </p>
+        <div class="paper-hl">
+          <div class="phl">1.2km Validated Range</div><div class="phl">139ms Loop Latency</div>
+          <div class="phl">mAP@50: 0.888</div><div class="phl">Outdoor Field Trials</div><div class="phl">24/7 Operation</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Downloads -->
+    <div class="eyebrow" style="margin-top:.5rem" data-aos="fade-up">Project Documentation</div>
+    <div class="dl-grid" style="margin-top:.8rem">
+      <button class="dl-card" onclick="openPdf('Manuscript.pdf','Bridging the Granularity Gap — HUJE 2026')" data-aos="fade-up" data-aos-delay="0">
+        <div class="dl-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+        <div><div class="dl-name">Published Review Article — HUJE</div><div class="dl-meta">Manuscript.pdf · Peer-Reviewed · ISSN 3062-4991 · Read in browser</div><span class="dl-action-tag reader">📖 Opens in-page reader</span></div>
+        <div class="dl-arr">📖</div>
+      </button>
+      <button class="dl-card" onclick="openPdf('Book.pdf','Graduation Project Book — HUE C-UAS 2026')" data-aos="fade-up" data-aos-delay="60">
+        <div class="dl-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div><div class="dl-name">Graduation Project Book / Monograph</div><div class="dl-meta">Book.pdf · Full Technical Documentation · Read in browser</div><span class="dl-action-tag reader">📖 Opens in-page reader</span></div>
+        <div class="dl-arr">📖</div>
+      </button>
+      <a href="https://github.com/islam-8" target="_blank" rel="noopener" class="dl-card" data-aos="fade-up" data-aos-delay="0">
+        <div class="dl-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold)"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg></div>
+        <div><div class="dl-name">Source Code — GitHub</div><div class="dl-meta">github.com/islam-8 · YOLOv8 Pipeline · Tracking · ISAPI</div><span class="dl-action-tag external">↗ Opens external site</span></div>
+        <div class="dl-arr">↗</div>
+      </a>
+      <a href="https://islam-8.github.io/portfolio/" target="_blank" rel="noopener" class="dl-card" data-aos="fade-up" data-aos-delay="60">
+        <div class="dl-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div><div class="dl-name">Lead Researcher Portfolio</div><div class="dl-meta">islam-8.github.io/portfolio · Systems Engineer · 2026</div><span class="dl-action-tag external">↗ Opens external site</span></div>
+        <div class="dl-arr">↗</div>
+      </a>
+    </div>
+
+    <!-- Funding -->
+    <div style="margin-top:2.5rem">
+      <div class="eyebrow" data-aos="fade-up">External Recognition</div>
+      <h2 class="sec-h" data-aos="fade-up">Funding &amp; Institutional Support</h2>
+      <div class="sec-rule" data-aos="fade-up"></div>
+      <div class="fund-grid">
+        <div class="fund-card" data-aos="fade-up" data-aos-delay="0"><div class="fund-logo-wrap"><img src="assets/logos/asrt.jpg" alt="ASRT" class="fund-logo" loading="lazy"></div><div><div class="fund-tag">ASRT — Badayty Initiative</div><h4>Academy of Scientific Research &amp; Technology</h4><p>Project Badayty (بدايتي) — ASRT's flagship innovation funding programme. Awarded to high-potential student-led research with national security or commercial application.</p></div></div>
+        <div class="fund-card" data-aos="fade-up" data-aos-delay="60"><div class="fund-logo-wrap"><img src="assets/logos/isf.png" alt="ISF" class="fund-logo" loading="lazy"></div><div><div class="fund-tag">ISF — Innovators Support Fund</div><h4>Ministry of Higher Education</h4><p>صندوق رعاية المبتكرين والنوابغ — Ministry-level recognition and financial support for breakthrough engineering innovations in Egyptian universities.</p></div></div>
+        <div class="fund-card" data-aos="fade-up" data-aos-delay="0"><div class="fund-logo-wrap"><img src="assets/logos/hue.jpeg" alt="HUE" class="fund-logo" loading="lazy"></div><div><div class="fund-tag">HUE Research Office</div><h4>Horus University Egypt</h4><p>Full institutional backing — supervised publication, laboratory resources, conference participation, and project administration throughout the 2025–2026 academic year.</p></div></div>
+        <div class="fund-card" data-aos="fade-up" data-aos-delay="60"><div class="fund-logo-wrap"><img src="assets/logos/ITC.webp" alt="ITC" class="fund-logo" loading="lazy"></div><div><div class="fund-tag">ITC 2026 Submission</div><h4>ITC Technology Competition</h4><p>Proposal submitted to ITC 2026 at prototype stage. Full technical transparency applied. Clear Phase II roadmap documented in the project monograph.</p></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PAGE: TEAM
+════════════════════════════════════════════════════════════ -->
+<div id="page-team" class="page">
+  <section class="team-sup-sec" aria-labelledby="sup-heading">
+    <div style="max-width:1200px;margin:0 auto;padding:0 4%">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">Faculty Supervision</div>
+      <h1 class="sec-h light" id="sup-heading">Supervisory Committee</h1>
+      <div class="sec-rule"></div>
+      <div class="sup-grid">
+        <article class="sup-card" data-aos="fade-up" data-aos-delay="0">
+          <div class="sup-av"><img src="assets/team/amr.jpg" alt="Prof. Dr. Amr Hussein" loading="lazy"></div>
+          <div class="sup-name">Prof. Dr. Amr Hussein Hussein Abdullah</div>
+          <div class="sup-rank">Full Professor · Principal Supervisor</div>
+          <div class="sup-dept">Dept. of Communications &amp; Electronics Engineering<br>Horus University Egypt · Vice Dean (Community Affairs)</div>
+          <div class="sup-tags"><span class="stag">Ph.D. Tanta 2012</span><span class="stag">Antennas</span><span class="stag">SCOPUS Author</span></div>
+          <div class="sup-links">
+            <a href="https://scholar.google.ae/citations?user=nZbEowAAAAJ&hl=en" target="_blank" rel="noopener" class="sup-link">Scholar</a>
+            <a href="https://orcid.org/0000-0002-9685-2528" target="_blank" rel="noopener" class="sup-link">ORCID</a>
+            <a href="https://www.researchgate.net/profile/Amr-Hussein-6" target="_blank" rel="noopener" class="sup-link">ResGate</a>
+          </div>
+        </article>
+        <article class="sup-card" data-aos="fade-up" data-aos-delay="80">
+          <div class="sup-av"><img src="assets/team/mervat.jpg" alt="Assoc. Prof. Mervat El-Seddek" loading="lazy"></div>
+          <div class="sup-name">Assoc. Prof. Dr. Mervat Mohamed Hassan Elseddek</div>
+          <div class="sup-rank">Associate Professor · Co-Supervisor</div>
+          <div class="sup-dept">Dept. of Communications &amp; Electronics Engineering<br>IEEE Senior Member · NAQAAE Certified Reviewer</div>
+          <div class="sup-tags"><span class="stag">Ph.D. Mansoura 2015</span><span class="stag">DSP / AI</span><span class="stag">IEEE Senior Member</span></div>
+          <div class="sup-links">
+            <a href="https://scholar.google.com/citations?user=bfEfWVQAAAAJ&hl=en" target="_blank" rel="noopener" class="sup-link">Scholar</a>
+            <a href="https://orcid.org/0000-0001-5854-0948" target="_blank" rel="noopener" class="sup-link">ORCID</a>
+            <a href="http://www.researchgate.net/profile/Mervat-El-Seddek" target="_blank" rel="noopener" class="sup-link">ResGate</a>
+          </div>
+        </article>
+        <article class="sup-card" data-aos="fade-up" data-aos-delay="160">
+          <div class="sup-av"><img src="assets/team/rania.jpg" alt="Dr. Rania El-Abd" loading="lazy"></div>
+          <div class="sup-name">Assis. Dr. Rania Hamdy El-Abd</div>
+          <div class="sup-rank">Assistant Professor · Co-Supervisor</div>
+          <div class="sup-dept">Dept. of Communications &amp; Electronics Engineering<br>Horus University Egypt</div>
+          <div class="sup-tags"><span class="stag">Supervision</span><span class="stag">Project Administration</span></div>
+          <div class="sup-links"><a href="https://eng.horus.edu.eg/wp-content/uploads/2025/11/CV-رانيا-حمدى-محمد-محمد-مصبح-العبد.pdf" target="_blank" rel="noopener" class="sup-link">CV ↓</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="members-wrap" aria-labelledby="team-heading">
+    <div class="eyebrow">Engineering Team</div>
+    <h2 class="sec-h" id="team-heading">Team Horus — Class of 2026</h2>
+    <div class="sec-rule"></div>
+    <div class="mem-grid">
+      <article class="mem-card lead-card" style="grid-column:1/-1" data-aos="fade-up">
+        <div class="lead-badge">★ Lead Researcher &amp; Corresponding Author</div>
+        <div class="mem-av"><img src="assets/team/islam.jpg" alt="Islam Emad" loading="lazy"></div>
+        <div class="mem-name">Islam Emad Ahmed Ismail</div>
+        <div class="mem-id">Student ID: 1211108 · ORCID: <a href="https://orcid.org/0009-0002-2829-4912" target="_blank" rel="noopener" style="color:var(--gold)">0009-0002-2829-4912</a></div>
+        <div class="mem-role">Lead Researcher · ECE Student · Class of 2026</div>
+        <div class="mem-skills"><span class="msk">Python</span><span class="msk">YOLOv8</span><span class="msk">Raspberry Pi 5</span><span class="msk">Embedded Linux</span><span class="msk">OpenCV</span><span class="msk">Computer Vision</span><span class="msk">Signal Processing</span><span class="msk">Research Writing</span></div>
+        <div class="mem-links">
+          <a href="https://islam-8.github.io/portfolio/" target="_blank" rel="noopener" class="mem-link">🌐 Portfolio</a>
+          <a href="https://github.com/islam-8" target="_blank" rel="noopener" class="mem-link">⌥ GitHub</a>
+          <a href="https://www.linkedin.com/in/islam-ismail-18a88b381" target="_blank" rel="noopener" class="mem-link">in LinkedIn</a>
+          <a href="mailto:eesllm@icloud.com" class="mem-link">✉ Email</a>
+          <a href="https://orcid.org/0009-0002-2829-4912" target="_blank" rel="noopener" class="mem-link">ORCID</a>
+        </div>
+      </article>
+      <article class="mem-card" data-aos="fade-up" data-aos-delay="0"><div class="mem-av"><img src="assets/team/abdelaziz.jpg" alt="Abdelaziz Eltohami" loading="lazy"></div><div class="mem-name">Abdelaziz Eltohami Mohamed</div><div class="mem-id">ID: 1211105</div><div class="mem-role">Hardware Engineer</div><div class="mem-skills"><span class="msk">Validation</span><span class="msk">Investigation</span><span class="msk">Data Collection</span><span class="msk">CAD/SolidWorks</span></div></article>
+      <article class="mem-card" data-aos="fade-up" data-aos-delay="60"><div class="mem-av"><img src="assets/team/rafeek.jpg" alt="Rafeek Marzouk" loading="lazy"></div><div class="mem-name">Rafeek Marzouk El-Fauomy</div><div class="mem-id">ID: 1233007</div><div class="mem-role">RF &amp; Signal Processing</div><div class="mem-skills"><span class="msk">Validation</span><span class="msk">Investigation</span><span class="msk">Data Collection</span><span class="msk">Spectrum Analysis</span></div></article>
+      <article class="mem-card" data-aos="fade-up" data-aos-delay="120"><div class="mem-av"><img src="assets/team/rawan.jpg" alt="Rawan Elbialy" loading="lazy"></div><div class="mem-name">Rawan Mohammed Elbialy</div><div class="mem-id">ID: 1211174</div><div class="mem-role">Data Collection &amp; Validation</div><div class="mem-skills"><span class="msk">Validation</span><span class="msk">Investigation</span><span class="msk">Dataset Curation</span></div></article>
+      <article class="mem-card" data-aos="fade-up" data-aos-delay="0"><div class="mem-av"><img src="assets/team/sagy.jpg" alt="Sagy Shawky" loading="lazy"></div><div class="mem-name">Sagy Shawky Abo El-Naga</div><div class="mem-id">ID: 1221602</div><div class="mem-role">Control Systems &amp; Testing</div><div class="mem-skills"><span class="msk">Validation</span><span class="msk">Investigation</span><span class="msk">FMEA</span><span class="msk">Field Testing</span></div></article>
+      <article class="mem-card" data-aos="fade-up" data-aos-delay="60"><div class="mem-av"><img src="assets/team/hesham.jpg" alt="Islam Hesham" loading="lazy"></div><div class="mem-name">Islam Hesham Hamed</div><div class="mem-id">ID: 1201040</div><div class="mem-role">Software &amp; System Integration</div><div class="mem-skills"><span class="msk">Validation</span><span class="msk">Investigation</span><span class="msk">Python</span><span class="msk">Embedded Linux</span></div></article>
+    </div>
+
+    <!-- CRediT table -->
+    <div style="margin-top:2.5rem" data-aos="fade-up">
+      <div class="eyebrow">CRediT Taxonomy</div>
+      <h2 class="sec-h">Project Contribution Matrix</h2>
+      <div class="sec-rule"></div>
+      <div class="task-table-wrap">
+        <table class="task-table" aria-label="Project contribution matrix">
+          <thead><tr><th>Team Member</th><th>Role</th><th>CRediT Contributions</th></tr></thead>
+          <tbody>
+            <tr><td>Islam Emad Ismail</td><td>Lead Researcher</td><td><div class="task-contrib"><span class="tc">Conceptualization</span><span class="tc">Methodology</span><span class="tc">Software Development</span><span class="tc">Formal Analysis</span><span class="tc">Visualization</span><span class="tc">Writing — Original Draft</span><span class="tc">Writing — Review &amp; Editing</span></div></td></tr>
+            <tr><td>Abdelaziz Eltohami</td><td>Hardware Engineer</td><td><div class="task-contrib"><span class="tc">Validation</span><span class="tc">Investigation</span><span class="tc">Data Collection</span><span class="tc">CAD / Mechanical Design</span><span class="tc">Physical Assembly</span></div></td></tr>
+            <tr><td>Rafeek Marzouk</td><td>RF Specialist</td><td><div class="task-contrib"><span class="tc">Validation</span><span class="tc">Investigation</span><span class="tc">RF Spectrum Analysis</span><span class="tc">Data Collection</span><span class="tc">Hardware Characterization</span></div></td></tr>
+            <tr><td>Rawan Elbialy</td><td>Data &amp; Validation</td><td><div class="task-contrib"><span class="tc">Validation</span><span class="tc">Investigation</span><span class="tc">Dataset Curation</span><span class="tc">Annotation</span><span class="tc">Literature Review Support</span></div></td></tr>
+            <tr><td>Sagy Shawky</td><td>Control &amp; Testing</td><td><div class="task-contrib"><span class="tc">Validation</span><span class="tc">Investigation</span><span class="tc">Field Testing</span><span class="tc">FMEA Analysis</span><span class="tc">Safety Assessment</span></div></td></tr>
+            <tr><td>Islam Hesham</td><td>SW Integration</td><td><div class="task-contrib"><span class="tc">Validation</span><span class="tc">Investigation</span><span class="tc">Software Integration</span><span class="tc">Embedded Linux</span><span class="tc">System Testing</span></div></td></tr>
+            <tr><td>Prof. Dr. Amr Hussein</td><td>Principal Supervisor</td><td><div class="task-contrib"><span class="tc">Supervision</span><span class="tc">Project Administration</span><span class="tc">Funding Acquisition</span><span class="tc">Writing — Review &amp; Editing</span></div></td></tr>
+            <tr><td>Assoc. Prof. Mervat El-Seddek</td><td>Co-Supervisor</td><td><div class="task-contrib"><span class="tc">Supervision</span><span class="tc">Project Administration</span><span class="tc">Writing — Review &amp; Editing</span></div></td></tr>
+            <tr><td>Assis. Dr. Rania El-Abd</td><td>Co-Supervisor</td><td><div class="task-contrib"><span class="tc">Supervision</span><span class="tc">Project Administration</span><span class="tc">Writing — Review &amp; Editing</span></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PAGE: GALLERY
+════════════════════════════════════════════════════════════ -->
+<div id="page-gallery" class="page">
+  <div class="page-banner">
+    <div class="page-banner-inner">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">Visual Documentation</div>
+      <h1 class="sec-h light" id="gallery-heading">Project Media Gallery</h1>
+      <div class="sec-rule"></div>
+    </div>
+  </div>
+  <div class="gal-filters" role="group" aria-label="Filter gallery">
+    <button class="fbtn active" onclick="filterGal('all',this)">All</button>
+    <button class="fbtn" onclick="filterGal('team',this)">Team</button>
+    <button class="fbtn" onclick="filterGal('hw',this)">Hardware</button>
+    <button class="fbtn" onclick="filterGal('conf',this)">Conference</button>
+    <button class="fbtn" onclick="filterGal('sw',this)">Software / AI</button>
+    <button class="fbtn" onclick="filterGal('video',this)">Video</button>
+  </div>
+  <div class="gal-grid" id="galGrid" role="list">
+    <!-- Team photos -->
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_01/Project_01.jpeg" data-title="Team — Graduation Day" data-description="Graduation defence ceremony · June 2026 · Faculty of Engineering, Horus University Egypt"><img src="assets/gallery/Project_01/Project_01.jpeg" alt="Team Photo 1" loading="lazy"><div class="gal-ov">Team — Graduation Day</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_01/Project_02.jpeg" data-title="Team — Photo 2"><img src="assets/gallery/Project_01/Project_02.jpeg" alt="Team Photo 2" loading="lazy"><div class="gal-ov">Team — Photo 2</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_01/Project_03.jpeg" data-title="Team — Photo 3"><img src="assets/gallery/Project_01/Project_03.jpeg" alt="Team Photo 3" loading="lazy"><div class="gal-ov">Team — Photo 3</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_01/Project_04.jpeg" data-title="Team — Photo 4"><img src="assets/gallery/Project_01/Project_04.jpeg" alt="Team Photo 4" loading="lazy"><div class="gal-ov">Team — Photo 4</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_01/Project_05.jpeg" data-title="Team — Photo 5"><img src="assets/gallery/Project_01/Project_05.jpeg" alt="Team Photo 5" loading="lazy"><div class="gal-ov">Team — Photo 5</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_01/Project_06.jpeg" data-title="Team — Photo 6"><img src="assets/gallery/Project_01/Project_06.jpeg" alt="Team Photo 6" loading="lazy"><div class="gal-ov">Team — Photo 6</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_01/Project_07.jpeg" data-title="Team — Photo 7"><img src="assets/gallery/Project_01/Project_07.jpeg" alt="Team Photo 7" loading="lazy"><div class="gal-ov">Team — Photo 7</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_01/Project_08.jpeg" data-title="Team — Photo 8"><img src="assets/gallery/Project_01/Project_08.jpeg" alt="Team Photo 8" loading="lazy"><div class="gal-ov">Team — Photo 8</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_01/Project_09.jpeg" data-title="Team — Photo 9"><img src="assets/gallery/Project_01/Project_09.jpeg" alt="Team Photo 9" loading="lazy"><div class="gal-ov">Team — Photo 9</div></a>
+    <!-- Project_02 photos -->
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_02/Project_01.jpeg" data-title="Project — Photo Set 2-1"><img src="assets/gallery/Project_02/Project_01.jpeg" alt="Project Photo 2-1" loading="lazy"><div class="gal-ov">Project Session 2</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_02/Project_02.jpeg" data-title="Project — Photo Set 2-2"><img src="assets/gallery/Project_02/Project_02.jpeg" alt="Project Photo 2-2" loading="lazy"><div class="gal-ov">Project Session 2</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_02/Project_03.jpeg" data-title="Project — Photo Set 2-3"><img src="assets/gallery/Project_02/Project_03.jpeg" alt="Project Photo 2-3" loading="lazy"><div class="gal-ov">Project Session 2</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_02/Project_04.jpeg" data-title="Project — Photo Set 2-4"><img src="assets/gallery/Project_02/Project_04.jpeg" alt="Project Photo 2-4" loading="lazy"><div class="gal-ov">Project Session 2</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_02/Project_05.jpeg" data-title="Project — Photo Set 2-5"><img src="assets/gallery/Project_02/Project_05.jpeg" alt="Project Photo 2-5" loading="lazy"><div class="gal-ov">Project Session 2</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/Project_02/Project_06.jpeg" data-title="Project — Photo Set 2-6"><img src="assets/gallery/Project_02/Project_06.jpeg" alt="Project Photo 2-6" loading="lazy"><div class="gal-ov">Project Session 2</div></a>
+    <!-- General -->
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/General/General_01.jpeg" data-title="General — Photo 1"><img src="assets/gallery/General/General_01.jpeg" alt="General Photo 1" loading="lazy"><div class="gal-ov">Team — General</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/General/General_02.jpeg" data-title="General — Photo 2"><img src="assets/gallery/General/General_02.jpeg" alt="General Photo 2" loading="lazy"><div class="gal-ov">Team — General</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/General/General_03.jpeg" data-title="General — Photo 3"><img src="assets/gallery/General/General_03.jpeg" alt="General Photo 3" loading="lazy"><div class="gal-ov">Team — General</div></a>
+    <a class="gal-item glightbox" data-cat="team" role="listitem" href="assets/gallery/General/General_04.jpeg" data-title="General — Photo 4"><img src="assets/gallery/General/General_04.jpeg" alt="General Photo 4" loading="lazy"><div class="gal-ov">Team — General</div></a>
+    <!-- Hardware -->
+    <a class="gal-item glightbox" data-cat="hw" role="listitem" href="assets/components/hikvision_camera.png" data-title="Hikvision DS-2DE4225IW · 25× PTZ Camera"><img src="assets/components/hikvision_camera.png" alt="Hikvision PTZ Camera" loading="lazy"><div class="gal-ov">Hikvision DS-2DE4225IW</div></a>
+    <a class="gal-item glightbox" data-cat="hw" role="listitem" href="assets/components/htool_sa_device.png" data-title="HTOOL SA-6G · RF Spectrum Analyzer"><img src="assets/components/htool_sa_device.png" alt="HTOOL SA-6G" loading="lazy"><div class="gal-ov">HTOOL SA-6G RF Analyzer</div></a>
+    <a class="gal-item glightbox" data-cat="hw" role="listitem" href="assets/components/rf_sa6_device.png" data-title="RF Analyzer · Detail View"><img src="assets/components/rf_sa6_device.png" alt="RF Analyzer Detail" loading="lazy"><div class="gal-ov">RF Analyzer — Detail View</div></a>
+    <a class="gal-item glightbox" data-cat="hw" role="listitem" href="assets/components/kingjoy_tripod.png" data-title="KINGJOY VT-2100L · Tripod Mount"><img src="assets/components/kingjoy_tripod.png" alt="KINGJOY Tripod" loading="lazy"><div class="gal-ov">KINGJOY VT-2100L Tripod</div></a>
+    <a class="gal-item glightbox" data-cat="hw" role="listitem" href="assets/components/mech_cad_ports.png" data-title="SolidWorks CAD · Port Design"><img src="assets/components/mech_cad_ports.png" alt="CAD Ports" loading="lazy"><div class="gal-ov">SolidWorks · Port Design</div></a>
+    <a class="gal-item glightbox" data-cat="hw" role="listitem" href="assets/components/mech_l_bracket.png" data-title="SolidWorks · L-Bracket Design"><img src="assets/components/mech_l_bracket.png" alt="L-Bracket CAD" loading="lazy"><div class="gal-ov">SolidWorks · L-Bracket</div></a>
+    <a class="gal-item glightbox" data-cat="hw" role="listitem" href="assets/components/prototype_photo.png" data-title="Full System Prototype"><img src="assets/components/prototype_photo.png" alt="System Prototype" loading="lazy"><div class="gal-ov">Full System Prototype</div></a>
+    <a class="gal-item glightbox" data-cat="hw" role="listitem" href="assets/components/rpi5_diagram.jpeg" data-title="Raspberry Pi 5 · Compute Core"><img src="assets/components/rpi5_diagram.jpeg" alt="Raspberry Pi 5" loading="lazy"><div class="gal-ov">Raspberry Pi 5</div></a>
+    <a class="gal-item glightbox" data-cat="sw" role="listitem" href="assets/components/tracking_overlay.png" data-title="YOLOv8n · Tracking Overlay"><img src="assets/components/tracking_overlay.png" alt="YOLOv8 Tracking" loading="lazy"><div class="gal-ov">YOLOv8n · Tracking Overlay</div></a>
+    <a class="gal-item gal-video glightbox" data-cat="video" data-type="video" role="listitem" href="assets/components/Video.mp4" data-title="Full System Demo — Final Build" data-description="Complete walkthrough of the C-UAS detection, tracking and alert pipeline running on the final hardware build.">
+      <div class="gal-video-poster"><span class="gal-play-btn" aria-hidden="true">▶</span></div>
+      <div class="gal-ov">🎬 Full System Demo — Final Build</div>
+    </a>
+    <!-- NRSC 2026 -->
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_01.jpeg" data-title="NRSC 2026 — Best Poster"><img src="assets/gallery/NRSC_26/NRSC_01.jpeg" alt="NRSC 2026-1" loading="lazy"><div class="gal-ov">NRSC 2026 — Best Poster</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_02.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_02.jpeg" alt="NRSC 2026-2" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_03.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_03.jpeg" alt="NRSC 2026-3" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_04.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_04.jpeg" alt="NRSC 2026-4" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_05.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_05.jpeg" alt="NRSC 2026-5" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_06.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_06.jpeg" alt="NRSC 2026-6" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_07.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_07.jpeg" alt="NRSC 2026-7" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_08.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_08.jpeg" alt="NRSC 2026-8" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_09.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_09.jpeg" alt="NRSC 2026-9" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_10.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_10.jpeg" alt="NRSC 2026-10" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_11.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_11.jpeg" alt="NRSC 2026-11" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_12.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_12.jpeg" alt="NRSC 2026-12" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+    <a class="gal-item glightbox" data-cat="conf" role="listitem" href="assets/gallery/NRSC_26/NRSC_13.jpeg" data-title="NRSC 2026 — Conference"><img src="assets/gallery/NRSC_26/NRSC_13.jpeg" alt="NRSC 2026-13" loading="lazy"><div class="gal-ov">NRSC 2026 — Conference</div></a>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PAGE: LIVE SIMULATION
+════════════════════════════════════════════════════════════ -->
+<div id="page-sim" class="page">
+  <div class="page-banner">
+    <div class="page-banner-inner">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">Interactive Demo</div>
+      <h1 class="sec-h light" id="sim-heading">Live System Simulation</h1>
+      <div class="sec-rule"></div>
+      <p class="sec-lead light" id="sim-lead">Visualisation of the C-UAS pipeline architecture. Toggle AUTO / MANUAL mode, simulate detection events, and observe the data flow — mirroring the actual system behaviour described in the published research.</p>
+    </div>
+  </div>
+  <div style="background:rgba(200,169,66,.05);border-bottom:1px solid rgba(200,169,66,.15);padding:.58rem 4%;text-align:center">
+    <span style="font-family:var(--f-mono);font-size:.58rem;color:var(--gold);letter-spacing:.15em">⚠ SOFTWARE DEMONSTRATION — Hardware field trials planned for Phase II.</span>
+  </div>
+
+  <div class="sim-layout">
+    <div>
+      <h2 class="sim-h">📷 Optical Feed — PTZ Camera Simulation</h2>
+      <div class="sim-canvas-wrap">
+        <div class="sim-cam-bar">
+          <span class="sim-cam-label">▸ HIKVISION DS-2DE4225IW · 25× ZOOM · DARKFIGHTER</span>
+          <span class="sim-cam-zoom" id="camZoom">ZOOM: 12×</span>
+        </div>
+        <div style="position:relative;background:#000;line-height:0">
+          <canvas id="simCanvas" width="640" height="360" style="width:100%;display:block"></canvas>
+          <div style="position:absolute;top:8px;left:10px;font-family:var(--f-mono);font-size:.5rem;color:rgba(200,169,66,.7);letter-spacing:.1em">REC ● 30 FPS</div>
+          <div style="position:absolute;top:8px;right:10px;font-family:var(--f-mono);font-size:.5rem;color:rgba(200,169,66,.7)">YOLOv8n INT8</div>
+          <div style="position:absolute;bottom:8px;left:10px;font-family:var(--f-mono);font-size:.5rem;color:rgba(255,255,255,.35)">SECTOR: NE-4 · BRG: 047°</div>
+        </div>
+        <div class="sim-lat-bar">
+          <div class="sim-lat-item"><span>INFERENCE </span><span style="color:var(--green)" id="infMs">-- ms</span></div>
+          <div class="sim-lat-item"><span>CONF </span><span style="color:var(--gold)" id="confDisp">--</span></div>
+          <div class="sim-lat-item"><span>CLASS </span><span style="color:var(--red)" id="classDisp">--</span></div>
+          <div class="sim-lat-item"><span>KALMAN </span><span style="color:var(--gold)" id="kalmanDisp">IDLE</span></div>
+        </div>
+      </div>
+      <!-- Pipeline flow -->
+      <div style="margin-top:.9rem;background:var(--navy-deep);border:1px solid rgba(200,169,66,.14);border-radius:var(--r-xs);padding:.7rem 1rem">
+        <div style="font-family:var(--f-mono);font-size:.52rem;color:rgba(200,169,66,.55);letter-spacing:.15em;margin-bottom:.6rem">// PIPELINE DATA FLOW</div>
+        <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:wrap">
+          <div class="pipe-step" id="ps0">📷 RTSP</div>
+          <span style="color:rgba(200,169,66,.3);font-size:.7rem">→</span>
+          <div class="pipe-step" id="ps1">⚡ GSTREAM</div>
+          <span style="color:rgba(200,169,66,.3);font-size:.7rem">→</span>
+          <div class="pipe-step" id="ps2">🧠 YOLOv8n</div>
+          <span style="color:rgba(200,169,66,.3);font-size:.7rem">→</span>
+          <div class="pipe-step" id="ps3">📊 KALMAN</div>
+          <span style="color:rgba(200,169,66,.3);font-size:.7rem">→</span>
+          <div class="pipe-step" id="ps4">🎯 ISAPI/PID</div>
+          <span style="color:rgba(200,169,66,.3);font-size:.7rem">→</span>
+          <div class="pipe-step" id="ps5">📲 TELEGRAM</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <h2 class="sim-h">⚙️ C-UAS Control Dashboard</h2>
+      <div class="dash-panel" role="region" aria-label="System control dashboard">
+        <div class="dp-hdr"><span class="dp-title">▸ Horus C-UAS · Control Panel</span><span class="dp-clock" id="dClock" aria-live="polite">--:--:--</span></div>
+        <div class="dp-body">
+          <div class="mode-row">
+            <span class="mode-lbl on-auto" id="mlAuto">AUTO</span>
+            <label class="toggle" aria-label="Toggle AUTO / MANUAL mode">
+              <input type="checkbox" id="modeToggle" role="switch" aria-checked="false">
+              <div class="toggle-track" aria-hidden="true"></div>
+              <div class="toggle-thumb" aria-hidden="true"></div>
+            </label>
+            <span class="mode-lbl" id="mlManual">MANUAL</span>
+          </div>
+          <p class="mode-desc" id="modeDesc" aria-live="polite">Autonomous tracking and automated engagement active.</p>
+          <div class="dp-row"><span class="dp-k">SYSTEM STATUS</span><span class="dp-v" id="dSys">STANDBY</span></div>
+          <div class="dp-row"><span class="dp-k">TARGET CLASS</span><span class="dp-v gold" id="dTgt">NONE</span></div>
+          <div class="dp-row"><span class="dp-k">CONFIDENCE</span><span class="dp-v" id="dConf">--</span></div>
+          <div class="dp-row"><span class="dp-k">BOUNDING BOX</span><span class="dp-v" id="dBbox">-- px</span></div>
+          <div class="dp-row"><span class="dp-k">LOOP LATENCY</span><span class="dp-v" id="dLat">-- ms</span></div>
+          <div class="dp-sep"></div>
+          <div class="pbar-wrap"><div class="pbar-top"><span>AI INFERENCE</span><span id="aiPct">0%</span></div><div class="pbar"><div class="pfill grn" id="aiBar" style="width:0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div></div>
+          <div class="pbar-wrap"><div class="pbar-top"><span>TRACKING LOCK</span><span id="lkPct">0%</span></div><div class="pbar"><div class="pfill gld" id="lkBar" style="width:0%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div></div>
+          <div class="dp-sep"></div>
+          <div class="dp-row"><span class="dp-k">RF JAMMER</span><span class="dp-v amb">OFFLINE (Phase II)</span></div>
+          <div class="dp-row"><span class="dp-k">RF ANALYZER</span><span class="dp-v amb">HW READY · DRIVER DEV.</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="sim-h" style="font-size:.85rem">📲 Telegram Alert Channel</div>
+        <div class="tg-widget" role="region" aria-label="Simulated Telegram alerts">
+          <div class="tg-top"><div class="tg-av" aria-hidden="true">🦅</div><div class="tg-info"><h3 style="font-size:.8rem;font-weight:700;color:var(--white);font-family:var(--f-body)">C-UAS Alert Bot</h3><span>@HorusCUAS_Bot · Online</span></div></div>
+          <div class="tg-msgs" id="tgBox" aria-live="polite">
+            <div class="tmsg i">✅ System initialized. C-UAS platform online.<br>Mode: AUTO-SURVEILLANCE · 4G Connected<br>YOLOv8n INT8 loaded. Ready for patrol.<div class="tmsg-ts">System boot</div></div>
+          </div>
+          <div class="tg-btns" role="group" aria-label="Simulation controls">
+            <button class="tbtn r" onclick="sim('intrusion')">⚠️ Simulate Intrusion</button>
+            <button class="tbtn gd" onclick="sim('lock')">🎯 Target Lock</button>
+            <button class="tbtn g" onclick="sim('clear')">✅ Area Clear</button>
+            <button class="tbtn b" onclick="sim('status')">📊 Status Report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PAGE: CONTACT
+════════════════════════════════════════════════════════════ -->
+<div id="page-contact" class="page">
+  <div class="page-banner">
+    <div class="page-banner-inner">
+      <div class="eyebrow" style="color:rgba(200,169,66,.8)">Get in Touch</div>
+      <h1 class="sec-h light">Contact &amp; Location</h1>
+      <div class="sec-rule"></div>
+      <p class="sec-lead light" id="contact-lead">Faculty of Engineering — Horus University Egypt, New Damietta. For academic enquiries, collaboration proposals, and research correspondence.</p>
+    </div>
+  </div>
+  <div class="contact-layout">
+    <div data-aos="fade-right">
+      <div class="contact-card">
+        <div class="cc-hdr"><span aria-hidden="true">📍</span><h4>Faculty Address &amp; Institution</h4></div>
+        <div class="cc-body">
+          <div class="c-row"><div class="c-ico">🏛️</div><div><div class="c-lbl">Institution</div><div class="c-val">Horus University Egypt (HUE)</div></div></div>
+          <div class="c-row"><div class="c-ico">🎓</div><div><div class="c-lbl">Faculty &amp; Department</div><div class="c-val">Faculty of Engineering<br>Dept. of Communications &amp; Electronics Engineering</div></div></div>
+          <div class="c-row"><div class="c-ico">📮</div><div><div class="c-lbl">Address</div><div class="c-val">International Coastal Road, New Damietta<br>Damietta Governorate, 8027101 — Egypt</div></div></div>
+          <div class="c-row"><div class="c-ico">📞</div><div><div class="c-lbl">Telephone</div><div class="c-val"><a href="tel:+201559933466">+201559933466</a></div></div></div>
+          <div class="c-row"><div class="c-ico">🌐</div><div><div class="c-lbl">Faculty Website</div><div class="c-val"><a href="https://eng.horus.edu.eg" target="_blank" rel="noopener">eng.horus.edu.eg</a></div></div></div>
+          <div class="c-row"><div class="c-ico">✉️</div><div><div class="c-lbl">Email</div><div class="c-val"><a href="mailto:Admin@horus.edu.eg">Admin@horus.edu.eg</a><br><a href="mailto:eesllm@icloud.com">eesllm@icloud.com</a></div></div></div>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-hdr"><span>👨‍🔬</span><h4>Research Team Contact</h4></div>
+        <div class="cc-body">
+          <div class="c-row"><div class="c-ico">🧑‍💻</div><div><div class="c-lbl">Lead Researcher</div><div class="c-val">Islam Emad Ahmed Ismail<br>ORCID: <a href="https://orcid.org/0009-0002-2829-4912" target="_blank" rel="noopener">0009-0002-2829-4912</a><br><a href="https://islam-8.github.io/portfolio/" target="_blank" rel="noopener">Portfolio ↗</a> · <a href="https://github.com/islam-8" target="_blank" rel="noopener">GitHub ↗</a></div></div></div>
+          <div class="c-row"><div class="c-ico">👨‍🏫</div><div><div class="c-lbl">Principal Supervisor</div><div class="c-val">Prof. Dr. Amr Hussein Hussein Abdullah<br>ORCID: <a href="https://orcid.org/0000-0002-9685-2528" target="_blank" rel="noopener">0000-0002-9685-2528</a></div></div></div>
+          <div class="c-row"><div class="c-ico">📄</div><div><div class="c-lbl">Published Article</div><div class="c-val"><a href="https://huje.journals.ekb.eg/article_508720.html" target="_blank" rel="noopener">huje.journals.ekb.eg — Article 508720</a></div></div></div>
+          <div style="margin-top:.85rem;padding-top:.85rem;border-top:1px solid var(--off-white)">
+            <div class="c-lbl" style="margin-bottom:.6rem">Official Social Channels</div>
+            <div class="social-btns">
+              <a href="https://www.facebook.com/hue.eg/" target="_blank" rel="noopener" class="soc-btn">📘 Facebook</a>
+              <a href="https://twitter.com/HUE_eg" target="_blank" rel="noopener" class="soc-btn">𝕏 Twitter</a>
+              <a href="https://github.com/islam-8" target="_blank" rel="noopener" class="soc-btn">⌥ GitHub</a>
+              <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener" class="soc-btn">🌐 Faculty</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="map-box" role="img" aria-label="Map — Horus University Egypt, New Damietta">
+        <div class="map-ico" aria-hidden="true">🗺️</div>
+        <div class="map-lbl">Campus Location · Google Maps</div>
+        <div class="map-addr">Horus University Egypt<br>International Coastal Road, New Damietta</div>
+        <button class="map-btn" onclick="window.open('https://maps.google.com/?q=Horus+University+New+Damietta+Egypt','_blank')">Open in Google Maps ↗</button>
+      </div>
+    </div>
+    <div data-aos="fade-left">
+      <div class="contact-form-wrap">
+        <div class="form-title" id="form-heading">Send an Enquiry</div>
+        <form id="contactForm" onsubmit="submitForm(event)" novalidate>
+          <div class="form-row">
+            <div class="form-grp"><label for="cf-name">Full Name *</label><input type="text" id="cf-name" placeholder="Your full name" required autocomplete="name"></div>
+            <div class="form-grp"><label for="cf-org">Institution</label><input type="text" id="cf-org" placeholder="University / Company" autocomplete="organization"></div>
+          </div>
+          <div class="form-grp"><label for="cf-email">Email Address *</label><input type="email" id="cf-email" placeholder="your@email.com" required autocomplete="email"></div>
+          <div class="form-grp">
+            <label for="cf-subject">Subject *</label>
+            <select id="cf-subject" required>
+              <option value="">— Select subject —</option>
+              <option>Research Collaboration</option>
+              <option>Academic Enquiry</option>
+              <option>Industry / Commercial Partnership</option>
+              <option>Media / Press Request</option>
+              <option>Conference / Presentation Invitation</option>
+              <option>General Enquiry</option>
+            </select>
+          </div>
+          <div class="form-grp"><label for="cf-msg">Message *</label><textarea id="cf-msg" placeholder="Your message or enquiry…" required></textarea></div>
+          <button type="submit" class="form-submit">Send Message</button>
+          <p class="form-note">For academic and professional correspondence. We aim to respond within 3–5 working days.</p>
+        </form>
+      </div>
+      <div style="margin-top:1.4rem;background:var(--white);border:1px solid var(--light-line);border-radius:var(--r-xs);padding:1.4rem;box-shadow:var(--sh-sm)">
+        <div class="eyebrow" style="margin-bottom:.9rem">Institutional Accreditation</div>
+        <div class="acc-grid">
+          <div class="acc-item" style="display:flex;align-items:center;gap:.65rem">
+            <img src="assets/logos/naqaae.webp" alt="NAQAAE" style="width:32px;height:32px;object-fit:contain;flex-shrink:0" loading="lazy">
+            <div><div class="code">NAQAAE</div><div class="name">National Authority for Quality Assurance</div></div>
+          </div>
+          <div class="acc-item"><div class="code">ISO 21001</div><div class="name">Educational Organization QMS</div></div>
+          <div class="acc-item" style="display:flex;align-items:center;gap:.65rem">
+            <img src="assets/logos/egac.jpeg" alt="EGAC" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;border-radius:2px" loading="lazy">
+            <div><div class="code">EGAC</div><div class="name">Egyptian Accreditation Council</div></div>
+          </div>
+          <div class="acc-item"><div class="code">ASRT</div><div class="name">Academy of Scientific Research &amp; Tech.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════ -->
+<footer role="contentinfo">
+  <div class="foot-grid">
+    <div>
+      <img src="assets/logos/white_hue.png" alt="Horus University Egypt" style="height:38px;width:auto;object-fit:contain;margin-bottom:.9rem" loading="lazy">
+      <div class="foot-brand-name">Advanced C-UAS <span>System</span></div>
+      <div class="foot-brand-sub">Graduation Project 2026 · Horus University Egypt<br>Faculty of Engineering · Dept. Communications &amp; Electronics<br>New Damietta · Arab Republic of Egypt</div>
+    </div>
+    <nav aria-label="Footer navigation">
+      <div class="foot-col-h">Navigation</div>
+      <ul class="foot-links">
+        <li><button onclick="showPage('home')">System Overview</button></li>
+        <li><button onclick="showPage('arch')">Architecture &amp; Pipeline</button></li>
+        <li><button onclick="showPage('research')">Research &amp; Publications</button></li>
+        <li><button onclick="showPage('team')">Research Team</button></li>
+        <li><button onclick="showPage('gallery')">Media Gallery</button></li>
+        <li><button onclick="showPage('sim')">Live Demo</button></li>
+        <li><button onclick="showPage('contact')">Contact &amp; Location</button></li>
+      </ul>
+    </nav>
+    <div>
+      <div class="foot-col-h">Research Output</div>
+      <ul class="foot-links">
+        <li><a href="https://huje.journals.ekb.eg/article_508720.html" target="_blank" rel="noopener">Published Article — HUJE ↗</a></li>
+        <li><button onclick="openPdf('Manuscript.pdf','Bridging the Granularity Gap')">Read Paper in Browser 📖</button></li>
+        <li><button onclick="openPdf('Book.pdf','Graduation Project Book')">Read Book in Browser 📖</button></li>
+        <li><a href="Manuscript.pdf" download>Download Paper — Manuscript.pdf ↓</a></li>
+        <li><a href="Book.pdf" download>Download Book — Book.pdf ↓</a></li>
+        <li><a href="https://github.com/islam-8" target="_blank" rel="noopener">Source Code — GitHub ↗</a></li>
+        <li><a href="https://islam-8.github.io/portfolio/" target="_blank" rel="noopener">Lead Researcher Portfolio ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div class="foot-disc" role="note">
+      <strong>AI Usage Disclosure:</strong> Generative AI tools were utilized strictly for linguistic proofreading and formatting. All scientific content, system design, experimental methodology, results, and conclusions represent the original intellectual work of the listed authors and supervisory committee.<br>
+      <strong>Regulatory Note:</strong> The RF neutralization module is theoretical and requires NTRA authorization under Egyptian Law No. 214 of 2017 before operational deployment.
+    </div>
+    <div class="foot-copy">© 2026 Horus University Egypt<br>Faculty of Engineering<br><a href="https://eng.horus.edu.eg" target="_blank" rel="noopener">eng.horus.edu.eg</a></div>
+  </div>
+</footer>
+
+<!-- INFO BAR -->
+<div class="info-bar" role="contentinfo">
+  <div class="info-bar-left">
+    <div class="info-item">📍 <span>New Damietta, Egypt</span></div>
+    <div class="info-item">📞 <a href="tel:+201559933466">+201559933466</a></div>
+    <div class="info-item">✉️ <a href="mailto:eesllm@icloud.com">eesllm@icloud.com</a></div>
+    <div class="info-item">🌐 <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener">eng.horus.edu.eg</a></div>
+  </div>
+  <div class="info-bar-right">
+    <a href="https://www.facebook.com/hue.eg/" target="_blank" rel="noopener" class="social-ico" aria-label="Facebook">f</a>
+    <a href="https://twitter.com/HUE_eg" target="_blank" rel="noopener" class="social-ico" aria-label="Twitter">𝕏</a>
+    <a href="https://github.com/islam-8" target="_blank" rel="noopener" class="social-ico" aria-label="GitHub">⌥</a>
+    <a href="https://eng.horus.edu.eg" target="_blank" rel="noopener" class="social-ico" aria-label="Faculty">🌐</a>
+  </div>
+</div>
+
+<!-- ══ PDF MODAL ══ -->
+<div id="pdf-modal" class="pdf-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="pdf-modal-title">
+  <div class="pdf-modal-inner">
+    <div class="pdf-modal-header">
+      <span class="pdf-modal-title" id="pdf-modal-title">Document Viewer</span>
+      <div class="pdf-modal-actions">
+        <button class="pdf-action-btn" onclick="openFullscreen()">⛶ Fullscreen</button>
+        <a id="pdf-download-link" href="#" download class="pdf-action-btn">↓ Download</a>
+        <button class="pdf-close-btn" onclick="closePdf()" aria-label="Close viewer">✕</button>
+      </div>
+    </div>
+    <iframe id="pdf-frame" class="pdf-frame" title="Document viewer" allow="fullscreen"></iframe>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="form-toast" role="status" aria-live="polite">✅ Message sent. We will respond within 3–5 working days.</div>
+
+<!-- ══ SCRIPTS ══ -->
+<!-- Swiper -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<!-- AOS -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<!-- GLightbox -->
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<!-- App -->
+<script src="assets/js/app.js"></script>
+</body>
+</html>
