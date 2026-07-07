@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/logos/hue.jpeg" alt="Horus University Egypt" width="86">
+<img src="assets/logos/hue.jpeg" alt="Horus University Egypt" width="186">
 
 # Advanced System for Drone Detection, Tracking & Neutralization
 
